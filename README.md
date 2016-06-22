@@ -1,6 +1,18 @@
 # plesk-extension
 Plesk Extension for SpamExperts' services integration
 
+
+### Build (OSX/Linux)
+
+After cloning the repo into a local copy, run the following commands:
+
+```
+cd <cloned sources>
+chmod +x build.sh
+./build.sh
+```
+
+
 ### Troubleshooting
 The extension logs can bee seen at `/var/log/plesk/panel.log`. 
 

@@ -1,0 +1,9 @@
+# Composer files
+vendor/
+
+# Binary gettext files
+*.mo
+
+.gitignore
+.idea/
+/spamexperts-extension.zip

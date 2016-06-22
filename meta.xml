@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<module>
+    <id>spamexperts-extension</id>
+    <name>Professional SpamFilter</name>
+    <description>The application integrates SpamExperts' advanced email protection system with Plesk, offering flexible and automatic protection of domains and emails as well as a one-click login option to our dedicated SpamExperts control panel for managing specific settings, viewing detailed statistics and enhanced user control.</description>
+    <version>1.0</version>
+    <release>1</release>
+    <vendor>SpamExperts B.V.</vendor>
+    <url>http://www.spamexperts.com/</url>
+    <plesk_min_version>12.5.0</plesk_min_version>
+</module>

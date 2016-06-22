@@ -99,11 +99,11 @@ APICALL;
         $response = pm_ApiRpc::getService()->call($request);
 
         $data = [];
-        $index = 1;
         foreach ($response->webspace->get->result as $domainInfo) {
             if ('ok' == $domainInfo->status) {
-                $data[$index++] = [
-                    'domain'   => (string) $domainInfo->data->gen_info->{"ascii-name"},
+                $asciiDomain = (string) $domainInfo->data->gen_info->{"ascii-name"};
+                $data[$asciiDomain] = [
+                    'domain'   => $asciiDomain,
                     'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
                 ];
             }
@@ -170,27 +170,42 @@ APICALL;
 
     public function statusAction()
     {
+        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
+        
         $messages = [];
-        foreach ((array) $this->_getParam('ids') as $id) {
-            $messages[] = ['status' => 'info', 'content' => "Row #$id was successfully removed."];
+        foreach ((array) $this->_getParam('ids') as $domain) {
+            $messages[] = [
+                'status' => 'info', 
+                'content' => "Domain '{$domain}' is " . ($apiClient->checkDomain($domain) ? '' : ' NOT ') . "protected",
+            ];
         }
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 
     public function protectAction()
     {
+        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
+
         $messages = [];
-        foreach ((array) $this->_getParam('ids') as $id) {
-            $messages[] = ['status' => 'info', 'content' => "Row #$id was successfully removed."];
+        foreach ((array) $this->_getParam('ids') as $domain) {
+            $messages[] = [
+                'status' => 'info',
+                'content' => "Domain '{$domain}' is " . ($apiClient->addDomain($domain) ? ' has been successfully ' : ' has NOT been ') . "protected",
+            ];
         }
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 
     public function unprotectAction()
     {
+        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
+
         $messages = [];
-        foreach ((array) $this->_getParam('ids') as $id) {
-            $messages[] = ['status' => 'info', 'content' => "Row #$id was successfully removed."];
+        foreach ((array) $this->_getParam('ids') as $domain) {
+            $messages[] = [
+                'status' => 'info',
+                'content' => "Domain '{$domain}' is " . ($apiClient->removeDomain($domain) ? ' has been successfully ' : ' has NOT been ') . "unprotected",
+            ];
         }
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }

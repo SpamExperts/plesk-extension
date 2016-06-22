@@ -1,5 +1,5 @@
 # Composer files
-vendor/
+plib/library/vendor/
 
 # Binary gettext files
 *.mo
@@ -7,3 +7,5 @@ vendor/
 .gitignore
 .idea/
 /spamexperts-extension.zip
+/composer.phar
+/plib/library/composer.lock

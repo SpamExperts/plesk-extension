@@ -1,6 +1,6 @@
 <?php
 
-class Modules_SpamexpertsExtension_SettingsForm extends pm_Form_Simple
+class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 {
     const OPTION_SPAMPANEL_URL = 'spampanel_url';
     const OPTION_SPAMPANEL_API_HOST = 'apihost';
@@ -116,58 +116,67 @@ class Modules_SpamexpertsExtension_SettingsForm extends pm_Form_Simple
             ],
         ]);
 
+        $autoAddDomains = pm_Settings::get(self::OPTION_AUTO_ADD_DOMAINS);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAINS, [
             'label' => 'Automatic action for a new domain when it is added to this server',
             'multiOptions' => ['1' => 'Protect', '0' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_AUTO_ADD_DOMAINS) ?: 1,
+            'value' => null !== $autoAddDomains ? $autoAddDomains : 1,
         ]);
 
+        $autoDelDomains = pm_Settings::get(self::OPTION_AUTO_DEL_DOMAINS);
         $this->addElement('radio', self::OPTION_AUTO_DEL_DOMAINS, [
             'label' => 'Automatic action for a domain when it is deleted from this server',
             'multiOptions' => ['1' => 'Unprotect', '0' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_AUTO_DEL_DOMAINS) ?: 1,
+            'value' => null !== $autoDelDomains ? $autoDelDomains : 1,
         ]);
 
+        $autoProvisionDns = pm_Settings::get(self::OPTION_AUTO_PROVISION_DNS);
         $this->addElement('radio', self::OPTION_AUTO_PROVISION_DNS, [
             'label' => 'Action on the MX records for protected domains',
             'multiOptions' => ['1' => 'Update', '0' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_AUTO_PROVISION_DNS) ?: 1,
+            'value' => null !== $autoProvisionDns ? $autoProvisionDns : 1,
         ]);
 
+        $autoSetContact = pm_Settings::get(self::OPTION_AUTO_SET_CONTACT);
         $this->addElement('radio', self::OPTION_AUTO_SET_CONTACT, [
             'label' => 'Primary contact email for protected domains',
             'multiOptions' => ['1' => 'Set', '0' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_AUTO_SET_CONTACT) ?: 0,
+            'value' => null !== $autoSetContact ? $autoSetContact : 0,
         ]);
 
+        $extraDomainsHandling = pm_Settings::get(self::OPTION_EXTRA_DOMAINS_HANDLING);
         $this->addElement('radio', self::OPTION_EXTRA_DOMAINS_HANDLING, [
             'label' => 'Action on secondary domains (aliases and sub-domains)',
             'multiOptions' => ['1' => 'Protect as Domains', '2' => 'Protect as Aliases', '0' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_EXTRA_DOMAINS_HANDLING) ?: 0,
+            'value' => null !== $extraDomainsHandling ? $extraDomainsHandling : 0,
         ]);
 
+        $skipRemoteDomains = pm_Settings::get(self::OPTION_SKIP_REMOTE_DOMAINS);
         $this->addElement('radio', self::OPTION_SKIP_REMOTE_DOMAINS, [
             'label' => 'Action on "remote" domains (hosted on external DNS servers)',
             'multiOptions' => ['0' => 'Protect', '1' => 'Skip'],
-            'value' => pm_Settings::get(self::OPTION_SKIP_REMOTE_DOMAINS) ?: 1,
+            'value' => null !== $skipRemoteDomains ? $skipRemoteDomains : 1,
         ]);
 
+        $logoutRedirect = pm_Settings::get(self::OPTION_LOGOUT_REDIRECT);
         $this->addElement('radio', self::OPTION_LOGOUT_REDIRECT, [
             'label' => 'Redirect users upon logout',
             'multiOptions' => ['0' => 'To the SpamFilter panel logout page', '1' => 'Back to Plesk'],
-            'value' => pm_Settings::get(self::OPTION_LOGOUT_REDIRECT) ?: 0,
+            'value' => null !== $logoutRedirect ? $logoutRedirect : 0,
         ]);
 
+        $addDomainsOnLogin = pm_Settings::get(self::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN, [
             'label' => 'Action upon SpamFilter panel login to not protected domain',
             'multiOptions' => ['0' => 'Protect the domain and make another login atempt', '1' => 'Report error'],
-            'value' => pm_Settings::get(self::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN) ?: 0,
+            'value' => null !== $addDomainsOnLogin ? $addDomainsOnLogin : 0,
         ]);
 
+        $useRouteIps = pm_Settings::get(self::OPTION_USE_IP_DESTINATION_ROUTES);
         $this->addElement('radio', self::OPTION_USE_IP_DESTINATION_ROUTES, [
             'label' => 'Use as destination routes for clean mail when protecting domains',
             'multiOptions' => ['0' => 'Hostnames', '1' => 'IP addresses'],
-            'value' => pm_Settings::get(self::OPTION_USE_IP_DESTINATION_ROUTES) ?: 0,
+            'value' => null !== $useRouteIps ? $useRouteIps : 0,
         ]);
 
         $this->addControlButtons([

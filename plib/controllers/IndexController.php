@@ -36,7 +36,7 @@ class IndexController extends pm_Controller_Action
     public function settingsAction()
     {
         // Init form here
-        $form = new Modules_SpamexpertsExtension_SettingsForm([]);
+        $form = new Modules_SpamexpertsExtension_Form_Settings([]);
         if ($this->getRequest()->isPost()
             && $form->isValid($this->getRequest()->getPost())) {
 

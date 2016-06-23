@@ -51,6 +51,42 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                 }
                 
                 break;
+
+            case 'domain_alias':
+                switch ($action) {
+                    case 'domain_alias_create':
+//                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
+//                            pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+//                        } else {
+//                            pm_Log::debug("Skipping '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+//                        }
+
+//                        $newValues =
+//                            array (
+//                                'Domain Alias Name' => 'reseller-one.test',
+//                                'Domain Id' => 4,
+//                                'Status' => 0,
+//                                'DNS' => 'true',
+//                                'Mail' => 'true',
+//                                'Web' => 'true',
+//                                'Tomcat' => 'false',
+//                                'Domain GUID' => '2e096dee-6b13-465a-89b2-922b658f9325',
+//                                'Client GUID' => '015328f7-22b9-46b4-86d8-26243a657dd5',
+//                            )
+
+                        break;
+
+                    case 'domain_alias_delete':
+//                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
+//                            pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+//                        } else {
+//                            pm_Log::debug("Skipping '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+//                        }
+
+                        break;
+                }
+
+                break;
         }
     }
 }

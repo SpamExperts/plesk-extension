@@ -86,6 +86,9 @@ class IndexController extends pm_Controller_Action
 
     private function _getDomainsList()
     {
+        $data = [];
+
+        // Fetching webspaces
         $request = <<<APICALL
 <webspace>
   <get>
@@ -98,12 +101,58 @@ class IndexController extends pm_Controller_Action
 APICALL;
         $response = pm_ApiRpc::getService()->call($request);
 
-        $data = [];
         foreach ($response->webspace->get->result as $domainInfo) {
-            if ('ok' == $domainInfo->status) {
+            if ('ok' == $domainInfo->status && !empty($domainInfo->data)) {
                 $asciiDomain = (string) $domainInfo->data->gen_info->{"ascii-name"};
                 $data[$asciiDomain] = [
                     'domain'   => $asciiDomain,
+                    'type'     => 'Primary',
+                    'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
+                ];
+            }
+        }
+
+        // Fetching sites
+        $request = <<<APICALL
+<site>
+  <get>
+    <filter></filter>
+    <dataset>
+      <gen_info></gen_info>
+    </dataset>
+  </get>
+</site>
+APICALL;
+        $response = pm_ApiRpc::getService()->call($request);
+
+        foreach ($response->site->get->result as $domainInfo) {
+            if ('ok' == $domainInfo->status && !empty($domainInfo->data)) {
+                $asciiDomain = (string) $domainInfo->data->gen_info->{"ascii-name"};
+                $data[$asciiDomain] = [
+                    'domain'   => $asciiDomain,
+                    'type'     => 'Primary',
+                    'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
+                ];
+            }
+        }
+
+
+        // Fetching site aliases
+        $request = <<<APICALL
+<site-alias>
+  <get>
+    <filter></filter>
+  </get>
+</site-alias>
+APICALL;
+        $response = pm_ApiRpc::getService()->call($request);
+
+        foreach ($response->{"site-alias"}->get->result as $domainInfo) {
+            if ('ok' == $domainInfo->status && !empty($domainInfo->info)) {
+                $asciiDomain = (string) $domainInfo->info->{"ascii-name"};
+                $data[$asciiDomain] = [
+                    'domain'   => $asciiDomain,
+                    'type'     => 'Secondary',
                     'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
                 ];
             }
@@ -121,6 +170,10 @@ APICALL;
                 'title' => 'Link',
                 'noEscape' => true,
                 'searchable' => true,
+            ],
+            'type' => [
+                'title' => 'Type',
+                'searchable' => false,
             ],
             'login-link' => [
                 'title' => '',

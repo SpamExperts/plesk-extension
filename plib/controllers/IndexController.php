@@ -238,6 +238,17 @@ APICALL;
     public function protectAction()
     {
         $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
+        $dns = new Modules_SpamexpertsExtension_Plesk_Dns;
+
+        $spamfilterMx = [];
+        for ($mx = 1; $mx <= 4; $mx++) {
+            $record = pm_Settings::get(
+                constant("Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMFILTER_MX{$mx}")
+            );
+            if (!empty($record)) {
+                $spamfilterMx[] = $record;
+            }
+        }
 
         $messages = [];
         foreach ((array) $this->_getParam('ids') as $domain) {
@@ -245,6 +256,16 @@ APICALL;
                 'status' => 'info',
                 'content' => "Domain '{$domain}' is " . ($apiClient->addDomain($domain) ? ' has been successfully ' : ' has NOT been ') . "protected",
             ];
+
+            try {
+                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+                $dns->replaceDomainsMxRecords($pleskDomain, $spamfilterMx);
+            } catch (Exception $e) {
+                $messages[] = [
+                    'status' => 'error',
+                    'content' => $e->getMessage(),
+                ];
+            }
         }
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }

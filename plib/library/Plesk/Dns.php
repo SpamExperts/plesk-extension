@@ -35,6 +35,8 @@ APICALL;
         $response = $this->xmlapi($request);
 
         $records = [];
+        
+        // TODO: Sort records by MX priority
 
         /** @noinspection PhpUndefinedFieldInspection */
         if (!empty($response->dns->get_rec->result)) {

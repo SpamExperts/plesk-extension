@@ -223,43 +223,36 @@ APICALL;
 
     public function statusAction()
     {
-        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
-        
         $messages = [];
+
         foreach ((array) $this->_getParam('ids') as $domain) {
+            $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+            $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+
             $messages[] = [
                 'status' => 'info', 
-                'content' => "Domain '{$domain}' is " . ($apiClient->checkDomain($domain) ? '' : ' NOT ') . "protected",
+                'content' => "Domain '{$domain}' is " . ($spamfilterDomain->status() ? '' : ' NOT ') . "protected",
             ];
         }
+
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 
     public function protectAction()
     {
-        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
-        $dns = new Modules_SpamexpertsExtension_Plesk_Dns;
-
-        $spamfilterMx = [];
-        for ($mx = 1; $mx <= 4; $mx++) {
-            $record = pm_Settings::get(
-                constant("Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMFILTER_MX{$mx}")
-            );
-            if (!empty($record)) {
-                $spamfilterMx[] = $record;
-            }
-        }
-
         $messages = [];
-        foreach ((array) $this->_getParam('ids') as $domain) {
-            $messages[] = [
-                'status' => 'info',
-                'content' => "Domain '{$domain}' is " . ($apiClient->addDomain($domain) ? ' has been successfully ' : ' has NOT been ') . "protected",
-            ];
 
+        foreach ((array) $this->_getParam('ids') as $domain) {
             try {
                 $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
-                $dns->replaceDomainsMxRecords($pleskDomain, $spamfilterMx);
+                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                $spamfilterDomain->protect(
+                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                );
+                $messages[] = [
+                    'status' => 'info',
+                    'content' => "Domain '{$domain}' has been successfully protected",
+                ];
             } catch (Exception $e) {
                 $messages[] = [
                     'status' => 'error',
@@ -267,20 +260,33 @@ APICALL;
                 ];
             }
         }
+
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 
     public function unprotectAction()
     {
-        $apiClient = new Modules_SpamexpertsExtension_SpamFilter_Api;
-
         $messages = [];
+
         foreach ((array) $this->_getParam('ids') as $domain) {
-            $messages[] = [
-                'status' => 'info',
-                'content' => "Domain '{$domain}' is " . ($apiClient->removeDomain($domain) ? ' has been successfully ' : ' has NOT been ') . "unprotected",
-            ];
+            try {
+                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                $spamfilterDomain->unprotect(
+                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                );
+                $messages[] = [
+                    'status' => 'info',
+                    'content' => "Domain '{$domain}' has been successfully unprotected",
+                ];
+            } catch (Exception $e) {
+                $messages[] = [
+                    'status' => 'error',
+                    'content' => $e->getMessage(),
+                ];
+            }
         }
+
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 

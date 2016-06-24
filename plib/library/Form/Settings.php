@@ -132,7 +132,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 
         $autoProvisionDns = pm_Settings::get(self::OPTION_AUTO_PROVISION_DNS);
         $this->addElement('radio', self::OPTION_AUTO_PROVISION_DNS, [
-            'label' => 'Action on the MX records for protected domains',
+            'label' => 'Action on the MX records for protected/unprotected domains',
             'multiOptions' => ['1' => 'Update', '0' => 'Skip'],
             'value' => null !== $autoProvisionDns ? $autoProvisionDns : 1,
         ]);

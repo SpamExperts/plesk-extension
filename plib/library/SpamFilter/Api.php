@@ -160,6 +160,13 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $result;
     }
 
+    static final public function getRevision()
+    {
+        $api = new self;
+
+        return $api->call('/api/version/get');
+    }
+
     /**
      * Method for sending requests to the SpamFilter API
      *
@@ -169,7 +176,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
      */
     protected function call($url)
     {
-        return (string)$this->get($url)->getBody();
+        return (string) $this->get($url)->getBody();
     }
 
 }

@@ -22,6 +22,10 @@ class IndexController extends pm_Controller_Action
                 'title' => "Settings",
                 'action' => 'settings',
             ];
+            $tabs[] = [
+                'title' => "Support",
+                'action' => 'support',
+            ];
         }
         
         // Init tabs for all actions
@@ -288,6 +292,10 @@ APICALL;
         }
 
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
+    }
+    
+    public function supportAction()
+    {
     }
 
 }

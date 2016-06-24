@@ -17,71 +17,189 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                     case 'domain_create':
                         if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
                             pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $newValues['Domain Name'],
+                                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_WEBSPACE,
+                                    $objectId
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->protect(
+                                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                                );
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
+                            }
                         } else {
                             pm_Log::debug("Skipping '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
                         }
-                        
-//                        $newValues =
-//                        array (
-//                            'Domain Name' => 'event-processing.test',
-//                            'IP Address' => '138.201.53.58',
-//                            'IPv6 Address' => '',
-//                            'Domain GUID' => 'bf8372b1-58c8-453a-a50a-86ac5f6f3eb0',
-//                            'Client GUID' => '773dfeca-9eef-468c-9684-549dc0ef88f6',
-//                        )
                         
                         break;
 
                     case 'domain_delete':
                         if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
                             pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $oldValues['Domain Name']
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
+                            }
                         } else {
                             pm_Log::debug("Skipping '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
                         }
-                        
-//                        $oldValues =
-//                        array (
-//                            'Domain Name' => 'event-processing.test',
-//                            'Domain GUID' => 'bf8372b1-58c8-453a-a50a-86ac5f6f3eb0',
-//                            'Login Name' => 'admin',
-//                            'Client GUID' => '773dfeca-9eef-468c-9684-549dc0ef88f6',
-//                        )
 
                         break;
                 }
                 
                 break;
 
+            case 'site':
+                switch ($action) {
+                    case 'site_create':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
+                            pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $newValues['Domain Name'],
+                                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SITE,
+                                    $objectId
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->protect(
+                                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                                );
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+                        }
+
+                        break;
+
+                    case 'site_delete':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
+                            pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $oldValues['Domain Name']
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+                        }
+
+                        break;
+                }
+
+                break;
+
+            case 'subdomain':
+            case 'site_subdomain':
+                switch ($action) {
+                    case 'subdomain_create':
+                    case 'site_subdomain_create':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
+                            pm_Log::debug("Starting '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    "{$newValues['Subdomain Name']}.{$newValues['Domain Name']}",
+                                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SUBDOMAIN,
+                                    $objectId
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->protect(
+                                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                                );
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to protect '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
+                        }
+
+                        break;
+
+                    case 'subdomain_delete':
+                    case 'site_subdomain_delete':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
+                            pm_Log::debug("Starting '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to unprotect '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
+                        }
+
+                        break;
+                }
+
+                break;
+
             case 'domain_alias':
+            case 'site_alias':
                 switch ($action) {
                     case 'domain_alias_create':
-//                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
-//                            pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
-//                        } else {
-//                            pm_Log::debug("Skipping '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
-//                        }
+                    case 'site_alias_create':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
+                            pm_Log::debug("Starting '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
 
-//                        $newValues =
-//                            array (
-//                                'Domain Alias Name' => 'reseller-one.test',
-//                                'Domain Id' => 4,
-//                                'Status' => 0,
-//                                'DNS' => 'true',
-//                                'Mail' => 'true',
-//                                'Web' => 'true',
-//                                'Tomcat' => 'false',
-//                                'Domain GUID' => '2e096dee-6b13-465a-89b2-922b658f9325',
-//                                'Client GUID' => '015328f7-22b9-46b4-86d8-26243a657dd5',
-//                            )
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $newValues['Domain Alias Name'],
+                                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS,
+                                    $objectId
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->protect(
+                                    0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
+                                );
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to protect '{$newValues['Domain Alias Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
+                        }
 
                         break;
 
                     case 'domain_alias_delete':
-//                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
-//                            pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
-//                        } else {
-//                            pm_Log::debug("Skipping '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
-//                        }
+                    case 'site_alias_delete':
+                        if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
+                            pm_Log::debug("Starting '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");
+
+                            try {
+                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                    $oldValues['Domain Alias Name']
+                                );
+                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                            } catch (Exception $e) {
+                                pm_Log::err("Failed to protect '{$oldValues['Domain Alias Name']}' - " . $e->getMessage());
+                            }
+                        } else {
+                            pm_Log::debug("Skipping '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");
+                        }
 
                         break;
                 }

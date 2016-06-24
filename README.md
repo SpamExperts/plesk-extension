@@ -1,6 +1,10 @@
 # plesk-extension
 Plesk Extension for SpamExperts' services integration
 
+### System requirements
+
+- Odin Plesk Panel v12.5+
+- PHP v5.6+
 
 ### Build (OSX/Linux)
 

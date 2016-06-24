@@ -23,6 +23,10 @@ class IndexController extends pm_Controller_Action
                 'action' => 'settings',
             ];
             $tabs[] = [
+                'title' => "Branding",
+                'action' => 'branding',
+            ];
+            $tabs[] = [
                 'title' => "Support",
                 'action' => 'support',
             ];
@@ -77,6 +81,28 @@ class IndexController extends pm_Controller_Action
 
             $this->_status->addMessage('info', 'Configuration options were successfully saved.');
             $this->_helper->json(['redirect' => $this->_helper->url('settings')]);
+        }
+
+        $this->view->form = $form;
+    }
+
+
+    public function brandingAction()
+    {
+        // Init form here
+        $form = new Modules_SpamexpertsExtension_Form_Brand([]);
+        if ($this->getRequest()->isPost()
+            && $form->isValid($this->getRequest()->getPost())) {
+
+            foreach ([
+                $form::OPTION_BRAND_NAME,
+                $form::OPTION_LOGO_URL,
+            ] as $optionName) {
+                pm_Settings::set($optionName, $form->getValue($optionName));
+            }
+
+            $this->_status->addMessage('info', 'Configuration options were successfully saved.');
+            $this->_helper->json(['redirect' => $this->_helper->url('branding')]);
         }
 
         $this->view->form = $form;

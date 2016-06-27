@@ -7,7 +7,11 @@ class IndexController extends pm_Controller_Action
         parent::init();
 
         // Init title for all actions
-        $this->view->pageTitle = "Professional SpamFilter";
+        $this->view->pageTitle = htmlentities(
+            pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "Professional SpamFilter",
+            ENT_QUOTES,
+            'UTF-8'
+        );
 
         // Init common tabs
         $tabs = [
@@ -91,6 +95,7 @@ class IndexController extends pm_Controller_Action
     {
         // Init form here
         $form = new Modules_SpamexpertsExtension_Form_Brand([]);
+
         if ($this->getRequest()->isPost()
             && $form->isValid($this->getRequest()->getPost())) {
 
@@ -98,7 +103,10 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_BRAND_NAME,
                 $form::OPTION_LOGO_URL,
             ] as $optionName) {
-                pm_Settings::set($optionName, $form->getValue($optionName));
+                $value = $form->getValue($optionName);
+                if (null !== $value) {
+                    pm_Settings::set($optionName, $value);
+                }
             }
 
             $this->_status->addMessage('info', 'Configuration options were successfully saved.');

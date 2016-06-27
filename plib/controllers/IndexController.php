@@ -174,7 +174,6 @@ APICALL;
             }
         }
 
-
         // Fetching site aliases
         $request = <<<APICALL
 <site-alias>
@@ -225,7 +224,9 @@ APICALL;
                 'title' => 'Check Status',
                 'description' => 'Check protection status of selected domains.',
                 'class' => 'sb-status-selected',
-                'execGroupOperation' => $this->_helper->url('status'),
+                'execGroupOperation' => [
+                    "url" => $this->_helper->url('status'),
+                ],
             ],
         ];
         if (pm_Session::getClient()->isAdmin()
@@ -234,13 +235,27 @@ APICALL;
                 'title' => 'Protect',
                 'description' => 'Add the selected domains to the SpamFilter and enable email filtering.',
                 'class' => 'sb-protect-selected',
-                'execGroupOperation' => $this->_helper->url('protect'),
+                'execGroupOperation' => [
+                    "url" => $this->_helper->url('protect'),
+                    "skipConfirmation" => false,
+                    "locale" => [
+                        "confirmOnGroupOperation" => "You are about to protect the selected domains. Continue?",
+                    ],
+                    "subtype" => "confirm",
+                ],
             ];
             $listTools[] = [
                 'title' => 'Unprotect',
                 'description' => 'Remove the selected domains from the SpamFilter and disable email filtering.',
                 'class' => 'sb-unprotect-selected',
-                'execGroupOperation' => $this->_helper->url('unprotect'),
+                'execGroupOperation' => [
+                    "url" => $this->_helper->url('unprotect'),
+                    "skipConfirmation" => false,
+                    "locale" => [
+                        "confirmOnGroupOperation" => "You are about to unprotect the selected domains. Continue?",
+                    ],
+                    "subtype" => "delete",
+                ],
             ];
         }
         $list->setTools($listTools);

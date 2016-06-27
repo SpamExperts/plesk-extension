@@ -79,7 +79,15 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
 
         $domainAddOk = $this->api->addDomain(
             $this->pleskDomain->getDomain(),
-            array_values($this->dns->getDomainsMxRecords($this->pleskDomain))
+            array_values($this->dns->getDomainsMxRecords($this->pleskDomain)),
+            array_column(
+                $this->pleskDomain->getAliases(
+                    [
+                        'site-id' => $this->pleskDomain->getId()
+                    ]
+                ),
+                'name'
+            )
         );
 
         if ($domainAddOk && !empty($spamfilterMx)) {

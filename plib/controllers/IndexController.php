@@ -126,73 +126,16 @@ class IndexController extends pm_Controller_Action
     {
         $data = [];
 
-        // Fetching webspaces
-        $request = <<<APICALL
-<webspace>
-  <get>
-    <filter></filter>
-    <dataset>
-      <gen_info></gen_info>
-    </dataset>
-  </get>
-</webspace>
-APICALL;
-        $response = pm_ApiRpc::getService()->call($request);
-
-        foreach ($response->webspace->get->result as $domainInfo) {
-            if ('ok' == $domainInfo->status && !empty($domainInfo->data)) {
-                $asciiDomain = (string) $domainInfo->data->gen_info->{"ascii-name"};
-                $data[$asciiDomain] = [
-                    'domain'   => $asciiDomain,
-                    'type'     => 'Primary',
-                    'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
-                ];
-            }
-        }
-
-        // Fetching sites
-        $request = <<<APICALL
-<site>
-  <get>
-    <filter></filter>
-    <dataset>
-      <gen_info></gen_info>
-    </dataset>
-  </get>
-</site>
-APICALL;
-        $response = pm_ApiRpc::getService()->call($request);
-
-        foreach ($response->site->get->result as $domainInfo) {
-            if ('ok' == $domainInfo->status && !empty($domainInfo->data)) {
-                $asciiDomain = (string) $domainInfo->data->gen_info->{"ascii-name"};
-                $data[$asciiDomain] = [
-                    'domain'   => $asciiDomain,
-                    'type'     => 'Primary',
-                    'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
-                ];
-            }
-        }
-
-        // Fetching site aliases
-        $request = <<<APICALL
-<site-alias>
-  <get>
-    <filter></filter>
-  </get>
-</site-alias>
-APICALL;
-        $response = pm_ApiRpc::getService()->call($request);
-
-        foreach ($response->{"site-alias"}->get->result as $domainInfo) {
-            if ('ok' == $domainInfo->status && !empty($domainInfo->info)) {
-                $asciiDomain = (string) $domainInfo->info->{"ascii-name"};
-                $data[$asciiDomain] = [
-                    'domain'   => $asciiDomain,
-                    'type'     => 'Secondary',
-                    'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
-                ];
-            }
+        foreach (array_merge(
+                     Modules_SpamexpertsExtension_Plesk_Domain::getWebspaces(),
+                     Modules_SpamexpertsExtension_Plesk_Domain::getSites(),
+                     Modules_SpamexpertsExtension_Plesk_Domain::getAliases()
+                 ) as $info) {
+            $data[$info['name']] = [
+                'domain'     => $info['name'],
+                'type'       => $info['type'],
+                'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
+            ];
         }
 
         $options = [

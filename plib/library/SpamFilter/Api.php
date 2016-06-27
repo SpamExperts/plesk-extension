@@ -176,7 +176,13 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
      */
     protected function call($url)
     {
-        return (string) $this->get($url)->getBody();
+        pm_Log::info("Making SpamFilter API request: $url");
+
+        $response = (string) $this->get($url)->getBody();
+
+        pm_Log::info("SpamFilter API response: $response");
+
+        return $response;
     }
 
 }

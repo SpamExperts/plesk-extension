@@ -166,12 +166,19 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $result;
     }
 
-    public function getAuthTicket($username)
+    public function getAuthTicket($username, $logoutUrl = null)
     {
         pm_Log::debug(__METHOD__ . ": " . "Authentication ticket request");
 
         try {
-            $result = $response = $this->call("/api/authticket/create/username/$username");
+            $url = "/api/authticket/create/username/$username/format/json/";
+            if (!empty($logoutUrl)) {
+                $url .= 'logouturl/' . base64_encode($logoutUrl) . '/';
+            }
+            $result = $response = $this->call($url);
+            if ($jsonDecoded = json_decode($result, true)) {
+                $result = $jsonDecoded['result'];
+            }
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
             $result = null;

@@ -134,7 +134,10 @@ class IndexController extends pm_Controller_Action
             $data[$info['name']] = [
                 'domain'     => $info['name'],
                 'type'       => $info['type'],
-                'login-link' => '<a href="#" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>',
+                'login-link' => (('Alias' != $info['type'])
+                    ? '<a href="' . $this->_helper->url('login', 'index', null, ['domain' => $info['name']])
+                        . '" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>'
+                    : ''),
             ];
         }
 
@@ -288,6 +291,47 @@ class IndexController extends pm_Controller_Action
     
     public function supportAction()
     {
+    }
+
+    public function loginAction()
+    {
+        $pageURL = 'http';
+        if ('on' == $_SERVER["HTTPS"]) {
+            $pageURL .= 's';
+        }
+        $pageURL .= '://' . $this->getRequest()->getHttpHost() . $_SERVER["REQUEST_URI"];
+
+        $domain = $this->_getParam('domain');
+        if (!empty($domain)) {
+            $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+            if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                $this->_status->addMessage('error', 'Access denied.');
+                $this->_forward('domains');
+            } else {
+                $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
+                if (!$api->checkDomainUser($domain)) {
+                    $api->addDomainUser($domain);
+                }
+
+                $authToken = $api->getAuthTicket(
+                    $domain,
+                    0 < pm_Settings::get(
+                        Modules_SpamexpertsExtension_Form_Settings::OPTION_LOGOUT_REDIRECT
+                    ) ? preg_replace('~/index.php.*$~', '/index.php', $pageURL) : null
+                );
+                if (!empty($authToken)) {
+                    $url = rtrim(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL), '/')
+                        . "/?authticket=$authToken";
+
+                    header("Location: $url");
+
+                    exit(0);
+                } else {
+                    $this->_status->addMessage('error', 'Unable to obtain authentication token.');
+                    $this->_forward('domains');
+                }
+            }
+        }
     }
 
 }

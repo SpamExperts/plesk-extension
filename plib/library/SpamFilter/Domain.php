@@ -106,18 +106,21 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      */
     public function unprotect($updateDns = true)
     {
-//        if ($updateDns) {
-//            $spamfilterMx = $this->getSpamfilterMxs();
-//            if (empty($spamfilterMx)) {
-//                throw new RuntimeException("SpamFilter MX hostnames are not set");
-//            }
-//        }
+        if ($updateDns) {
+            $destinationRoutes = $this->api->getRoutes(
+                $this->pleskDomain->getDomain()
+            );
+        }
 
-        $domainRemoveOk = $this->api->removeDomain($this->pleskDomain->getDomain());
+        $domainRemoveOk = $this->api->removeDomain(
+            $this->pleskDomain->getDomain()
+        );
 
-        if ($domainRemoveOk && $updateDns) {
-            $this->dns->replaceDomainsMxRecords($this->pleskDomain, 
-                ["mainmx.{$this->pleskDomain->getDomain()}", "fallbackmx.{$this->pleskDomain->getDomain()}"]);
+        if ($domainRemoveOk && !empty($destinationRoutes)) {
+            $this->dns->replaceDomainsMxRecords(
+                $this->pleskDomain,
+                $destinationRoutes
+            );
         }
     }
 

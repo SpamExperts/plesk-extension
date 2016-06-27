@@ -83,6 +83,28 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $result;
     }
 
+    public function getRoutes($domain)
+    {
+        pm_Log::debug(__METHOD__ . ": " . "Domain get routes request");
+
+        try {
+            $response = $this->call("/api/domain/getroute/domain/$domain");
+            $result = json_decode($response, true);
+            if (is_array($result)) {
+                foreach ($result as &$route) {
+                    list($route, ) = explode('::', $route);
+                }
+            }
+        } catch (Exception $e) {
+            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $result = false;
+        }
+
+        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+
+        return $result;
+    }
+
     ## Domain user
 
     public function addDomainUser($domain)
@@ -162,9 +184,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 
     static final public function getRevision()
     {
-        $api = new self;
-
-        return $api->call('/api/version/get');
+        return (new self)->call('/api/version/get');
     }
 
     /**

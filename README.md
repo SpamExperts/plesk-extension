@@ -16,6 +16,12 @@ chmod +x build.sh
 ./build.sh
 ```
 
+### Install
+
+ * Open Plesk
+ * Log in as an administrator
+ * Go to Server Management -> Extensions
+ * Click Add Extension and upload your package
 
 ### Troubleshooting
 The extension logs can bee seen at `/var/log/plesk/panel.log`. 

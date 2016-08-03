@@ -15,6 +15,7 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                     self::PLACE_ADMIN_HOME,
                     self::PLACE_RESELLER_HOME,
                     self::PLACE_CUSTOMER_HOME,
+                    self::PLACE_DOMAIN,
                 ],
                 'title' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME)

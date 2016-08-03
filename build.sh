@@ -12,7 +12,7 @@ zip -r spamexperts-extension.zip \
     --exclude="*/\.DS_Store" \
     --exclude=build.sh \
     --exclude=composer.phar \
-    --exclude=composer.json \
-    --exclude=composer.lock \
+    --exclude=library/composer.json \
+    --exclude=library/composer.lock \
     --exclude=spamexperts-extension.zip \
     --exclude="*/\.*" ./*

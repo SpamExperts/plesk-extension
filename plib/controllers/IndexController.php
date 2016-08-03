@@ -101,6 +101,8 @@ class IndexController extends pm_Controller_Action
             $this->accessDenied();
         }
 
+        $this->checkExtensionConfiguration();
+
         // Init form here
         $form = new Modules_SpamexpertsExtension_Form_Brand([]);
 
@@ -126,6 +128,8 @@ class IndexController extends pm_Controller_Action
 
     public function domainsAction()
     {
+        $this->checkExtensionConfiguration();
+
         // List object for pm_View_Helper_RenderList
         $this->view->list = $this->_getDomainsList();
     }
@@ -333,6 +337,8 @@ class IndexController extends pm_Controller_Action
         if (!pm_Session::getClient()->isAdmin()) {
             $this->accessDenied();
         }
+
+        $this->checkExtensionConfiguration();
     }
 
     public function loginAction()
@@ -379,6 +385,27 @@ class IndexController extends pm_Controller_Action
     protected function accessDenied()
     {
         throw new pm_Exception('Access denied');
+    }
+
+    protected function checkExtensionConfiguration()
+    {
+        if (empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL))
+            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_HOST))
+            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_USER))
+            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_PASS))) {
+
+            if (pm_Session::getClient()->isAdmin()) {
+                $this->_status->addMessage(
+                    'error',
+                    'Extension is not configured yet. Please set up configuration options.'
+                );
+                $this->_forward('settings');
+            } else {
+                throw new pm_Exception(
+                    'Extension is not configured yet. Please ask your system administrator to fix that.'
+                );
+            }
+        }
     }
 
 }

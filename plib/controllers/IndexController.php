@@ -47,6 +47,10 @@ class IndexController extends pm_Controller_Action
 
     public function settingsAction()
     {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
+
         // Init form here
         $form = new Modules_SpamexpertsExtension_Form_Settings([]);
         if ($this->getRequest()->isPost()
@@ -93,6 +97,10 @@ class IndexController extends pm_Controller_Action
 
     public function brandingAction()
     {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
+
         // Init form here
         $form = new Modules_SpamexpertsExtension_Form_Brand([]);
 
@@ -291,6 +299,9 @@ class IndexController extends pm_Controller_Action
     
     public function supportAction()
     {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
     }
 
     public function loginAction()
@@ -332,6 +343,11 @@ class IndexController extends pm_Controller_Action
                 }
             }
         }
+    }
+
+    protected function accessDenied()
+    {
+        throw new pm_Exception('Access denied');
     }
 
 }

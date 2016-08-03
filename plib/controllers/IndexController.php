@@ -234,10 +234,19 @@ class IndexController extends pm_Controller_Action
 
         foreach ((array) $this->_getParam('ids') as $domain) {
             $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+
+            if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                $this->_status->addMessage(
+                    'error',
+                    sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                );
+                $this->_forward('domains');
+            }
+
             $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
 
             $messages[] = [
-                'status' => 'info', 
+                'status' => 'info',
                 'content' => "Domain '{$domain}' is " . ($spamfilterDomain->status() ? '' : ' NOT ') . "protected",
             ];
         }
@@ -252,6 +261,15 @@ class IndexController extends pm_Controller_Action
         foreach ((array) $this->_getParam('ids') as $domain) {
             try {
                 $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+
+                if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                    $this->_status->addMessage(
+                        'error',
+                        sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                    );
+                    $this->_forward('domains');
+                }
+
                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                 $spamfilterDomain->protect(
                     0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
@@ -278,6 +296,15 @@ class IndexController extends pm_Controller_Action
         foreach ((array) $this->_getParam('ids') as $domain) {
             try {
                 $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+
+                if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                    $this->_status->addMessage(
+                        'error',
+                        sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                    );
+                    $this->_forward('domains');
+                }
+
                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                 $spamfilterDomain->unprotect(
                     0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)

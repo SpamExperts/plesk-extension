@@ -389,11 +389,7 @@ class IndexController extends pm_Controller_Action
 
     protected function checkExtensionConfiguration()
     {
-        if (empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL))
-            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_HOST))
-            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_USER))
-            || empty(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_PASS))) {
-
+        if (Modules_SpamexpertsExtension_Form_Settings::areEmpty()) {
             if (pm_Session::getClient()->isAdmin()) {
                 $this->_status->addMessage(
                     'error',

@@ -184,4 +184,12 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             'sendTitle'    => 'Save',
         ]);
     }
+
+    final static public function areEmpty()
+    {
+        return empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
+            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_HOST))
+            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_USER))
+            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_PASS));
+    }
 }

@@ -147,7 +147,7 @@ class IndexController extends pm_Controller_Action
                 'domain'     => $info['name'],
                 'type'       => $info['type'],
                 'login-link' => (('Alias' != $info['type'])
-                    ? '<a href="' . $this->_helper->url('login', 'index', null, ['domain' => $info['name']])
+                    ? '<a target="_blank" href="' . $this->_helper->url('login', 'index', null, ['domain' => $info['name']])
                         . '" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>'
                     : ''),
             ];

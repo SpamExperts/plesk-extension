@@ -8,4 +8,7 @@ plib/library/vendor/
 .idea/
 /spamexperts-extension.zip
 /composer.phar
+/codecept.phar
 /plib/library/composer.lock
+
+tests/_output/*

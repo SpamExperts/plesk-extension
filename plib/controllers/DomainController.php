@@ -53,13 +53,29 @@ class DomainController extends pm_Controller_Action
                     }
 
                     $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                    $spamfilterDomain->protect(
-                        0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
-                    );
-                    $messages[] = [
-                        'status' => 'info',
-                        'content' => "Domain '{$domain}' has been successfully protected",
-                    ];
+
+                    if ($spamfilterDomain->status()) {
+                        $messages[] = [
+                            'status' => 'warning',
+                            'content' => sprintf(
+                                "Domain '%s' is protected already, skipping it.",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            ),
+                        ];
+                    } else {
+                        $spamfilterDomain->protect(
+                            0 < pm_Settings::get(
+                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
+                            )
+                        );
+                        $messages[] = [
+                            'status' => 'info',
+                            'content' => sprintf(
+                                "Domain '%s' has been successfully protected",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            ),
+                        ];
+                    }
                 } catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',
@@ -90,13 +106,29 @@ class DomainController extends pm_Controller_Action
                     }
 
                     $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                    $spamfilterDomain->unprotect(
-                        0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS)
-                    );
-                    $messages[] = [
-                        'status' => 'info',
-                        'content' => "Domain '{$domain}' has been successfully unprotected",
-                    ];
+
+                    if (! $spamfilterDomain->status()) {
+                        $messages[] = [
+                            'status' => 'warning',
+                            'content' => sprintf(
+                                "Domain '%s' is not protected, skipping it.",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            ),
+                        ];
+                    } else {
+                        $spamfilterDomain->unprotect(
+                            0 < pm_Settings::get(
+                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
+                            )
+                        );
+                        $messages[] = [
+                            'status' => 'info',
+                            'content' => sprintf(
+                                "Domain '%s' has been successfully unprotected",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            ),
+                        ];
+                    }
                 } catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',

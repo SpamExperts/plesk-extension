@@ -92,7 +92,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = json_decode($response, true);
             if (is_array($result)) {
                 foreach ($result as &$route) {
-                    list($route, ) = explode('::', $route);
+                    list($route, ) = explode(':', $route);
                 }
             }
         } catch (Exception $e) {

@@ -43,7 +43,7 @@ APICALL;
             /** @noinspection PhpUndefinedFieldInspection */
             foreach ($response->dns->get_rec->result as $rec) {
                 if ('ok' == $rec->status && 'MX' == $rec->data->type) {
-                    $records[(int) $rec->id] = (string) $rec->data->value;
+                    $records[(int) $rec->id] = (string) rtrim($rec->data->value, '.');
                 }
             }
         }
@@ -64,27 +64,11 @@ APICALL;
     public function replaceDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, array $records)
     {
         $domainId = $domain->getId();
+        $obsoleteMXRecords = $this->getDomainsMxRecords($domain);
 
-        $deleteRecordRequestTemplate = <<<APICALL
-<dns>
- <del_rec>
-  <filter>
-    <id>%s</id>
-  </filter>
- </del_rec>
-</dns>
-APICALL;
-        foreach ($this->getDomainsMxRecords($domain) as $oldRecordId => $oldRecordValue) {
-            $response = $this->xmlapi(sprintf($deleteRecordRequestTemplate, $oldRecordId));
-            /** @noinspection PhpUndefinedFieldInspection */
-            if ('ok' != $response->dns->del_rec->result->status) {
-                /** @noinspection PhpUndefinedFieldInspection */
-                throw new RuntimeException(
-                    "Failed to delete DMS MX record #{$oldRecordId} - "
-                        . $response->dns->del_rec->result->errtext
-                );
-            }
-        }
+        // The remove existing records -> Add new ones does not work
+        // because the panel does not allow to delete the last MX record
+        // So we remember old records, add new ones and then delete the obsolete ones
 
         $filter = $this->buildFilter($domain->getType(), $domainId);
 
@@ -113,6 +97,27 @@ APICALL;
                 "Failed to add DMS MX records - "
                 . $response->dns->add_rec->result->errtext
             );
+        }
+
+        $deleteRecordRequestTemplate = <<<APICALL
+<dns>
+ <del_rec>
+  <filter>
+    <id>%s</id>
+  </filter>
+ </del_rec>
+</dns>
+APICALL;
+        foreach ($obsoleteMXRecords as $oldRecordId => $oldRecordValue) {
+            $response = $this->xmlapi(sprintf($deleteRecordRequestTemplate, $oldRecordId));
+            /** @noinspection PhpUndefinedFieldInspection */
+            if ('ok' != $response->dns->del_rec->result->status) {
+                /** @noinspection PhpUndefinedFieldInspection */
+                throw new RuntimeException(
+                    "Failed to delete DMS MX record #{$oldRecordId} - "
+                        . $response->dns->del_rec->result->errtext
+                );
+            }
         }
     }
 

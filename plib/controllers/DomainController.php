@@ -63,6 +63,13 @@ class DomainController extends pm_Controller_Action
                             ),
                         ];
                     } else {
+                        $domainContactEmail = null;
+                        if (0 < pm_Settings::get(
+                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                            )) {
+                            $domainContactEmail = $pleskDomain->getContactEmail();
+                        }
+
                         $spamfilterDomain->protect(
                             0 < pm_Settings::get(
                                 Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
@@ -74,7 +81,8 @@ class DomainController extends pm_Controller_Action
                                     ]
                                 ),
                                 'name'
-                            )
+                            ),
+                            $domainContactEmail
                         );
                         $messages[] = [
                             'status' => 'info',

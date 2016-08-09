@@ -105,6 +105,23 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $result;
     }
 
+    public function setContact($domain, $email)
+    {
+        pm_Log::debug(__METHOD__ . ": " . "Domain admin contact set request");
+
+        try {
+            $response = $this->call("/api/domaincontact/set/domain/$domain/email/$email/");
+            $result = stripos($response, 'changed to') !== false;
+        } catch (Exception $e) {
+            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $result = false;
+        }
+
+        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+
+        return $result;
+    }
+
     ## Domain user
 
     public function addDomainUser($domain)

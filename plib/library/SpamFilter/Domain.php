@@ -69,7 +69,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      *
      * @throws RuntimeException
      */
-    public function protect($updateDns = true, array $aliases = [])
+    public function protect($updateDns = true, array $aliases = [], $contactEmail = null)
     {
         if ($updateDns) {
             $spamfilterMx = $this->getSpamfilterMxs();
@@ -86,6 +86,10 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
 
         if ($domainAddOk && !empty($spamfilterMx)) {
             $this->dns->replaceDomainsMxRecords($this->pleskDomain, $spamfilterMx);
+        }
+
+        if ($domainAddOk && !empty($contactEmail)) {
+            $this->api->setContact($this->pleskDomain->getDomain(), $contactEmail);
         }
     }
 

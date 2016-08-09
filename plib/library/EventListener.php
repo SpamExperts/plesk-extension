@@ -24,6 +24,14 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_WEBSPACE,
                                     $objectId
                                 );
+
+                                $domainContactEmail = null;
+                                if (0 < pm_Settings::get(
+                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                                    )) {
+                                    $domainContactEmail = $pleskDomain->getContactEmail();
+                                }
+
                                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                                 $spamfilterDomain->protect(
                                     0 < pm_Settings::get(
@@ -36,7 +44,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                             ]
                                         ),
                                         'name'
-                                    )
+                                    ),
+                                    $domainContactEmail
                                 );
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
@@ -81,6 +90,14 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SITE,
                                     $objectId
                                 );
+
+                                $domainContactEmail = null;
+                                if (0 < pm_Settings::get(
+                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                                    )) {
+                                    $domainContactEmail = $pleskDomain->getContactEmail();
+                                }
+
                                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                                 $spamfilterDomain->protect(
                                     0 < pm_Settings::get(
@@ -93,7 +110,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                             ]
                                         ),
                                         'name'
-                                    )
+                                    ),
+                                    $domainContactEmail
                                 );
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
@@ -140,6 +158,14 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SUBDOMAIN,
                                     $objectId
                                 );
+
+                                $domainContactEmail = null;
+                                if (0 < pm_Settings::get(
+                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                                    )) {
+                                    $domainContactEmail = $pleskDomain->getContactEmail();
+                                }
+
                                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                                 $spamfilterDomain->protect(
                                     0 < pm_Settings::get(
@@ -152,7 +178,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                             ]
                                         ),
                                         'name'
-                                    )
+                                    ),
+                                    $domainContactEmail
                                 );
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' - " . $e->getMessage());
@@ -200,6 +227,14 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS,
                                     $objectId
                                 );
+
+                                $domainContactEmail = null;
+                                if (0 < pm_Settings::get(
+                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                                    )) {
+                                    $domainContactEmail = $pleskDomain->getContactEmail();
+                                }
+
                                 $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                                 $spamfilterDomain->protect(
                                     0 < pm_Settings::get(
@@ -212,7 +247,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                             ]
                                         ),
                                         'name'
-                                    )
+                                    ),
+                                    $domainContactEmail
                                 );
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Alias Name']}' - " . $e->getMessage());

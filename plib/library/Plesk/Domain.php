@@ -150,4 +150,17 @@ APICALL;
         return $id;
     }
 
+    /**
+     * Contact email getter
+     *
+     * @return string
+     */
+    public function getContactEmail()
+    {
+        $pmDomain = new pm_Domain($this->getId());
+        $email = $pmDomain->getClient()->getProperty('email');
+
+        return !empty($email) ? $email : null;
+    }
+
 }

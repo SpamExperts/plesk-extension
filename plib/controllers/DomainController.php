@@ -66,6 +66,14 @@ class DomainController extends pm_Controller_Action
                         $spamfilterDomain->protect(
                             0 < pm_Settings::get(
                                 Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
+                            ),
+                            array_column(
+                                (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
+                                    [
+                                        'site-id' => $pleskDomain->getId()
+                                    ]
+                                ),
+                                'name'
                             )
                         );
                         $messages[] = [

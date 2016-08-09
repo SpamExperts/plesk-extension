@@ -62,13 +62,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
     /**
      * Implements a domain protection
      *
-     * @param bool $updateDns
+     * @param bool  $updateDns
+     * @param array $aliases
      *
      * @return void
      *
      * @throws RuntimeException
      */
-    public function protect($updateDns = true)
+    public function protect($updateDns = true, array $aliases = [])
     {
         if ($updateDns) {
             $spamfilterMx = $this->getSpamfilterMxs();
@@ -80,14 +81,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
         $domainAddOk = $this->api->addDomain(
             $this->pleskDomain->getDomain(),
             array_values($this->dns->getDomainsMxRecords($this->pleskDomain)),
-            array_column(
-                $this->pleskDomain->getAliases(
-                    [
-                        'site-id' => $this->pleskDomain->getId()
-                    ]
-                ),
-                'name'
-            )
+            $aliases
         );
 
         if ($domainAddOk && !empty($spamfilterMx)) {

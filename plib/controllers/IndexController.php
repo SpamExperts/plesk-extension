@@ -138,10 +138,12 @@ class IndexController extends pm_Controller_Action
     {
         $data = [];
 
+        $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
+
         foreach (array_merge(
-                     Modules_SpamexpertsExtension_Plesk_Domain::getWebspaces(),
-                     Modules_SpamexpertsExtension_Plesk_Domain::getSites(),
-                     Modules_SpamexpertsExtension_Plesk_Domain::getAliases()
+                     $domainsManager->getWebspaces(),
+                     $domainsManager->getSites(),
+                     $domainsManager->getAliases()
                  ) as $info) {
             $data[$info['name']] = [
                 'domain'     => $info['name'],

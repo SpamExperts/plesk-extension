@@ -19,10 +19,17 @@ class DomainController extends pm_Controller_Action
 
             $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
 
-            $messages[] = [
-                'status' => 'info',
-                'content' => "Domain '{$domain}' is " . ($spamfilterDomain->status() ? '' : ' NOT ') . "protected",
-            ];
+            if ($spamfilterDomain->status()) {
+                $messages[] = [
+                    'status' => 'info',
+                    'content' => sprintf("Domain '%s' is protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
+                ];
+            } else {
+                $messages[] = [
+                    'status' => 'error',
+                    'content' => sprintf("Domain '%s' is NOT protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
+                ];
+                }
         }
 
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);

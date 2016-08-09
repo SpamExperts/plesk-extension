@@ -43,7 +43,15 @@ APICALL;
             /** @noinspection PhpUndefinedFieldInspection */
             foreach ($response->dns->get_rec->result as $rec) {
                 if ('ok' == $rec->status && 'MX' == $rec->data->type) {
-                    $records[(int) $rec->id] = (string) rtrim($rec->data->value, '.');
+                    $mxHostname = (string) rtrim($rec->data->value, '.');
+
+                    if (0 < pm_Settings::get(
+                            Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_IP_DESTINATION_ROUTES
+                        )) {
+                        $mxIpaddress = gethostbyname($mxHostname);
+                    }
+
+                    $records[(int) $rec->id] = !empty($mxIpaddress) ? $mxIpaddress : $mxHostname;
                 }
             }
         }

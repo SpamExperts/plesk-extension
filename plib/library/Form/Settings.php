@@ -168,7 +168,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         $addDomainsOnLogin = pm_Settings::get(self::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN, [
             'label' => 'Action upon SpamFilter panel login to not protected domain',
-            'multiOptions' => ['0' => 'Protect the domain and make another login atempt', '1' => 'Report error'],
+            'multiOptions' => ['0' => 'Protect the domain and make another login attempt', '1' => 'Report error'],
             'value' => null !== $addDomainsOnLogin ? $addDomainsOnLogin : 0,
         ]);
 

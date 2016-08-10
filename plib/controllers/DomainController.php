@@ -17,9 +17,19 @@ class DomainController extends pm_Controller_Action
                 $this->_forward('index', 'index');
             }
 
-            $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+            $checkerClass =
+                Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                    ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary'
+                    : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary';
 
-            if ($spamfilterDomain->status()) {
+            /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $checker */
+            $checker = new $checkerClass(
+                $pleskDomain->getDomain(),
+                $pleskDomain->getType(),
+                $pleskDomain->getId()
+            );
+
+            if ($checker->execute()) {
                 $messages[] = [
                     'status' => 'info',
                     'content' => sprintf("Domain '%s' is protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
@@ -29,7 +39,7 @@ class DomainController extends pm_Controller_Action
                     'status' => 'error',
                     'content' => sprintf("Domain '%s' is NOT protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
                 ];
-                }
+            }
         }
 
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);

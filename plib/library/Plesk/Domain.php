@@ -32,6 +32,13 @@ class Modules_SpamexpertsExtension_Plesk_Domain
     protected $id;
 
     /**
+     * Parent domain ID (actual for aliases only)
+     *
+     * @var int
+     */
+    protected $parentId;
+
+    /**
      * @var bool
      */
     protected $isLocal = null;
@@ -203,6 +210,42 @@ APICALL;
         }
 
         return $this->isLocal;
+    }
+
+    /**
+     * Returns parent domain descriptor for secondary domains
+     *
+     * @return Modules_SpamexpertsExtension_Plesk_Domain
+     */
+    public function getParent()
+    {
+        if (null === $this->parentId) {
+            $aliasId = $this->getId();
+
+            if (self::TYPE_ALIAS !== $this->type) {
+                throw new RuntimeException("This domain type cannot have parents");
+            }
+
+            $request = <<<APICALL
+<site-alias>
+  <get>
+   <filter>
+      <id>$aliasId</id>
+   </filter>
+  </get>
+</site-alias>
+APICALL;
+
+            $response = $this->xmlapi($request);
+
+            if ('ok' == $response->{"site-alias"}->get->result->status) {
+                $this->parentId = (int) $response->{"site-alias"}->get->result->info->{"site-id"};
+            }
+        }
+
+        $parentDomain = new pm_Domain($this->parentId);
+
+        return new self($parentDomain->getName(), null, $this->parentId);
     }
 
 }

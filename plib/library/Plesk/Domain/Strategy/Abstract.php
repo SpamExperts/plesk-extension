@@ -141,7 +141,37 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
 
     protected function protectAsAlias()
     {
+        $pleskDomain = $this->initPanelDomainInstance();
+        if (null === $this->domainId) {
+            $this->domainId = $pleskDomain->getId();
+        }
+        if (null === $this->domainType) {
+            $this->domainType = $pleskDomain->getType();
+        }
 
+        if (! $this->isRemoteDomainsProtectionEnabled() && ! $pleskDomain->isLocal()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
+
+        if ($spamfilterDomain->statusAlias()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' is protected already, skipping it.",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain->protectAlias(
+            $this->updateDnsMode
+        );
     }
 
     protected function unprotectAsDomain()
@@ -162,7 +192,28 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
 
     protected function unprotectAsAlias()
     {
+        $spamfilterDomain = $this->initSeDomainInstance($this->initPanelDomainInstance());
 
+        if (! $spamfilterDomain->statusAlias()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' is not protected, skipping it",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain->unprotectAlias($this->updateDnsMode);
+    }
+
+    protected function statusAsDomain()
+    {
+        return $this->initSeDomainInstance($this->initPanelDomainInstance())->status();
+    }
+
+    protected function statusAsAlias()
+    {
+        return $this->initSeDomainInstance($this->initPanelDomainInstance())->statusAlias();
     }
 
     protected function getSecondaryDomainsAction()

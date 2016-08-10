@@ -59,6 +59,20 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
         return $this->api->checkDomain($this->pleskDomain->getDomain());
     }
 
+
+    /**
+     * Domain status checker
+     *
+     * @return bool
+     */
+    public function statusAlias()
+    {
+        return $this->api->aliasExists(
+            $this->pleskDomain->getParent()->getDomain(),
+            $this->pleskDomain->getDomain()
+        );
+    }
+
     /**
      * Implements a domain protection
      *
@@ -95,6 +109,34 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
     }
 
     /**
+     * Implements a domain alias protection
+     *
+     * @param bool   $updateDns
+     *
+     * @return void
+     *
+     * @throws RuntimeException
+     */
+    public function protectAlias($updateDns = true)
+    {
+        if ($updateDns) {
+            $spamfilterMx = $this->getSpamfilterMxs();
+            if (empty($spamfilterMx)) {
+                throw new RuntimeException("SpamFilter MX hostnames are not set");
+            }
+        }
+
+        $domainAddOk = $this->api->addAlias(
+            $this->pleskDomain->getParent()->getDomain(),
+            $this->pleskDomain->getDomain()
+        );
+
+        if ($domainAddOk && !empty($spamfilterMx)) {
+            $this->dns->replaceDomainsMxRecords($this->pleskDomain, $spamfilterMx);
+        }
+    }
+
+    /**
      * Implements a domain unprotection
      *
      * @param bool $updateDns
@@ -112,6 +154,38 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
         }
 
         $domainRemoveOk = $this->api->removeDomain(
+            $this->pleskDomain->getDomain()
+        );
+
+        if ($domainRemoveOk && !empty($destinationRoutes)) {
+            $this->dns->replaceDomainsMxRecords(
+                $this->pleskDomain,
+                $destinationRoutes
+            );
+        }
+    }
+
+    /**
+     * Implements a domain alias unprotection
+     *
+     * @param bool $updateDns
+     *
+     * @return void
+     *
+     * @throws RuntimeException
+     */
+    public function unprotectAlias($updateDns = true)
+    {
+        $parentDomain = $this->pleskDomain->getParent();
+
+        if ($updateDns) {
+            $destinationRoutes = $this->api->getRoutes(
+                $parentDomain->getDomain()
+            );
+        }
+
+        $domainRemoveOk = $this->api->removeAlias(
+            $parentDomain->getDomain(),
             $this->pleskDomain->getDomain()
         );
 

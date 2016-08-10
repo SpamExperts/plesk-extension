@@ -211,6 +211,62 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return (new self)->call('/api/version/get');
     }
 
+    # Domain aliases
+
+    public function addAlias($domain, $alias)
+    {
+        pm_Log::debug(__METHOD__ . ": " . "Domain alias add request");
+
+        try {
+            $response = $this->call("/api/domainalias/add/domain/" . idn_to_ascii($domain)
+                . "/alias/" . idn_to_ascii($alias) . "/");
+            $result = stripos($response, 'has been added') !== false;
+        } catch (Exception $e) {
+            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $result = false;
+        }
+
+        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+
+        return $result;
+    }
+
+    public function removeAlias($domain, $alias)
+    {
+        pm_Log::debug(__METHOD__ . ": " . "Domain alias remove request");
+
+        try {
+            $response = $this->call("/api/domainalias/remove/domain/" . idn_to_ascii($domain)
+                . "/alias/" . idn_to_ascii($alias) . "/");
+            $result = stripos($response, 'has been removed') !== false;
+        } catch (Exception $e) {
+            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $result = false;
+        }
+
+        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+
+        return $result;
+    }
+
+    public function aliasExists($domain, $alias)
+    {
+        pm_Log::debug(__METHOD__ . ": " . "Domain alias presence check request");
+
+        try {
+            $response = $this->call("/api/domainalias/list/domain/" . idn_to_ascii($domain) . "/");
+            $allAliases = json_decode($response);
+            $result = is_array($allAliases) && in_array($alias, $allAliases);
+        } catch (Exception $e) {
+            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $result = false;
+        }
+
+        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+
+        return $result;
+    }
+
     /**
      * Method for sending requests to the SpamFilter API
      *

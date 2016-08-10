@@ -147,7 +147,14 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         $extraDomainsHandling = pm_Settings::get(self::OPTION_EXTRA_DOMAINS_HANDLING);
         $this->addElement('radio', self::OPTION_EXTRA_DOMAINS_HANDLING, [
             'label' => 'Action on secondary domains (domain aliases)',
-            'multiOptions' => ['1' => 'Protect as Domains', '2' => 'Protect as Aliases', '0' => 'Skip'],
+            'multiOptions' => [
+                Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN
+                    => 'Protect as Domains',
+                Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_PROTECT_AS_ALIAS
+                    => 'Protect as Aliases',
+                Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP
+                    => 'Skip'
+            ],
             'value' => null !== $extraDomainsHandling ? $extraDomainsHandling : 0,
         ]);
 

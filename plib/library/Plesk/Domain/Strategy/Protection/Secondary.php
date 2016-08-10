@@ -10,29 +10,25 @@ class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary
      */
     public function execute()
     {
-        $pleskDomain = $this->initPanelDomainInstance();
-        if (null === $this->domainId) {
-            $this->domainId = $pleskDomain->getId();
-        }
-        if (null === $this->domainType) {
-            $this->domainType = $pleskDomain->getType();
-        }
+        switch ($this->getSecondaryDomainsAction()) {
+            case self::SECONDARY_DOMAIN_ACTION_SKIP:
+                throw new RuntimeException(
+                    sprintf(
+                        "Domain '%s' has been skipped according to current configuration",
+                        htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                    )
+                );
 
-        if (! $this->isRemoteDomainsProtectionEnabled() && ! $pleskDomain->isLocal()) {
-            throw new RuntimeException(
-                sprintf(
-                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
-                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
-                )
-            );
-        }
+            case self::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN:
+                $this->protectAsDomain();
 
-        $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
-        $spamfilterDomain->protect(
-            $this->updateDnsMode,
-            [],
-            $this->getContactEmail($pleskDomain)
-        );
+                break;
+
+            case self::SECONDARY_DOMAIN_ACTION_PROTECT_AS_ALIAS:
+                $this->protectAsAlias();
+
+                break;
+        }
     }
 
 }

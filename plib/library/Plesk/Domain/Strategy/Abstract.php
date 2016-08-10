@@ -2,6 +2,10 @@
 
 abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
 {
+    const SECONDARY_DOMAIN_ACTION_SKIP              = 0;
+    const SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN = 1;
+    const SECONDARY_DOMAIN_ACTION_PROTECT_AS_ALIAS  = 2;
+
     /**
      * Domain name container
      *
@@ -96,6 +100,76 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         return ('0' == pm_Settings::get(
             Modules_SpamexpertsExtension_Form_Settings::OPTION_SKIP_REMOTE_DOMAINS
         ));
+    }
+
+    protected function protectAsDomain()
+    {
+        $pleskDomain = $this->initPanelDomainInstance();
+        if (null === $this->domainId) {
+            $this->domainId = $pleskDomain->getId();
+        }
+        if (null === $this->domainType) {
+            $this->domainType = $pleskDomain->getType();
+        }
+
+        if (! $this->isRemoteDomainsProtectionEnabled() && ! $pleskDomain->isLocal()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
+
+        if ($spamfilterDomain->status()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' is protected already, skipping it.",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain->protect(
+            $this->updateDnsMode,
+            $this->getAliases(),
+            $this->getContactEmail($pleskDomain)
+        );
+    }
+
+    protected function protectAsAlias()
+    {
+
+    }
+
+    protected function unprotectAsDomain()
+    {
+        $spamfilterDomain = $this->initSeDomainInstance($this->initPanelDomainInstance());
+
+        if (! $spamfilterDomain->status()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' is not protected, skipping it",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
+        $spamfilterDomain->unprotect($this->updateDnsMode);
+    }
+
+    protected function unprotectAsAlias()
+    {
+
+    }
+
+    protected function getSecondaryDomainsAction()
+    {
+        return pm_Settings::get(
+                Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+            );
     }
 
 }

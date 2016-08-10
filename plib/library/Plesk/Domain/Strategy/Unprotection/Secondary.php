@@ -10,7 +10,25 @@ class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary
      */
     public function execute()
     {
-        $this->initSeDomainInstance($this->initPanelDomainInstance())->unprotect($this->updateDnsMode);
+        switch ($this->getSecondaryDomainsAction()) {
+            case self::SECONDARY_DOMAIN_ACTION_SKIP:
+                throw new RuntimeException(
+                    sprintf(
+                        "Domain '%s' has been skipped according to current configuration",
+                        htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                    )
+                );
+
+            case self::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN:
+                $this->unprotectAsDomain();
+
+                break;
+
+            case self::SECONDARY_DOMAIN_ACTION_PROTECT_AS_ALIAS:
+                $this->unprotectAsAlias();
+
+                break;
+        }
     }
 
 }

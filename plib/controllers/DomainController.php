@@ -52,39 +52,26 @@ class DomainController extends pm_Controller_Action
                         $this->_forward('index', 'index');
                     }
 
-                    $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                    $protectorClass =
+                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                            ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
+                            : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
 
-                    if ($spamfilterDomain->status()) {
-                        $messages[] = [
-                            'status' => 'warning',
-                            'content' => sprintf(
-                                "Domain '%s' is protected already, skipping it.",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                            ),
-                        ];
-                    } else {
-                        $protectorClass =
-                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
-                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
+                    /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
+                    $protector = new $protectorClass(
+                        $pleskDomain->getDomain(),
+                        $pleskDomain->getType(),
+                        $pleskDomain->getId()
+                    );
+                    $protector->execute();
 
-                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
-                        $protector =
-                            new $protectorClass(
-                                $pleskDomain->getDomain(),
-                                $pleskDomain->getType(),
-                                $pleskDomain->getId()
-                            );
-                        $protector->execute();
-
-                        $messages[] = [
-                            'status' => 'info',
-                            'content' => sprintf(
-                                "Domain '%s' has been successfully protected",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                            ),
-                        ];
-                    }
+                    $messages[] = [
+                        'status' => 'info',
+                        'content' => sprintf(
+                            "Domain '%s' has been successfully protected",
+                            htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                        ),
+                    ];
                 } catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',
@@ -114,39 +101,26 @@ class DomainController extends pm_Controller_Action
                         $this->_forward('index', 'index');
                     }
 
-                    $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                    $unprotectorClass =
+                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                            ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary'
+                            : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary';
 
-                    if (! $spamfilterDomain->status()) {
-                        $messages[] = [
-                            'status' => 'warning',
-                            'content' => sprintf(
-                                "Domain '%s' is not protected, skipping it.",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                            ),
-                        ];
-                    } else {
-                        $unprotectorClass =
-                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary'
-                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary';
+                    /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
+                    $unprotector = new $unprotectorClass(
+                            $pleskDomain->getDomain(),
+                            $pleskDomain->getType(),
+                            $pleskDomain->getId()
+                        );
+                    $unprotector->execute();
 
-                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
-                        $unprotector =
-                            new $unprotectorClass(
-                                $pleskDomain->getDomain(),
-                                $pleskDomain->getType(),
-                                $pleskDomain->getId()
-                            );
-                        $unprotector->execute();
-
-                        $messages[] = [
-                            'status' => 'info',
-                            'content' => sprintf(
-                                "Domain '%s' has been successfully unprotected",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                            ),
-                        ];
-                    }
+                    $messages[] = [
+                        'status' => 'info',
+                        'content' => sprintf(
+                            "Domain '%s' has been successfully unprotected",
+                            htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                        ),
+                    ];
                 } catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',

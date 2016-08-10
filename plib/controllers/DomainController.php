@@ -63,34 +63,47 @@ class DomainController extends pm_Controller_Action
                             ),
                         ];
                     } else {
-                        $domainContactEmail = null;
                         if (0 < pm_Settings::get(
-                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                            )) {
-                            $domainContactEmail = $pleskDomain->getContactEmail();
-                        }
-
-                        $spamfilterDomain->protect(
-                            0 < pm_Settings::get(
-                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                            ),
-                            array_column(
-                                (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                    [
-                                        'site-id' => $pleskDomain->getId()
-                                    ]
+                                Modules_SpamexpertsExtension_Form_Settings::OPTION_SKIP_REMOTE_DOMAINS
+                            ) && ! $pleskDomain->isLocal()) {
+                            $messages[] = [
+                                'status' => 'error',
+                                'content' => sprintf(
+                                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
+                                    htmlentities($domain, ENT_QUOTES, 'UTF-8')
                                 ),
-                                'name'
-                            ),
-                            $domainContactEmail
-                        );
-                        $messages[] = [
-                            'status' => 'info',
-                            'content' => sprintf(
-                                "Domain '%s' has been successfully protected",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                            ),
-                        ];
+                            ];
+                        } else {
+                            $domainContactEmail = null;
+                            if (0 < pm_Settings::get(
+                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
+                                )
+                            ) {
+                                $domainContactEmail = $pleskDomain->getContactEmail();
+                            }
+
+                            $spamfilterDomain->protect(
+                                0 < pm_Settings::get(
+                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
+                                ),
+                                array_column(
+                                    (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
+                                        [
+                                            'site-id' => $pleskDomain->getId()
+                                        ]
+                                    ),
+                                    'name'
+                                ),
+                                $domainContactEmail
+                            );
+                            $messages[] = [
+                                'status' => 'info',
+                                'content' => sprintf(
+                                    "Domain '%s' has been successfully protected",
+                                    htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                                ),
+                            ];
+                        }
                     }
                 } catch (Exception $e) {
                     $messages[] = [
@@ -168,6 +181,7 @@ class DomainController extends pm_Controller_Action
         $domain = $this->_getParam('domain');
         if (!empty($domain)) {
             $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+
             if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                 $this->_status->addMessage('error', 'Access denied.');
                 $this->_forward('index', 'index');

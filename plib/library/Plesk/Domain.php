@@ -32,6 +32,11 @@ class Modules_SpamexpertsExtension_Plesk_Domain
     protected $id;
 
     /**
+     * @var bool
+     */
+    protected $isLocal = null;
+
+    /**
      * Class constructor
      *
      * @param string $domain
@@ -161,6 +166,43 @@ APICALL;
         $email = $pmDomain->getClient()->getProperty('email');
 
         return !empty($email) ? $email : null;
+    }
+
+    /**
+     * Determines if a domain is "local" or "remote"
+     * (i.e. it's DNS zone is hosted on the same server with the panel or
+     * on an external server)
+     *
+     * @return bool
+     */
+    public function isLocal()
+    {
+        if (null === $this->isLocal) {
+            $id = $this->getId();
+
+            $filterName = 'site-id';
+            if (self::TYPE_ALIAS == $this->getType()) {
+                $filterName = 'site-alias-id';
+            }
+
+            $request = <<<APICALL
+<dns>
+ <get>
+  <filter>
+   <$filterName>$id</$filterName>
+  </filter>
+ </get>
+</dns>
+APICALL;
+
+            $response = $this->xmlapi($request);
+
+            if ('ok' == $response->dns->get->result->status) {
+                $this->isLocal = 'enabled' == strtolower($response->dns->get->result->zone_status);
+            }
+        }
+
+        return $this->isLocal;
     }
 
 }

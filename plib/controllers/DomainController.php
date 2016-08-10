@@ -74,28 +74,20 @@ class DomainController extends pm_Controller_Action
                                 ),
                             ];
                         } else {
-                            $domainContactEmail = null;
-                            if (0 < pm_Settings::get(
-                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                                )
-                            ) {
-                                $domainContactEmail = $pleskDomain->getContactEmail();
-                            }
+                            $protectorClass =
+                                Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                                    ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
+                                    : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
 
-                            $spamfilterDomain->protect(
-                                0 < pm_Settings::get(
-                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                                ),
-                                array_column(
-                                    (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                        [
-                                            'site-id' => $pleskDomain->getId()
-                                        ]
-                                    ),
-                                    'name'
-                                ),
-                                $domainContactEmail
-                            );
+                            /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
+                            $protector =
+                                new $protectorClass(
+                                    $pleskDomain->getDomain(),
+                                    $pleskDomain->getType(),
+                                    $pleskDomain->getId()
+                                );
+                            $protector->execute();
+
                             $messages[] = [
                                 'status' => 'info',
                                 'content' => sprintf(
@@ -145,11 +137,20 @@ class DomainController extends pm_Controller_Action
                             ),
                         ];
                     } else {
-                        $spamfilterDomain->unprotect(
-                            0 < pm_Settings::get(
-                                Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                            )
-                        );
+                        $unprotectorClass =
+                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary'
+                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary';
+
+                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
+                        $unprotector =
+                            new $unprotectorClass(
+                                $pleskDomain->getDomain(),
+                                $pleskDomain->getType(),
+                                $pleskDomain->getId()
+                            );
+                        $unprotector->execute();
+
                         $messages[] = [
                             'status' => 'info',
                             'content' => sprintf(

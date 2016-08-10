@@ -19,34 +19,12 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary(
                                     $newValues['Domain Name'],
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_WEBSPACE,
                                     $objectId
                                 );
-
-                                $domainContactEmail = null;
-                                if (0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                                    )) {
-                                    $domainContactEmail = $pleskDomain->getContactEmail();
-                                }
-
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->protect(
-                                    0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                                    ),
-                                    array_column(
-                                        (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                            [
-                                                'site-id' => $pleskDomain->getId()
-                                            ]
-                                        ),
-                                        'name'
-                                    ),
-                                    $domainContactEmail
-                                );
+                                $protector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -61,11 +39,10 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
-                                    $oldValues['Domain Name']
-                                );
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                                $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
+                                        $oldValues['Domain Name']
+                                    );
+                                $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -85,34 +62,12 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary(
                                     $newValues['Domain Name'],
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SITE,
                                     $objectId
                                 );
-
-                                $domainContactEmail = null;
-                                if (0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                                    )) {
-                                    $domainContactEmail = $pleskDomain->getContactEmail();
-                                }
-
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->protect(
-                                    0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                                    ),
-                                    array_column(
-                                        (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                            [
-                                                'site-id' => $pleskDomain->getId()
-                                            ]
-                                        ),
-                                        'name'
-                                    ),
-                                    $domainContactEmail
-                                );
+                                $protector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -127,11 +82,10 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
-                                    $oldValues['Domain Name']
-                                );
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                                $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
+                                        $oldValues['Domain Name']
+                                    );
+                                $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -153,34 +107,12 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary(
                                     "{$newValues['Subdomain Name']}.{$newValues['Domain Name']}",
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SUBDOMAIN,
                                     $objectId
                                 );
-
-                                $domainContactEmail = null;
-                                if (0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                                    )) {
-                                    $domainContactEmail = $pleskDomain->getContactEmail();
-                                }
-
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->protect(
-                                    0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                                    ),
-                                    array_column(
-                                        (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                            [
-                                                'site-id' => $pleskDomain->getId()
-                                            ]
-                                        ),
-                                        'name'
-                                    ),
-                                    $domainContactEmail
-                                );
+                                $protector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Subdomain Name']}.{$newValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -196,11 +128,10 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' unprotection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
-                                    "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
-                                );
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                                $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
+                                        "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
+                                    );
+                                $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' - " . $e->getMessage());
                             }
@@ -222,34 +153,12 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
+                                $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary(
                                     $newValues['Domain Alias Name'],
                                     Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS,
                                     $objectId
                                 );
-
-                                $domainContactEmail = null;
-                                if (0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_SET_CONTACT
-                                    )) {
-                                    $domainContactEmail = $pleskDomain->getContactEmail();
-                                }
-
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->protect(
-                                    0 < pm_Settings::get(
-                                        Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS
-                                    ),
-                                    array_column(
-                                        (new Modules_SpamexpertsExtension_Plesk_Domain_Collection)->getAliases(
-                                            [
-                                                'site-id' => $pleskDomain->getId()
-                                            ]
-                                        ),
-                                        'name'
-                                    ),
-                                    $domainContactEmail
-                                );
+                                $protector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$newValues['Domain Alias Name']}' - " . $e->getMessage());
                             }
@@ -265,11 +174,10 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                             pm_Log::debug("Starting '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");
 
                             try {
-                                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain(
-                                    $oldValues['Domain Alias Name']
-                                );
-                                $spamfilterDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                                $spamfilterDomain->unprotect(false); // It's senseless to update DNS of deleted entity
+                                $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
+                                        $oldValues['Domain Alias Name']
+                                    );
+                                $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$oldValues['Domain Alias Name']}' - " . $e->getMessage());
                             }

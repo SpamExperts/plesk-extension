@@ -126,7 +126,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         if ($spamfilterDomain->status()) {
             throw new RuntimeException(
                 sprintf(
-                    "Domain '%s' is protected already, skipping it.",
+                    "Domain '%s' is protected already, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
                 )
             );
@@ -163,7 +163,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         if ($spamfilterDomain->statusAlias()) {
             throw new RuntimeException(
                 sprintf(
-                    "Domain '%s' is protected already, skipping it.",
+                    "Domain '%s' is protected already, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
                 )
             );

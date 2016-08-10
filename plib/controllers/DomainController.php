@@ -12,7 +12,7 @@ class DomainController extends pm_Controller_Action
             if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                 $this->_status->addMessage(
                     'error',
-                    sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                    sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
                 );
                 $this->_forward('index', 'index');
             }
@@ -57,7 +57,7 @@ class DomainController extends pm_Controller_Action
                     if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                            sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
                     }
@@ -106,7 +106,7 @@ class DomainController extends pm_Controller_Action
                     if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s.', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                            sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
                     }
@@ -159,6 +159,35 @@ class DomainController extends pm_Controller_Action
                 $this->_status->addMessage('error', 'Access denied.');
                 $this->_forward('index', 'index');
             } else {
+                $seDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+                if (! $seDomain->status()) {
+                    if (! pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN)) {
+                        $protectorClass =
+                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
+                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
+
+                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
+                        $protector = new $protectorClass(
+                            $pleskDomain->getDomain(),
+                            $pleskDomain->getType(),
+                            $pleskDomain->getId()
+                        );
+                        $protector->execute();
+                    } else {
+                        $this->_status->addMessage(
+                            'error',
+                            sprintf(
+                                "Domain '%s' is not protected",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            )
+                        );
+                        $this->_forward('index', 'index');
+
+                        return;
+                    }
+                }
+
                 $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
                 if (!$api->checkDomainUser($domain)) {
                     $api->addDomainUser($domain);
@@ -170,6 +199,7 @@ class DomainController extends pm_Controller_Action
                         Modules_SpamexpertsExtension_Form_Settings::OPTION_LOGOUT_REDIRECT
                     ) ? preg_replace('~/index.php.*$~', '/index.php', $pageURL) : null
                 );
+
                 if (!empty($authToken)) {
                     $url = rtrim(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL), '/')
                         . "/?authticket=$authToken";

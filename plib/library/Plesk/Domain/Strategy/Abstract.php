@@ -23,6 +23,8 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
      */
     protected $domainId;
 
+    protected $updateDnsMode = true;
+
     /**
      * Class contructor
      *
@@ -37,9 +39,22 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         $this->domainName = $domainName;
         $this->domainType = $domainType;
         $this->domainId   = $domainId;
+
+        $this->updateDnsMode =
+            0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS);
     }
 
     abstract public function execute();
+
+    /**
+     * @param boolean $updateDnsMode
+     *
+     * @return void
+     */
+    public function setUpdateDnsMode($updateDnsMode)
+    {
+        $this->updateDnsMode = $updateDnsMode;
+    }
 
     protected function initPanelDomainInstance()
     {
@@ -74,6 +89,13 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
             ),
             'name'
         );
+    }
+
+    protected function isRemoteDomainsProtectionEnabled()
+    {
+        return ('0' == pm_Settings::get(
+            Modules_SpamexpertsExtension_Form_Settings::OPTION_SKIP_REMOTE_DOMAINS
+        ));
     }
 
 }

@@ -63,39 +63,27 @@ class DomainController extends pm_Controller_Action
                             ),
                         ];
                     } else {
-                        if (0 < pm_Settings::get(
-                                Modules_SpamexpertsExtension_Form_Settings::OPTION_SKIP_REMOTE_DOMAINS
-                            ) && ! $pleskDomain->isLocal()) {
-                            $messages[] = [
-                                'status' => 'error',
-                                'content' => sprintf(
-                                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
-                                    htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                                ),
-                            ];
-                        } else {
-                            $protectorClass =
-                                Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                                    ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
-                                    : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
+                        $protectorClass =
+                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
+                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
 
-                            /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
-                            $protector =
-                                new $protectorClass(
-                                    $pleskDomain->getDomain(),
-                                    $pleskDomain->getType(),
-                                    $pleskDomain->getId()
-                                );
-                            $protector->execute();
+                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
+                        $protector =
+                            new $protectorClass(
+                                $pleskDomain->getDomain(),
+                                $pleskDomain->getType(),
+                                $pleskDomain->getId()
+                            );
+                        $protector->execute();
 
-                            $messages[] = [
-                                'status' => 'info',
-                                'content' => sprintf(
-                                    "Domain '%s' has been successfully protected",
-                                    htmlentities($domain, ENT_QUOTES, 'UTF-8')
-                                ),
-                            ];
-                        }
+                        $messages[] = [
+                            'status' => 'info',
+                            'content' => sprintf(
+                                "Domain '%s' has been successfully protected",
+                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            ),
+                        ];
                     }
                 } catch (Exception $e) {
                     $messages[] = [

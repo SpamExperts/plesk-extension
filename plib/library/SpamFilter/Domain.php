@@ -62,8 +62,9 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
     /**
      * Implements a domain protection
      *
-     * @param bool  $updateDns
-     * @param array $aliases
+     * @param bool   $updateDns
+     * @param array  $aliases
+     * @param string $contactEmail
      *
      * @return void
      *

@@ -18,9 +18,18 @@ class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary
             $this->domainType = $pleskDomain->getType();
         }
 
+        if (! $this->isRemoteDomainsProtectionEnabled() && ! $pleskDomain->isLocal()) {
+            throw new RuntimeException(
+                sprintf(
+                    "Domain '%s' has been skipped as it was detected to be remote and remote domains protection if switched off in the extension configuration",
+                    htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
         $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
         $spamfilterDomain->protect(
-            0 < pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_PROVISION_DNS),
+            $this->updateDnsMode,
             $this->getAliases(),
             $this->getContactEmail($pleskDomain)
         );

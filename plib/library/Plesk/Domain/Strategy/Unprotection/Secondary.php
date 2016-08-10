@@ -10,7 +10,7 @@ class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary
      */
     public function execute()
     {
-        $this->initSeDomainInstance($this->initPanelDomainInstance())->unprotect(false);
+        $this->initSeDomainInstance($this->initPanelDomainInstance())->unprotect($this->updateDnsMode);
     }
 
 }

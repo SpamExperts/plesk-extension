@@ -42,6 +42,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
                                         $oldValues['Domain Name']
                                     );
+                                $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
@@ -85,6 +86,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
                                         $oldValues['Domain Name']
                                     );
+                                $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Domain Name']}' - " . $e->getMessage());
@@ -131,6 +133,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
                                         "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
                                     );
+                                $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to unprotect '{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}' - " . $e->getMessage());
@@ -177,6 +180,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
                                         $oldValues['Domain Alias Name']
                                     );
+                                $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
                                 pm_Log::err("Failed to protect '{$oldValues['Domain Alias Name']}' - " . $e->getMessage());

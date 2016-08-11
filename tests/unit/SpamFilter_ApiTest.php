@@ -207,4 +207,58 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($sut->addDomain($domain));
     }
 
+    public function testAddAliasSuccessful()
+    {
+        $domain = 'example.com';
+        $alias  = 'example.org';
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
+            ->will($this->returnValue("SUCCESS: Alias '$alias' has been added"));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertTrue($sut->addAlias($domain, $alias));
+    }
+
+    public function testAddExistingAlias()
+    {
+        $domain = 'example.com';
+        $alias  = 'example.org';
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
+            ->will($this->returnValue("ERROR: Alias already exists"));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertFalse($sut->addAlias($domain, $alias));
+    }
+
+    public function testAddAliasFailed()
+    {
+        $domain = 'example.com';
+        $alias  = 'example.org';
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
+            ->will($this->returnValue("ERROR: Database connection error.\nERROR: Failed to add alias '$alias'"));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertFalse($sut->addAlias($domain, $alias));
+    }
+
 }

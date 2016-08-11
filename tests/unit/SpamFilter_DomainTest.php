@@ -846,4 +846,219 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $sut->unprotect(true);
     }
 
+    public function testUnprotectAliasWithoutUpdatingDns()
+    {
+        $domain = 'example.com';
+        $parentDomain = 'parent.example.com';
+
+        $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain'])->getMock();
+        $parentPleskDomainMock->expects($this->once())
+            ->method('getDomain')
+            ->will($this->returnValue($parentDomain));
+
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain', 'getParent'])->getMock();
+        $pleskDomainMock->expects($this->once())
+            ->method('getParent')
+            ->will($this->returnValue($parentPleskDomainMock));
+        $pleskDomainMock->expects($this->once())
+            ->method('getDomain')
+            ->will($this->returnValue($domain));
+
+        $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $spamfilterApiMock->expects($this->once())
+            ->method('removeAlias')
+            ->with(
+                $this->equalTo($parentDomain),
+                $this->equalTo($domain)
+            )
+            ->will($this->returnValue(true));
+        $spamfilterApiMock->expects($this->never())
+            ->method('getRoutes');
+
+        $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
+            ->setMethods(['replaceDomainsMxRecords'])
+            ->getMock();
+        $pleskDnsMock->expects($this->never())
+            ->method('replaceDomainsMxRecords');
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
+            ->setMethods(null)
+            ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
+            ->getMock();
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
+        $sut->unprotectAlias(false);
+    }
+
+    public function testUnprotectAliasWithUpdatingDns()
+    {
+        $domain = 'example.com';
+        $parentDomain = 'parent.example.com';
+        $destinations = ['primmary.destination.host', 'secondary.destination.host'];
+
+        $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain'])->getMock();
+        $parentPleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($parentDomain));
+
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain', 'getParent'])->getMock();
+        $pleskDomainMock->expects($this->once())
+            ->method('getParent')
+            ->will($this->returnValue($parentPleskDomainMock));
+        $pleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($domain));
+
+        $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $spamfilterApiMock->expects($this->once())
+            ->method('removeAlias')
+            ->with(
+                $this->equalTo($parentDomain),
+                $this->equalTo($domain)
+            )
+            ->will($this->returnValue(true));
+        $spamfilterApiMock->expects($this->once())
+            ->method('getRoutes')
+            ->with(
+                $this->equalTo($parentDomain)
+            )
+            ->will($this->returnValue($destinations));
+
+        $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
+            ->setMethods(['replaceDomainsMxRecords'])
+            ->getMock();
+        $pleskDnsMock->expects($this->once())
+            ->method('replaceDomainsMxRecords')
+            ->with(
+                $this->equalTo($pleskDomainMock),
+                $destinations
+            );
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
+            ->setMethods(null)
+            ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
+            ->getMock();
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
+        $sut->unprotectAlias(true);
+    }
+
+    public function testUnprotectAliasSkipsUpdatingDnsIfRemoveAliasFails()
+    {
+        $domain = 'example.com';
+        $parentDomain = 'parent.example.com';
+        $destinations = ['primmary.destination.host', 'secondary.destination.host'];
+
+        $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain'])->getMock();
+        $parentPleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($parentDomain));
+
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain', 'getParent'])->getMock();
+        $pleskDomainMock->expects($this->once())
+            ->method('getParent')
+            ->will($this->returnValue($parentPleskDomainMock));
+        $pleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($domain));
+
+        $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $spamfilterApiMock->expects($this->once())
+            ->method('removeAlias')
+            ->with(
+                $this->equalTo($parentDomain),
+                $this->equalTo($domain)
+            )
+            ->will($this->returnValue(false));
+        $spamfilterApiMock->expects($this->once())
+            ->method('getRoutes')
+            ->with(
+                $this->equalTo($parentDomain)
+            )
+            ->will($this->returnValue($destinations));
+
+        $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
+            ->setMethods(['replaceDomainsMxRecords'])
+            ->getMock();
+        $pleskDnsMock->expects($this->never())
+            ->method('replaceDomainsMxRecords');
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
+            ->setMethods(null)
+            ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
+            ->getMock();
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
+        $sut->unprotectAlias(true);
+    }
+
+    public function testUnprotectAliasSkipsUpdatingDnsIfDestinationRoutesAreEmpty()
+    {
+        $domain = 'example.com';
+        $parentDomain = 'parent.example.com';
+        $destinations = [];
+
+        $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain'])->getMock();
+        $parentPleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($parentDomain));
+
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
+            ->setMethods(['getDomain', 'getParent'])->getMock();
+        $pleskDomainMock->expects($this->once())
+            ->method('getParent')
+            ->will($this->returnValue($parentPleskDomainMock));
+        $pleskDomainMock->expects($this->any())
+            ->method('getDomain')
+            ->will($this->returnValue($domain));
+
+        $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $spamfilterApiMock->expects($this->once())
+            ->method('removeAlias')
+            ->with(
+                $this->equalTo($parentDomain),
+                $this->equalTo($domain)
+            )
+            ->will($this->returnValue(true));
+        $spamfilterApiMock->expects($this->once())
+            ->method('getRoutes')
+            ->with(
+                $this->equalTo($parentDomain)
+            )
+            ->will($this->returnValue($destinations));
+
+        $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
+            ->setMethods(['replaceDomainsMxRecords'])
+            ->getMock();
+        $pleskDnsMock->expects($this->never())
+            ->method('replaceDomainsMxRecords');
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
+            ->setMethods(null)
+            ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
+            ->getMock();
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
+        $sut->unprotectAlias(true);
+    }
+
 }

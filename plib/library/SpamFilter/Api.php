@@ -30,15 +30,15 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         );
     }
 
-    public function addDomain($domain, $destinations = null, $aliases = null)
+    public function addDomain($domain, array $destinations = [], array $aliases = [])
     {
         $this->logDebug(__METHOD__ . ": " . "Domain addition request");
 
         try {
             $response = $this->call(
-                "/api/domain/add/domain/$domain" .
-                (is_array($destinations) ? "/destinations/" . json_encode($destinations) : "") .
-                (is_array($aliases) ? "/aliases/" . json_encode($aliases) : "")
+                "/api/domain/add/domain/$domain/" .
+                (!empty($destinations) ? "destinations/" . json_encode($destinations) . '/' : "") .
+                (!empty($aliases) ? "aliases/" . json_encode($aliases) . '/' : "")
             );
             $result = stripos($response, 'added') !== false || stripos($response, 'already') !== false;
         } catch (Exception $e) {

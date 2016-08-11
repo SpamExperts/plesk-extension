@@ -12,7 +12,8 @@ class DomainController extends pm_Controller_Action
             if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                 $this->_status->addMessage(
                     'error',
-                    sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                    sprintf('Access denied to the domain %s',
+                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                 );
                 $this->_forward('index', 'index');
             }
@@ -32,12 +33,14 @@ class DomainController extends pm_Controller_Action
             if ($checker->execute()) {
                 $messages[] = [
                     'status' => 'info',
-                    'content' => sprintf("Domain '%s' is protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
+                    'content' => sprintf("Domain '%s' is protected",
+                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
                 ];
             } else {
                 $messages[] = [
                     'status' => 'error',
-                    'content' => sprintf("Domain '%s' is NOT protected", htmlentities($domain, ENT_QUOTES, 'UTF-8')),
+                    'content' => sprintf("Domain '%s' is NOT protected",
+                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
                 ];
             }
         }
@@ -57,7 +60,8 @@ class DomainController extends pm_Controller_Action
                     if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                            sprintf('Access denied to the domain %s',
+                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
                     }
@@ -79,7 +83,7 @@ class DomainController extends pm_Controller_Action
                         'status' => 'info',
                         'content' => sprintf(
                             "Domain '%s' has been successfully protected",
-                            htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
                         ),
                     ];
                 } catch (Exception $e) {
@@ -106,7 +110,8 @@ class DomainController extends pm_Controller_Action
                     if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s', htmlentities($domain, ENT_QUOTES, 'UTF-8'))
+                            sprintf('Access denied to the domain %s',
+                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
                     }
@@ -128,7 +133,7 @@ class DomainController extends pm_Controller_Action
                         'status' => 'info',
                         'content' => sprintf(
                             "Domain '%s' has been successfully unprotected",
-                            htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
                         ),
                     ];
                 } catch (Exception $e) {
@@ -179,7 +184,7 @@ class DomainController extends pm_Controller_Action
                             'error',
                             sprintf(
                                 "Domain '%s' is not protected",
-                                htmlentities($domain, ENT_QUOTES, 'UTF-8')
+                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
                             )
                         );
                         $this->_forward('index', 'index');

@@ -61,4 +61,49 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($sut->checkDomain('example.com'));
     }
 
+    public function testCheckDomainAliasPresent()
+    {
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
+            ->will($this->returnValue('["alias.example.net","alias.example.com","alias.example.org"]'));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertTrue($sut->aliasExists('example.com', 'alias.example.net'));
+    }
+
+    public function testCheckDomainAliasMissing()
+    {
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
+            ->will($this->returnValue('["alias.example.com","alias.example.org"]'));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertFalse($sut->aliasExists('example.com', 'alias.example.net'));
+    }
+
+    public function testCheckDomainAliasInvalidJson()
+    {
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
+            ->will($this->returnValue('alias.example.comalias.example.org'));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertFalse($sut->aliasExists('example.com', 'alias.example.net'));
+    }
+
 }

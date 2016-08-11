@@ -40,7 +40,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
      */
     public function __construct($domainName, $domainType = null, $domainId = null)
     {
-        $this->domainName = $domainName;
+        $this->domainName = idn_to_ascii($domainName);
         $this->domainType = $domainType;
         $this->domainId   = $domainId;
 

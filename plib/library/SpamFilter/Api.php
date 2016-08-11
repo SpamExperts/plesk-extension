@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+/** @noinspection PhpUndefinedClassInspection */
 class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 {
     /**
@@ -11,6 +12,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
      */
     public function __construct()
     {
+        /** @noinspection PhpUndefinedClassInspection */
         parent::__construct(
             [
                 'base_uri' => "https://" . pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_HOST),
@@ -218,8 +220,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         $this->logDebug(__METHOD__ . ": " . "Domain alias add request");
 
         try {
-            $response = $this->call("/api/domainalias/add/domain/" . idn_to_ascii($domain)
-                . "/alias/" . idn_to_ascii($alias) . "/");
+            $response = $this->call("/api/domainalias/add/domain/$domain/alias/$alias/");
             $result = stripos($response, 'has been added') !== false;
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
@@ -236,8 +237,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         $this->logDebug(__METHOD__ . ": " . "Domain alias remove request");
 
         try {
-            $response = $this->call("/api/domainalias/remove/domain/" . idn_to_ascii($domain)
-                . "/alias/" . idn_to_ascii($alias) . "/");
+            $response = $this->call("/api/domainalias/remove/domain/$domain/alias/$alias/");
             $result = stripos($response, 'has been removed') !== false;
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
@@ -254,7 +254,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         $this->logDebug(__METHOD__ . ": " . "Domain alias presence check request");
 
         try {
-            $response = $this->call("/api/domainalias/list/domain/" . idn_to_ascii($domain) . "/");
+            $response = $this->call("/api/domainalias/list/domain/$domain/");
             $allAliases = json_decode($response);
             $result = is_array($allAliases) && in_array($alias, $allAliases);
         } catch (Exception $e) {

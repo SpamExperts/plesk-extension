@@ -146,7 +146,7 @@ class IndexController extends pm_Controller_Action
                      $domainsManager->getAliases()
                  ) as $info) {
             $data[$info['name']] = [
-                'domain'     => $info['name'],
+                'domain'     => idn_to_utf8($info['name']),
                 'type'       => $info['type'],
                 'login-link' => (('Alias' != $info['type'])
                     ? '<a target="_blank" href="' . $this->_helper->url('login', 'domain', null, ['domain' => $info['name']])

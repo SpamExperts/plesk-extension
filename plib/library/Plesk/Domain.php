@@ -54,7 +54,7 @@ class Modules_SpamexpertsExtension_Plesk_Domain
      */
     public function __construct($domain, $type = null, $id = null)
     {
-        $this->domain = $domain;
+        $this->domain = idn_to_utf8($domain);
         $this->type = $type;
         $this->id = $id;
     }

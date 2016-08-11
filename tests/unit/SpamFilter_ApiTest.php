@@ -261,4 +261,38 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($sut->addAlias($domain, $alias));
     }
 
+    public function testRemoveDomainSuccessful()
+    {
+        $domain = 'example.com';
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domain/remove/domain/$domain/"))
+            ->will($this->returnValue("SUCCESS: Domain '$domain' removed"));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertTrue($sut->removeDomain($domain));
+    }
+
+    public function testRemoveDomainFailed()
+    {
+        $domain = 'example.com';
+
+        $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
+            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sut->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo("/api/domain/remove/domain/$domain/"))
+            ->will($this->returnValue("ERROR: You are not the owner of '$domain'.\nERROR: Failed to remove domain '$domain'"));
+
+        /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
+        $this->assertFalse($sut->removeDomain($domain));
+    }
+
 }

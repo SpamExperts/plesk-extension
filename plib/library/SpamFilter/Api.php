@@ -56,7 +56,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         $this->logDebug(__METHOD__ . ": " . "Domain removal request");
 
         try {
-            $response = $this->call('/api/domain/remove/domain/' . $domain);
+            $response = $this->call("/api/domain/remove/domain/$domain/");
             $result = stripos($response, 'removed') !== false;
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();

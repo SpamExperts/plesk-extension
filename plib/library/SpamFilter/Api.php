@@ -30,7 +30,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 
     public function addDomain($domain, $destinations = null, $aliases = null)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain addition request");
+        $this->logDebug(__METHOD__ . ": " . "Domain addition request");
 
         try {
             $response = $this->call(
@@ -44,14 +44,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function removeDomain($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain removal request");
+        $this->logDebug(__METHOD__ . ": " . "Domain removal request");
 
         try {
             $response = $this->call('/api/domain/remove/domain/' . $domain);
@@ -61,14 +61,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function checkDomain($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain protection check request");
+        $this->logDebug(__METHOD__ . ": " . "Domain protection check request");
 
         try {
             $response = $this->call("/api/domain/exists/domain/$domain");
@@ -78,14 +78,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function getRoutes($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain get routes request");
+        $this->logDebug(__METHOD__ . ": " . "Domain get routes request");
 
         try {
             $response = $this->call("/api/domain/getroute/domain/$domain");
@@ -100,14 +100,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function setContact($domain, $email)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain admin contact set request");
+        $this->logDebug(__METHOD__ . ": " . "Domain admin contact set request");
 
         try {
             $response = $this->call("/api/domaincontact/set/domain/$domain/email/$email/");
@@ -117,7 +117,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
@@ -126,7 +126,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 
     public function addDomainUser($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain user addition request");
+        $this->logDebug(__METHOD__ . ": " . "Domain user addition request");
 
         $password = substr(str_shuffle(md5(microtime())), 0, 10);
 
@@ -138,14 +138,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function removeDomainUser($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain user removal request");
+        $this->logDebug(__METHOD__ . ": " . "Domain user removal request");
 
         try {
             $response = $this->call("/api/domainuser/remove/username/$domain");
@@ -155,14 +155,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function checkDomainUser($domain)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain user protection check request");
+        $this->logDebug(__METHOD__ . ": " . "Domain user protection check request");
 
         try {
             $response = $this->call("/api/user/get/username/$domain");
@@ -178,14 +178,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function getAuthTicket($username, $logoutUrl = null)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Authentication ticket request");
+        $this->logDebug(__METHOD__ . ": " . "Authentication ticket request");
 
         try {
             $url = "/api/authticket/create/username/$username/format/json/";
@@ -201,7 +201,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = null;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
@@ -215,7 +215,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 
     public function addAlias($domain, $alias)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain alias add request");
+        $this->logDebug(__METHOD__ . ": " . "Domain alias add request");
 
         try {
             $response = $this->call("/api/domainalias/add/domain/" . idn_to_ascii($domain)
@@ -226,14 +226,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function removeAlias($domain, $alias)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain alias remove request");
+        $this->logDebug(__METHOD__ . ": " . "Domain alias remove request");
 
         try {
             $response = $this->call("/api/domainalias/remove/domain/" . idn_to_ascii($domain)
@@ -244,14 +244,14 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
 
     public function aliasExists($domain, $alias)
     {
-        pm_Log::debug(__METHOD__ . ": " . "Domain alias presence check request");
+        $this->logDebug(__METHOD__ . ": " . "Domain alias presence check request");
 
         try {
             $response = $this->call("/api/domainalias/list/domain/" . idn_to_ascii($domain) . "/");
@@ -262,7 +262,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
             $result = false;
         }
 
-        pm_Log::debug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
 
         return $result;
     }
@@ -283,6 +283,11 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         pm_Log::info("SpamFilter API response: $response");
 
         return $response;
+    }
+
+    protected function logDebug($msg)
+    {
+        pm_Log::debug($msg);
     }
 
 }

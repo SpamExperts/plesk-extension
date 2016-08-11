@@ -14,7 +14,9 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('example.com'));
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['checkDomain'])->getMock();
+            ->setMethods(['__construct', 'checkDomain'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $spamfilterApiMock->expects($this->once())
             ->method('checkDomain')
             ->with(
@@ -41,7 +43,9 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('example.com'));
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['checkDomain'])->getMock();
+            ->setMethods(['__construct', 'checkDomain'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $spamfilterApiMock->expects($this->once())
             ->method('checkDomain')
             ->with(

@@ -13,6 +13,8 @@ zip -r spamexperts-extension.zip \
     --exclude=build.sh \
     --exclude=composer.phar \
     --exclude=codecept.phar \
+    --exclude=codeception.yml \
+    --exclude=*tests* \
     --exclude=library/composer.json \
     --exclude=library/composer.lock \
     --exclude=spamexperts-extension.zip \

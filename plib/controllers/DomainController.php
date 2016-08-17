@@ -20,8 +20,8 @@ class DomainController extends pm_Controller_Action
 
             $checkerClass =
                 Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                    ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary'
-                    : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary';
+                    ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary::class
+                    : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary::class;
 
             /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $checker */
             $checker = new $checkerClass(
@@ -68,8 +68,8 @@ class DomainController extends pm_Controller_Action
 
                     $protectorClass =
                         Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                            ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
-                            : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
+                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
+                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
                     $protector = new $protectorClass(
@@ -85,6 +85,11 @@ class DomainController extends pm_Controller_Action
                             "Domain '%s' has been successfully protected",
                             htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
                         ),
+                    ];
+                } catch (Modules_SpamexpertsExtension_Exception_IncorrectStatusException $e) {
+                    $messages[] = [
+                        'status' => 'warning',
+                        'content' => $e->getMessage(),
                     ];
                 } catch (Exception $e) {
                     $messages[] = [
@@ -118,8 +123,8 @@ class DomainController extends pm_Controller_Action
 
                     $unprotectorClass =
                         Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                            ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary'
-                            : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary';
+                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary::class
+                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary::class;
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
                     $unprotector = new $unprotectorClass(
@@ -136,7 +141,12 @@ class DomainController extends pm_Controller_Action
                             htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
                         ),
                     ];
-                } catch (Exception $e) {
+                } catch (Modules_SpamexpertsExtension_Exception_IncorrectStatusException $e) {
+                    $messages[] = [
+                        'status' => 'warning',
+                        'content' => $e->getMessage(),
+                    ];
+                }  catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',
                         'content' => $e->getMessage(),
@@ -169,8 +179,8 @@ class DomainController extends pm_Controller_Action
                     if (! pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN)) {
                         $protectorClass =
                             Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                                ? 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary'
-                                : 'Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary';
+                                ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
+                                : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
 
                         /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
                         $protector = new $protectorClass(

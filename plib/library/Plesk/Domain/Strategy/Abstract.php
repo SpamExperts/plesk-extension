@@ -124,7 +124,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
 
         if ($spamfilterDomain->status()) {
-            throw new RuntimeException(
+            throw new Modules_SpamexpertsExtension_Exception_IncorrectStatusException(
                 sprintf(
                     "Domain '%s' is protected already, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
@@ -161,7 +161,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         $spamfilterDomain = $this->initSeDomainInstance($pleskDomain);
 
         if ($spamfilterDomain->statusAlias()) {
-            throw new RuntimeException(
+            throw new Modules_SpamexpertsExtension_Exception_IncorrectStatusException(
                 sprintf(
                     "Domain '%s' is protected already, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
@@ -179,7 +179,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         $spamfilterDomain = $this->initSeDomainInstance($this->initPanelDomainInstance());
 
         if (! $spamfilterDomain->status()) {
-            throw new RuntimeException(
+            throw new Modules_SpamexpertsExtension_Exception_IncorrectStatusException(
                 sprintf(
                     "Domain '%s' is not protected, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')
@@ -195,7 +195,7 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         $spamfilterDomain = $this->initSeDomainInstance($this->initPanelDomainInstance());
 
         if (! $spamfilterDomain->statusAlias()) {
-            throw new RuntimeException(
+            throw new Modules_SpamexpertsExtension_Exception_IncorrectStatusException(
                 sprintf(
                     "Domain '%s' is not protected, skipping it",
                     htmlentities($this->domainName, ENT_QUOTES, 'UTF-8')

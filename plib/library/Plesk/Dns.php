@@ -84,7 +84,7 @@ APICALL;
 <add_rec>
     $filter
     <type>MX</type>
-    <host>{$domain->getDomain()}</host>
+    <host></host>
     <value>%s</value>
     <opt>%d</opt>
 </add_rec>

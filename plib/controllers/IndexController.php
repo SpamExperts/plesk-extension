@@ -140,11 +140,21 @@ class IndexController extends pm_Controller_Action
 
         $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
 
-        foreach (array_merge(
-                     $domainsManager->getWebspaces(),
-                     $domainsManager->getSites(),
-                     $domainsManager->getAliases()
-                 ) as $info) {
+        $allDomains = array_merge(
+            $domainsManager->getWebspaces(),
+            $domainsManager->getSites()
+        );
+        if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP !=
+            pm_Settings::get(
+                Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+            )) {
+            $allDomains = array_merge(
+                $allDomains,
+                $domainsManager->getAliases()
+            );
+        }
+
+        foreach ($allDomains as $info) {
             $data[$info['name']] = [
                 'domain'     => idn_to_utf8($info['name']),
                 'type'       => $info['type'],

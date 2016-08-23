@@ -153,17 +153,26 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                     case 'domain_alias_create':
                     case 'site_alias_create':
                         if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAINS)) {
-                            pm_Log::debug("Starting '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
-
-                            try {
-                                $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary(
-                                    $newValues['Domain Alias Name'],
-                                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS,
-                                    $objectId
+                            if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP ==
+                                pm_Settings::get(
+                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+                                )) {
+                                pm_Log::debug(
+                                    "Skipping '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook according to current strategy"
                                 );
-                                $protector->execute();
-                            } catch (Exception $e) {
-                                pm_Log::err("Failed to protect '{$newValues['Domain Alias Name']}' - " . $e->getMessage());
+                            } else {
+                                pm_Log::debug("Starting '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
+
+                                try {
+                                    $protector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary(
+                                        $newValues['Domain Alias Name'],
+                                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS,
+                                        $objectId
+                                    );
+                                    $protector->execute();
+                                } catch (Exception $e) {
+                                    pm_Log::err("Failed to protect '{$newValues['Domain Alias Name']}' - " . $e->getMessage());
+                                }
                             }
                         } else {
                             pm_Log::debug("Skipping '{$newValues['Domain Alias Name']}' protection in the {$objectType}/{$action} hook");
@@ -174,16 +183,25 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                     case 'domain_alias_delete':
                     case 'site_alias_delete':
                         if (pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_DEL_DOMAINS)) {
-                            pm_Log::debug("Starting '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");
+                            if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP ==
+                                pm_Settings::get(
+                                    Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+                                )) {
+                                pm_Log::debug(
+                                    "Skipping '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook according to current strategy"
+                                );
+                            } else {
+                                pm_Log::debug("Starting '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");
 
-                            try {
-                                $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
+                                try {
+                                    $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
                                         $oldValues['Domain Alias Name']
                                     );
-                                $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
-                                $unprotector->execute();
-                            } catch (Exception $e) {
-                                pm_Log::err("Failed to protect '{$oldValues['Domain Alias Name']}' - " . $e->getMessage());
+                                    $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
+                                    $unprotector->execute();
+                                } catch (Exception $e) {
+                                    pm_Log::err("Failed to protect '{$oldValues['Domain Alias Name']}' - " . $e->getMessage());
+                                }
                             }
                         } else {
                             pm_Log::debug("Skipping '{$oldValues['Domain Alias Name']}' unprotection in the {$objectType}/{$action} hook");

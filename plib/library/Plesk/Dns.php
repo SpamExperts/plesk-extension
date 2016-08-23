@@ -38,6 +38,10 @@ APICALL;
         
         // TODO: Sort records by MX priority
 
+        $useIpAddresses = 0 < pm_Settings::get(
+                Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_IP_DESTINATION_ROUTES
+            );
+
         /** @noinspection PhpUndefinedFieldInspection */
         if (!empty($response->dns->get_rec->result)) {
             /** @noinspection PhpUndefinedFieldInspection */
@@ -45,10 +49,12 @@ APICALL;
                 if ('ok' == $rec->status && 'MX' == $rec->data->type) {
                     $mxHostname = (string) rtrim($rec->data->value, '.');
 
-                    if (0 < pm_Settings::get(
-                            Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_IP_DESTINATION_ROUTES
-                        )) {
+                    if ($useIpAddresses) {
+                        pm_Log::debug("Obtaining IP address for '$mxHostname' ... ");
+
                         $mxIpaddress = gethostbyname($mxHostname);
+
+                        pm_Log::debug("'$mxHostname' resolves to '$mxIpaddress'");
                     }
 
                     $records[(int) $rec->id] = !empty($mxIpaddress) ? $mxIpaddress : $mxHostname;

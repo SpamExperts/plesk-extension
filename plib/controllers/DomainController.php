@@ -7,40 +7,47 @@ class DomainController extends pm_Controller_Action
         $messages = [];
 
         foreach ((array) $this->_getParam('ids') as $domain) {
-            $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
+            try {
+                $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-            if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
-                $this->_status->addMessage(
-                    'error',
-                    sprintf('Access denied to the domain %s',
-                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
+                if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                    $this->_status->addMessage(
+                        'error',
+                        sprintf('Access denied to the domain %s',
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
+                    );
+                    $this->_forward('index', 'index');
+                }
+
+                $checkerClass =
+                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                        ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary::class
+                        : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary::class;
+
+                /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $checker */
+                $checker = new $checkerClass(
+                    $pleskDomain->getDomain(),
+                    $pleskDomain->getType(),
+                    $pleskDomain->getId()
                 );
-                $this->_forward('index', 'index');
-            }
 
-            $checkerClass =
-                Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                    ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary::class
-                    : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary::class;
-
-            /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $checker */
-            $checker = new $checkerClass(
-                $pleskDomain->getDomain(),
-                $pleskDomain->getType(),
-                $pleskDomain->getId()
-            );
-
-            if ($checker->execute()) {
-                $messages[] = [
-                    'status' => 'info',
-                    'content' => sprintf("Domain '%s' is protected",
-                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
-                ];
-            } else {
+                if ($checker->execute()) {
+                    $messages[] = [
+                        'status' => 'info',
+                        'content' => sprintf("Domain '%s' is protected",
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
+                    ];
+                } else {
+                    $messages[] = [
+                        'status' => 'error',
+                        'content' => sprintf("Domain '%s' is NOT protected",
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
+                    ];
+                }
+            } catch (Exception $e) {
                 $messages[] = [
                     'status' => 'error',
-                    'content' => sprintf("Domain '%s' is NOT protected",
-                        htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
+                    'content' => $e->getMessage(),
                 ];
             }
         }

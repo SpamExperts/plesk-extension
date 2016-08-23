@@ -154,11 +154,21 @@ class IndexController extends pm_Controller_Action
             );
         }
 
+        $secondaryDomainsStrategy = pm_Settings::get(
+            Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+        );
+
         foreach ($allDomains as $info) {
+            $displayLoginLink
+                = ($secondaryDomainsStrategy
+                ==
+                Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN)
+                || 'Alias' != $info['type'];
+
             $data[$info['name']] = [
                 'domain'     => idn_to_utf8($info['name']),
                 'type'       => $info['type'],
-                'login-link' => (('Alias' != $info['type'])
+                'login-link' => ($displayLoginLink
                     ? '<a target="_blank" href="' . $this->_helper->url('login', 'domain', null, ['domain' => $info['name']])
                         . '" class="s-btn sb-login"><span>Manage in SpamFilter Panel</span></a>'
                     : ''),

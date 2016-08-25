@@ -45,7 +45,9 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                     'UTF-8'
                 ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
                 'link' => pm_Context::getActionUrl('index'),
-                'visibility' => !Modules_SpamexpertsExtension_Form_Settings::areEmpty(),
+                'visibility' => function ($options) {
+                    return ! Modules_SpamexpertsExtension_Form_Settings::areEmpty();
+                }
             ],
             [
                 'place' => [
@@ -65,7 +67,9 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                     'UTF-8'
                 ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
                 'link' => pm_Context::getActionUrl('index'),
-                'visibility' => !Modules_SpamexpertsExtension_Form_Settings::areEmpty(),
+                'visibility' => function ($options) {
+                    return ! Modules_SpamexpertsExtension_Form_Settings::areEmpty();
+                }
             ],
         ];
 

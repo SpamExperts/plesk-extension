@@ -9,10 +9,11 @@ class Modules_SpamexpertsExtension_Plesk_Dns
      * and a record hostname as a value
      *
      * @param Modules_SpamexpertsExtension_Plesk_Domain $domain
+     * @param bool $forceRaw
      *
      * @return array
      */
-    public function getDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain)
+    public function getDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, $forceRaw = false)
     {
         $domainId = $domain->getId();
 
@@ -49,7 +50,7 @@ APICALL;
                 if ('ok' == $rec->status && 'MX' == $rec->data->type) {
                     $mxHostname = (string) rtrim($rec->data->value, '.');
 
-                    if ($useIpAddresses) {
+                    if (!$forceRaw && $useIpAddresses) {
                         pm_Log::debug("Obtaining IP address for '$mxHostname' ... ");
 
                         $mxIpaddress = gethostbyname($mxHostname);
@@ -78,7 +79,7 @@ APICALL;
     public function replaceDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, array $records)
     {
         $domainId = $domain->getId();
-        $obsoleteMXRecords = $this->getDomainsMxRecords($domain);
+        $obsoleteMXRecords = $this->getDomainsMxRecords($domain, true);
 
         // The remove existing records -> Add new ones does not work
         // because the panel does not allow to delete the last MX record
@@ -98,22 +99,30 @@ APICALL;
         $bulkRecordsRequest = '';
         $priority = 10;
         foreach ($records as $rec) {
-            $bulkRecordsRequest .= sprintf($addRecordRequestTemplate, $rec, $priority);
-            $priority += 10;
+            $existingRecordIndex = array_search($rec, $obsoleteMXRecords);
+            if (false === $existingRecordIndex) {
+                $bulkRecordsRequest .= sprintf($addRecordRequestTemplate, $rec, $priority);
+                $priority += 10;
+            } else {
+                unset($obsoleteMXRecords[$existingRecordIndex]);
+            }
         }
 
-        $response = $this->xmlapi("<dns>{$bulkRecordsRequest}</dns>");
+        if (!empty($bulkRecordsRequest)) {
+            $response = $this->xmlapi("<dns>{$bulkRecordsRequest}</dns>");
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ('ok' != $response->dns->add_rec->result->status) {
             /** @noinspection PhpUndefinedFieldInspection */
-            throw new RuntimeException(
-                "Failed to add DMS MX records - "
-                . $response->dns->add_rec->result->errtext
-            );
+            if ('ok' != $response->dns->add_rec->result->status) {
+                /** @noinspection PhpUndefinedFieldInspection */
+                throw new RuntimeException(
+                    "Failed to add DMS MX records - "
+                    . $response->dns->add_rec->result->errtext
+                );
+            }
         }
 
-        $deleteRecordRequestTemplate = <<<APICALL
+        if (!empty($obsoleteMXRecords)) {
+            $deleteRecordRequestTemplate = <<<APICALL
 <dns>
  <del_rec>
   <filter>
@@ -122,15 +131,16 @@ APICALL;
  </del_rec>
 </dns>
 APICALL;
-        foreach ($obsoleteMXRecords as $oldRecordId => $oldRecordValue) {
-            $response = $this->xmlapi(sprintf($deleteRecordRequestTemplate, $oldRecordId));
-            /** @noinspection PhpUndefinedFieldInspection */
-            if ('ok' != $response->dns->del_rec->result->status) {
+            foreach ($obsoleteMXRecords as $oldRecordId => $oldRecordValue) {
+                $response = $this->xmlapi(sprintf($deleteRecordRequestTemplate, $oldRecordId));
                 /** @noinspection PhpUndefinedFieldInspection */
-                throw new RuntimeException(
-                    "Failed to delete DMS MX record #{$oldRecordId} - "
+                if ('ok' != $response->dns->del_rec->result->status) {
+                    /** @noinspection PhpUndefinedFieldInspection */
+                    throw new RuntimeException(
+                        "Failed to delete DMS MX record #{$oldRecordId} - "
                         . $response->dns->del_rec->result->errtext
-                );
+                    );
+                }
             }
         }
     }

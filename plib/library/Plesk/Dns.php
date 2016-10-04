@@ -55,6 +55,13 @@ APICALL;
 
                         $mxIpaddress = gethostbyname($mxHostname);
 
+                        if ($mxIpaddress == $mxHostname) { // IPv4 lookup has failed, let's try IPv6...
+                            $ipv6Recs = dns_get_record($mxHostname, DNS_AAAA);
+                            if (!empty($ipv6Recs[0]['ipv6'])) {
+                                $mxIpaddress = $ipv6Recs[0]['ipv6'];
+                            }
+                        }
+
                         pm_Log::debug("'$mxHostname' resolves to '$mxIpaddress'");
                     }
 

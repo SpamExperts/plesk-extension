@@ -17,6 +17,8 @@ class DomainController extends pm_Controller_Action
                             htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                     );
                     $this->_forward('index', 'index');
+
+                    return;
                 }
 
                 $checkerClass =
@@ -71,6 +73,8 @@ class DomainController extends pm_Controller_Action
                                 htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
+
+                        return;
                     }
 
                     $protectorClass =
@@ -126,6 +130,8 @@ class DomainController extends pm_Controller_Action
                                 htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
                         );
                         $this->_forward('index', 'index');
+
+                        return;
                     }
 
                     $unprotectorClass =
@@ -180,6 +186,8 @@ class DomainController extends pm_Controller_Action
             if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
                 $this->_status->addMessage('error', 'Access denied.');
                 $this->_forward('index', 'index');
+
+                return;
             } else {
                 $seDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
                 if (! $seDomain->status()) {
@@ -232,6 +240,8 @@ class DomainController extends pm_Controller_Action
                 } else {
                     $this->_status->addMessage('error', 'Unable to obtain authentication token.');
                     $this->_forward('index', 'index');
+
+                    return;
                 }
             }
         }

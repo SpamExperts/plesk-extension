@@ -130,28 +130,48 @@ class IndexController extends pm_Controller_Action
     {
         $this->checkExtensionConfiguration();
 
+        $contextDomainId = $this->_request->getQuery('dom_id');
+
         // List object for pm_View_Helper_RenderList
-        $this->view->list = $this->_getDomainsList();
+        $this->view->list = $this->_getDomainsList(
+            !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
+        );
     }
 
-    private function _getDomainsList()
+    private function _getDomainsList(array $ids = [])
     {
         $data = [];
 
-        $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
+        if (empty($ids)) {
+            $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
 
-        $allDomains = array_merge(
-            $domainsManager->getWebspaces(),
-            $domainsManager->getSites()
-        );
-        if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP !=
-            pm_Settings::get(
-                Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
-            )) {
             $allDomains = array_merge(
-                $allDomains,
-                $domainsManager->getAliases()
+                $domainsManager->getWebspaces(),
+                $domainsManager->getSites()
             );
+            if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP !=
+                pm_Settings::get(
+                    Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
+                )
+            ) {
+                $allDomains = array_merge(
+                    $allDomains,
+                    $domainsManager->getAliases()
+                );
+            }
+        } else {
+            $allDomains = [];
+
+            foreach ($ids as $domainId) {
+                $pleskDomainInstance = new Modules_SpamexpertsExtension_Plesk_Domain(
+                    (new pm_Domain($domainId))->getName()
+                );
+                $allDomains[] = [
+                    'id' => $pleskDomainInstance->getId(),
+                    'name' => $pleskDomainInstance->getDomain(),
+                    'type' => $pleskDomainInstance->getType(),
+                ];
+            }
         }
 
         $secondaryDomainsStrategy = pm_Settings::get(

@@ -10,7 +10,7 @@ class DomainController extends pm_Controller_Action
             try {
                 $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-                if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                if (!$this->hasAccessToDomain($pleskDomain)) {
                     $this->_status->addMessage(
                         'error',
                         sprintf('Access denied to the domain %s',
@@ -66,7 +66,7 @@ class DomainController extends pm_Controller_Action
                 try {
                     $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-                    if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                    if (!$this->hasAccessToDomain($pleskDomain)) {
                         $this->_status->addMessage(
                             'error',
                             sprintf('Access denied to the domain %s',
@@ -123,7 +123,7 @@ class DomainController extends pm_Controller_Action
                 try {
                     $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-                    if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+                    if (!$this->hasAccessToDomain($pleskDomain)) {
                         $this->_status->addMessage(
                             'error',
                             sprintf('Access denied to the domain %s',
@@ -183,7 +183,7 @@ class DomainController extends pm_Controller_Action
         if (!empty($domain)) {
             $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-            if (!pm_Session::getClient()->hasAccessToDomain($pleskDomain->getId())) {
+            if (!$this->hasAccessToDomain($pleskDomain)) {
                 $this->_status->addMessage('error', 'Access denied.');
                 $this->_forward('index', 'index');
 
@@ -245,6 +245,17 @@ class DomainController extends pm_Controller_Action
                 }
             }
         }
+    }
+
+    private function hasAccessToDomain(Modules_SpamexpertsExtension_Plesk_Domain $domain)
+    {
+        $result = pm_Session::getClient()->hasAccessToDomain($domain->getId());
+
+        if (!$result && $parentDomain = $domain->getParent()) {
+            $result = pm_Session::getClient()->hasAccessToDomain($parentDomain->getId());
+        }
+
+        return $result;
     }
 
 }

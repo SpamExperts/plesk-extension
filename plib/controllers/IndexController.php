@@ -91,9 +91,46 @@ class IndexController extends pm_Controller_Action
             $this->_helper->json(['redirect' => $this->_helper->url('settings')]);
         }
 
+        /**
+         * Check Plesk license for a container with bundled configuration
+         *
+         * @see https://trac.spamexperts.com/ticket/29702
+         */
+        $licenseSettings = \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense();
+        if (!empty($licenseSettings)) {
+            foreach (array_keys($licenseSettings) as $optKey) {
+                if (isset($licenseSettings[$optKey]) && $licenseSettings[$optKey] != pm_Settings::get($optKey)) {
+                    $this->_status->addMessage(
+                        'info',
+                        'Configuration options are found in Plesk license. <a href="'
+                            . $this->_helper->url('applyconfig') . '" onclick="return confirm(\'Sure?\');">Apply</a>',
+                        true
+                    );
+
+                    break;
+                }
+            }
+        }
+
         $this->view->form = $form;
     }
 
+    public function applyconfigAction()
+    {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
+
+        $licenseSettings = \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense();
+        if (!empty($licenseSettings)) {
+            foreach (array_keys($licenseSettings) as $optKey) {
+                pm_Settings::set($optKey, $licenseSettings[$optKey]);
+            }
+        }
+
+        $this->_status->addMessage('info', 'Configuration options have been successfully applied.');
+        $this->_redirect('/index/settings', [ 'exit' => true ]);
+    }
 
     public function brandingAction()
     {

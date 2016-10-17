@@ -103,7 +103,7 @@ class IndexController extends pm_Controller_Action
                     $this->_status->addMessage(
                         'info',
                         'Configuration options are found in Plesk license. <a href="'
-                            . $this->_helper->url('applyconfig') . '" onclick="return confirm(\'Sure?\');">Apply</a>',
+                            . $this->_helper->url('applyconfig') . '" onclick="return confirm(\'Existing configuration data will be erased. Are you sure to continue?\');">Apply</a>',
                         true
                     );
 

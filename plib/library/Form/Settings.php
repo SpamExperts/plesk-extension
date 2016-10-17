@@ -202,22 +202,18 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 
     final static public function retrieveFromPleskLicense()
     {
-//        $keys = pm_License::getAdditionalKeysList('spamexperts-extension'); // Here you pass id of the extension
-//        if (empty($keys)) {
-//            return ''; // or throw exception
-//        }
-//        $key = reset($keys);
-//        return $key['key-body'];
+        $keys = pm_License::getAdditionalKeysList('spamexperts-extension-beta');
 
-        return [
-            self::OPTION_SPAMPANEL_URL => "http://server1.aps1.simplyspamfree.com",
-            self::OPTION_SPAMPANEL_API_HOST => "server1.aps1.simplyspamfree.com",
-            self::OPTION_SPAMPANEL_API_USER => "plesk-ext",
-            self::OPTION_SPAMPANEL_API_PASS => "qaz123QAZ",
-            self::OPTION_SPAMFILTER_MX1 => "mx.aps1.simplyspamfree.com",
-            self::OPTION_SPAMFILTER_MX2 => "mail.simplyspamfree.com",
-            self::OPTION_SPAMFILTER_MX3 => "",
-            self::OPTION_SPAMFILTER_MX4 => "",
-        ];
+        if (is_array($keys) && $licenseMeta = reset($keys)) {
+            if (date('Ymd') < $licenseMeta['lim_date']) {
+                pm_Log::debug("Do not use Plesk license data is the license seems to be expired");
+            }
+
+            if ($licenseData = json_decode($licenseMeta['key-body'], true)) {
+                return $licenseData;
+            }
+        }
+
+        return '';
     }
 }

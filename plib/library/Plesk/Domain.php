@@ -187,25 +187,78 @@ APICALL;
         if (null === $this->isLocal) {
             $id = $this->getId();
 
-            $filterName = 'site-id';
-            if (self::TYPE_ALIAS == $this->getType()) {
-                $filterName = 'site-alias-id';
-            }
-
-            $request = <<<APICALL
+            switch ($this->getType()) {
+                case self::TYPE_WEBSPACE:
+                    $request = <<<APICALL
 <dns>
  <get>
   <filter>
-   <$filterName>$id</$filterName>
+   <site-id>$id</site-id>
   </filter>
  </get>
 </dns>
 APICALL;
+                    $response = $this->xmlapi($request);
+                    if ('ok' == $response->dns->get->result->status) {
+                        $this->isLocal = ('enabled' == strtolower($response->dns->get->result->zone_status));
+                    }
 
-            $response = $this->xmlapi($request);
+                    break;
 
-            if ('ok' == $response->dns->get->result->status) {
-                $this->isLocal = 'enabled' == strtolower($response->dns->get->result->zone_status);
+                case self::TYPE_SITE:
+                case self::TYPE_SUBDOMAIN:
+                    $request = <<<APICALL
+<dns>
+ <get>
+  <filter>
+   <site-id>$id</site-id>
+  </filter>
+ </get>
+</dns>
+APICALL;
+                    $response = $this->xmlapi($request);
+                    if ('ok' == $response->dns->get->result->status) {
+                        $zoneEnabled = 'enabled' == strtolower($response->dns->get->result->zone_status);
+                        if (! $zoneEnabled && $parentDomain = $this->getParent()) {
+                            $zoneEnabled = $parentDomain->isLocal();
+                        }
+                        $this->isLocal = $zoneEnabled;
+                    }
+
+                    break;
+
+                case self::TYPE_ALIAS:
+                    $request = <<<APICALL
+<site-alias>
+ <get>
+  <filter>
+   <name>{$this->getDomain()}</name>
+  </filter>
+ </get>
+</site-alias>
+APICALL;
+                    $response = $this->xmlapi($request);
+                    if ('ok' == $response->{'site-alias'}->get->result->status) {
+                        if ('false' == ((string) $response->{'site-alias'}->get->result->info->{'manage-dns'})) {
+                            $this->isLocal = $this->getParent()->isLocal();
+                        } else {
+                            $request = <<<APICALL
+<dns>
+ <get>
+  <filter>
+   <site-alias-id>$id</site-alias-id>
+  </filter>
+ </get>
+</dns>
+APICALL;
+                            $response = $this->xmlapi($request);
+                            if ('ok' == $response->dns->get->result->status) {
+                                $this->isLocal = ('enabled' == strtolower($response->dns->get->result->zone_status));
+                            }
+                        }
+                    }
+
+                    break;
             }
         }
 
@@ -223,7 +276,25 @@ APICALL;
             $aliasId = $this->getId();
 
             if (self::TYPE_ALIAS !== $this->type) {
-                throw new RuntimeException("This domain type cannot have parents");
+
+                // Check if a given domain is a subddomain
+                $request = <<<APICALL
+<subdomain>
+    <get>
+       <filter>
+            <name>{$this->getDomain()}</name>
+       </filter>
+    </get>
+</subdomain>
+APICALL;
+                $response = $this->xmlapi($request);
+
+                if ('ok' == $response->subdomain->get->result->status
+                    && !empty($response->subdomain->get->result->data->parent)) {
+                    return new self($response->subdomain->get->result->data->parent);
+                } else {
+                    return null;
+                }
             }
 
             $request = <<<APICALL

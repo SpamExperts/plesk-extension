@@ -167,7 +167,15 @@ class IndexController extends pm_Controller_Action
     {
         $this->checkExtensionConfiguration();
 
-        $contextDomainId = $this->_request->getQuery('dom_id');
+        // List object for pm_View_Helper_RenderList
+        $this->view->list = $this->_getDomainsList();
+    }
+
+    public function domainAction()
+    {
+        $this->checkExtensionConfiguration();
+
+        $contextDomainId = pm_Session::getCurrentDomain()->getId();
 
         // List object for pm_View_Helper_RenderList
         $this->view->list = $this->_getDomainsList(
@@ -178,6 +186,7 @@ class IndexController extends pm_Controller_Action
     private function _getDomainsList(array $ids = [])
     {
         $data = [];
+        $dataUrl = 'list-data';
 
         if (empty($ids)) {
             $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
@@ -209,6 +218,8 @@ class IndexController extends pm_Controller_Action
                     'type' => $pleskDomainInstance->getType(),
                 ];
             }
+
+            $dataUrl = 'list-context-data';
         }
 
         $secondaryDomainsStrategy = pm_Settings::get(
@@ -298,7 +309,7 @@ class IndexController extends pm_Controller_Action
         $list->setTools($listTools);
 
         // Take into account listDataAction corresponds to the URL /list-data/
-        $list->setDataUrl(['action' => 'list-data']);
+        $list->setDataUrl(['action' => $dataUrl]);
 
         return $list;
     }
@@ -306,6 +317,19 @@ class IndexController extends pm_Controller_Action
     public function listDataAction()
     {
         $list = $this->_getDomainsList();
+
+        // Json data from pm_View_List_Simple
+        $this->_helper->json($list->fetchData());
+    }
+
+    public function listContextDataAction()
+    {
+        $contextDomainId = pm_Session::getCurrentDomain()->getId();
+
+        // List object for pm_View_Helper_RenderList
+        $list = $this->_getDomainsList(
+            !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
+        );
 
         // Json data from pm_View_List_Simple
         $this->_helper->json($list->fetchData());

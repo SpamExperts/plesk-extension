@@ -93,9 +93,25 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
             }
         }
 
+        /**
+         * Current MX records retrieval procedure improvement.
+         * In some case the protection can be started before all DNS records are created.
+         * To avoid such cases we check if a non-empty records set has been fetched
+         * and if the set is empty we repeat the attempt after some delay.
+         * The total delay cannot exceed 60 seconds.
+         */
+        $actualMxRecords = [];
+        foreach ([1, 2, 5, 10, 17, 25] as $delay) {
+            $actualMxRecords = array_values($this->dns->getDomainsMxRecords($this->pleskDomain));
+            if (!empty($actualMxRecords)) {
+                break;
+            }
+            sleep($delay);
+        }
+
         $domainAddOk = $this->api->addDomain(
             $this->pleskDomain->getDomain(),
-            array_values($this->dns->getDomainsMxRecords($this->pleskDomain)),
+            $actualMxRecords,
             $aliases
         );
 

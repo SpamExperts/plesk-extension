@@ -202,7 +202,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 
     final static public function retrieveFromPleskLicense()
     {
-        $keys = pm_License::getAdditionalKeysList('spamexperts-extension-beta');
+        $keys = pm_License::getAdditionalKeysList('ext-spamexperts-extension-beta');
 
         if (is_array($keys) && $licenseMeta = reset($keys)) {
             if (date('Ymd') < $licenseMeta['lim_date']) {

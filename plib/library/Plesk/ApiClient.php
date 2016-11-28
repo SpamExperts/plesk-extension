@@ -12,7 +12,14 @@ class Modules_SpamexpertsExtension_Plesk_ApiClient
         return (string) $api->xmlapi('<server><get><gen_info/></get></server>')['version'];
     }
 
-    public function getDomains($resellerId)
+    /**
+     * Get customer domains based on reseller id
+     *
+     * @param $resellerId
+     * @return array
+     */
+
+    public function getCustomerDomains($resellerId)
     {
         $domains = [];
 
@@ -32,31 +39,36 @@ APICALL;
 
         $response = $this->xmlapi($request);
 
-        $filter = [];
+        if ('ok' == $response->customer->get->result->status) {
 
-        foreach ($response->customer->get->result as $customer) {
-            $filter[] = "<get-domain-list><filter><id>".$customer->id->__toString()."</id></filter></get-domain-list>";
-        }
+            $filter = [];
 
-        if (!empty($filter)) {
-            $filter = implode("", $filter);
+            foreach ($response->customer->get->result as $customer) {
+                $filter[] = "<get-domain-list><filter><id>" . $customer->id->__toString() . "</id></filter></get-domain-list>";
+            }
 
-            $request = <<<APICALL
+            if (!empty($filter)) {
+                $filter = implode("", $filter);
+
+                $request = <<<APICALL
 <customer>
     $filter
 </customer>
 APICALL;
 
-            $response = $this->xmlapi($request);
+                $response = $this->xmlapi($request);
 
-            foreach ($response->customer->children() as $customerDomains) {
-                foreach ($customerDomains->result->domains as $domain) {
-                    foreach ($domain->children() as $item) {
-                        $domains[] = [
-                            "id" => $item->id->__toString(),
-                            "name" => $item->name->__toString(),
-                            "type" => $item->type->__toString()
-                        ];
+                if ("ok" == $response->customer->{"get-domain-list"}->{result}->{status}) {
+                    foreach ($response->customer->children() as $customerDomains) {
+                        foreach ($customerDomains->result->domains as $domain) {
+                            foreach ($domain->children() as $item) {
+                                $domains[] = [
+                                    "id" => $item->id->__toString(),
+                                    "name" => $item->name->__toString(),
+                                    "type" => $item->type->__toString()
+                                ];
+                            }
+                        }
                     }
                 }
             }

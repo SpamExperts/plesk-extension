@@ -15,7 +15,7 @@ class C01ConfigurationCest
         $I->loginAsRoot();
 
         // Create a default package if no one exists
-        $I->createDefaultPackage();
+        // $I->createDefaultPackage();
 
         // Go to plugin configuration page
         $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ProfessionalSpamFilterPage::TITLE);
@@ -25,7 +25,7 @@ class C01ConfigurationCest
     public function _after(ConfigurationSteps $I)
     {
         // Remove all created accounts
-        $I->removeCreatedAccounts();
+        // $I->removeCreatedAccounts();
     }
 
     public function _failed(ConfigurationSteps $I)

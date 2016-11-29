@@ -7,6 +7,33 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://localhost/myapp
-        - \Helper\Acceptance
+        - WebDriver
+        - Helper\Acceptance
+        - Asserts
+    config:
+        WebDriver:
+         url: 'http://localhost/'
+         browser: firefox
+         wait: 0
+         restart: true
+         clear_cookies: true
+
+env:
+    # Environment variable names used for spam plugin configuration
+    api_url: 'API_URL'
+    api_hostname: 'API_HOSTNAME'
+    api_username: 'API_USERNAME'
+    api_password: 'API_PASSWORD'
+    primary_mx: 'PRIMARY_MX'
+
+    # Environment variables used for cpanel
+    username: 'EXTENSION_USERNAME'
+    password: 'EXTENSION_PASSWORD'
+    url: 'EXTENSION_URL'
+
+    chrome:
+      modules:
+        config:
+          WebDriver:
+            browser: chrome
+    firefox:

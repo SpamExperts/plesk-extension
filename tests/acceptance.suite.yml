@@ -7,33 +7,6 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - WebDriver
-        - Helper\Acceptance
-        - Asserts
-    config:
-        WebDriver:
-         url: 'http://localhost/'
-         browser: firefox
-         wait: 0
-         restart: true
-         clear_cookies: true
-
-env:
-    # Environment variable names used for spam plugin configuration
-    api_url: 'API_URL'
-    api_hostname: 'API_HOSTNAME'
-    api_username: 'API_USERNAME'
-    api_password: 'API_PASSWORD'
-    primary_mx: 'PRIMARY_MX'
-
-    # Environment variables used for plesk
-    username: 'ADDON_USERNAME'
-    password: 'ADDON_PASSWORD'
-    url: 'ADDON_URL'
-
-    chrome:
-      modules:
-        config:
-          WebDriver:
-            browser: chrome
-    firefox:
+        - PhpBrowser:
+            url: http://localhost/myapp
+        - \Helper\Acceptance

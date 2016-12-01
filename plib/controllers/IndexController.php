@@ -190,7 +190,7 @@ class IndexController extends pm_Controller_Action
 
         if ($client->isReseller()) {
             $apiClient = new Modules_SpamexpertsExtension_Plesk_ApiClient();
-            $allDomains = array_merge($allDomains, $apiClient->getDomains($client->getId()));
+            $allDomains = array_merge($allDomains, $apiClient->getCustomerDomains($client->getId()));
         }
 
         $secondaryDomainsStrategy = pm_Settings::get(

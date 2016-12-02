@@ -185,7 +185,7 @@ class IndexController extends pm_Controller_Action
             $dataUrl = 'list-context-data';
         }
 
-        // add reseller customer domains
+        // Add reseller customer domains
         $client = pm_Session::getClient();
 
         if ($client->isReseller()) {

@@ -203,7 +203,15 @@ class DomainController extends pm_Controller_Action
                             $pleskDomain->getType(),
                             $pleskDomain->getId()
                         );
-                        $protector->execute();
+
+                        try {
+                            $protector->execute();
+                        } catch (Exception $e) {
+                            $this->_status->addMessage('error', $e->getMessage());
+                            $this->_forward('index', 'index');
+
+                            return;
+                        }
                     } else {
                         $this->_status->addMessage(
                             'error',

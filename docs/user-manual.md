@@ -27,7 +27,7 @@ The first action that needs to be accomplished before using the extension is con
 
 The configuration page contains the full extension options and allows you to set up the extension to act as desired. In most cases, the default settings are sufficient (settings like SpamFilter API hostname and MX records still need to be filled in) but can be altered to suit your needs.
 
-Please note: If you want to use this extension on SpamExperts' Hosted Cloud there are some ![additional steps](https://my.spamexperts.com/kb/145/Using-addons-on-the-Hosted-Cloud.html) required.
+Please note: If you want to use this extension on SpamExperts' Hosted Cloud there are some [additional steps](https://my.spamexperts.com/kb/145/Using-addons-on-the-Hosted-Cloud.html) required.
 
 ### Settings
 

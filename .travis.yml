@@ -7,6 +7,8 @@ php:
     - 7.0
 
 before_script:
+    # Install Composer dependencies
+    - composer install -d plib/library
     # Download Codeception package
     - wget http://codeception.com/codecept.phar
 

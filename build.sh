@@ -18,5 +18,6 @@ zip -r spamexperts-extension.zip \
     --exclude=*docs* \
     --exclude=library/composer.json \
     --exclude=library/composer.lock \
+    --exclude=.travis.yml \
     --exclude=spamexperts-extension.zip \
     --exclude="*/\.*" ./*

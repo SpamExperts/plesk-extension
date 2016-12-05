@@ -7,9 +7,6 @@ use Page\ProfessionalSpamFilterPage;
 use Step\Acceptance\ConfigurationSteps;
 use Codeception\Util\Locator;
 
-/**
- * @skip
- */
 class C01ConfigurationCest
 {
     public function _before(ConfigurationSteps $I)
@@ -41,8 +38,6 @@ class C01ConfigurationCest
      */
     public function checkConfigurationPage(ConfigurationSteps $I)
     {
-        $scenario->incomplete('Travis CI is not set up to run acceptance tests yet');
-
         // Verify configuration page layout
         $I->verifyPageLayout();
 

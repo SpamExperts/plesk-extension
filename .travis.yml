@@ -13,4 +13,4 @@ before_script:
     - wget http://codeception.com/codecept.phar
 
 script:
-    - php codecept.phar run
+    - php codecept.phar run unit

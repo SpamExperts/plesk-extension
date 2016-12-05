@@ -36,8 +36,10 @@ class C01ConfigurationCest
     /**
      * Verify the 'Configuration page' layout and functionality
      */
-    public function checkConfigurationPage(ConfigurationSteps $I)
+    public function checkConfigurationPage(ConfigurationSteps $I, $scenario)
     {
+        $scenario->incomplete('Travis CI is not set up to run acceptance tests yet');
+
         // Verify configuration page layout
         $I->verifyPageLayout();
 

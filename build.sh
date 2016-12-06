@@ -15,6 +15,7 @@ zip -r spamexperts-extension.zip \
     --exclude=codecept.phar \
     --exclude=codeception.yml \
     --exclude=*tests* \
+    --exclude=docs/* \
     --exclude=library/composer.json \
     --exclude=library/composer.lock \
     --exclude=spamexperts-extension.zip \

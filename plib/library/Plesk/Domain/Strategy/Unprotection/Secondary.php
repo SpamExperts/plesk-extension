@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary
     extends Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
 {

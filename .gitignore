@@ -9,6 +9,7 @@ plib/library/vendor/
 /spamexperts-extension.zip
 /composer.phar
 /codecept.phar
+/phpmd.phar
 /plib/library/composer.lock
 
 tests/_output/*

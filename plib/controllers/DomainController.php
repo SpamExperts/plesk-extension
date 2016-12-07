@@ -171,6 +171,9 @@ class DomainController extends pm_Controller_Action
         $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function loginAction()
     {
         $pageURL = 'http';

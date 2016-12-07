@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_EventListener implements EventListener
 {
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function handleEvent($objectType, $objectId, $action, $oldValues, $newValues)
     {
         pm_Log::debug(__METHOD__ . ' call with the following arguments:');

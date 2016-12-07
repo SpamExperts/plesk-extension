@@ -13,3 +13,6 @@ plib/library/vendor/
 /plib/library/composer.lock
 
 tests/_output/*
+
+# sftp configuration file
+sftp-config.json

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_Plesk_Dns
 {
     use Modules_SpamexpertsExtension_Plesk_ApiClientTrait;
@@ -12,6 +15,8 @@ class Modules_SpamexpertsExtension_Plesk_Dns
      * @param bool $forceRaw
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function getDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, $forceRaw = false)
     {

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 class Modules_SpamexpertsExtension_Plesk_Domain
 {
     use Modules_SpamexpertsExtension_Plesk_ApiClientTrait;
@@ -51,6 +55,8 @@ class Modules_SpamexpertsExtension_Plesk_Domain
      * @param string $id
      *
      * @return Modules_SpamexpertsExtension_Plesk_Domain
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function __construct($domain, $type = null, $id = null)
     {
@@ -109,6 +115,8 @@ class Modules_SpamexpertsExtension_Plesk_Domain
      * @param string $type
      *
      * @return int
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     protected function getDomainId($domainName, $type)
     {
@@ -181,6 +189,8 @@ APICALL;
      * on an external server)
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function isLocal()
     {

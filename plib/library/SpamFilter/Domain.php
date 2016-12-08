@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_SpamFilter_Domain
 {
     /**
@@ -218,6 +221,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * set up in tyhe extension configuration
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function getSpamfilterMxs()
     {

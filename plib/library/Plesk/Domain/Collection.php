@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_Plesk_Domain_Collection
 {
     use Modules_SpamexpertsExtension_Plesk_ApiClientTrait;

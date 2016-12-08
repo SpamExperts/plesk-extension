@@ -2,13 +2,19 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-/** @noinspection PhpUndefinedClassInspection */
+/**
+ * @noinspection PhpUndefinedClassInspection
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 {
     /**
      * Class contstructor
      *
      * @return Modules_SpamexpertsExtension_SpamFilter_Api
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function __construct()
     {
@@ -162,6 +168,13 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $result;
     }
 
+    /**
+     * @param string $domain
+     *
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     */
     public function checkDomainUser($domain)
     {
         $this->logDebug(__METHOD__ . ": " . "Domain user protection check request");
@@ -275,6 +288,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
      * @param $url
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function call($url)
     {
@@ -287,6 +302,10 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         return $response;
     }
 
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function logDebug($msg)
     {
         pm_Log::debug($msg);

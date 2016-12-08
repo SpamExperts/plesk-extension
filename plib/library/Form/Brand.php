@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_Form_Brand extends pm_Form_Simple
 {
     const OPTION_BRAND_NAME = 'brand_name';
     const OPTION_LOGO_URL = 'brand_logo_url';
 
+    /**
+     * Modules_SpamexpertsExtension_Form_Brand constructor.
+     *
+     * @param array|mixed $options
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function __construct($options)
     {
         parent::__construct($options);

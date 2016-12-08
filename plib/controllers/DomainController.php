@@ -181,10 +181,7 @@ class DomainController extends pm_Controller_Action
             $seDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
             if (! $seDomain->status()) {
                 if (! pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN)) {
-                    $protectorClass =
-                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
-                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
+                    $protectorClass = $pleskDomain->getProtectorClassname();
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
                     $protector = new $protectorClass(
@@ -216,7 +213,7 @@ class DomainController extends pm_Controller_Action
             }
 
             $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
-            if (!$api->checkDomainUser($domain)) {
+            if (! $api->checkDomainUser($domain)) {
                 $api->addDomainUser($domain);
             }
 
@@ -234,12 +231,10 @@ class DomainController extends pm_Controller_Action
                 header("Location: $url");
 
                 exit(0);
-            } else {
-                $this->_status->addMessage('error', 'Unable to obtain authentication token.');
-                $this->_forward('index', 'index');
-
-                return;
             }
+
+            $this->_status->addMessage('error', 'Unable to obtain authentication token.');
+            $this->_forward('index', 'index');
         }
     }
 

@@ -185,13 +185,13 @@ class IndexController extends pm_Controller_Action
             $dataUrl = 'list-context-data';
         }
 
-        $secondaryDomainsStrategy = $this->getSetting(
+        $secDomainsStrategy = $this->getSetting(
             Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
         );
 
         foreach ($allDomains as $info) {
             $displayLoginLink
-                = ($secondaryDomainsStrategy
+                = ($secDomainsStrategy
                 ==
                 Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN)
                 || 'Alias' != $info['type'];

@@ -75,14 +75,16 @@ class Modules_SpamexpertsExtension_Plesk_Domain
         if (null === $this->id) {
             if (null !== $this->type) {
                 $this->id = $this->getDomainId($this->domain, $this->type);
-            } else {
-                foreach ([self::TYPE_SITE, self::TYPE_WEBSPACE, self::TYPE_ALIAS, self::TYPE_SUBDOMAIN] as $type) {
-                    $this->id = $this->getDomainId($this->domain, $type);
-                    if (null !== $this->id) {
-                        $this->type = $type;
 
-                        break;
-                    }
+                return $this->id;
+            }
+
+            foreach ([self::TYPE_SITE, self::TYPE_WEBSPACE, self::TYPE_ALIAS, self::TYPE_SUBDOMAIN] as $type) {
+                $this->id = $this->getDomainId($this->domain, $type);
+                if (null !== $this->id) {
+                    $this->type = $type;
+
+                    break;
                 }
             }
         }
@@ -198,6 +200,8 @@ APICALL;
      * @return bool
      *
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isLocal()
     {
@@ -306,12 +310,10 @@ APICALL;
 APICALL;
                 $response = $this->xmlapi($request);
 
-                if ('ok' == $response->subdomain->get->result->status
-                    && !empty($response->subdomain->get->result->data->parent)) {
-                    return new self($response->subdomain->get->result->data->parent);
-                } else {
-                    return null;
-                }
+                return (('ok' == $response->subdomain->get->result->status
+                    && !empty($response->subdomain->get->result->data->parent))
+                    ? new self($response->subdomain->get->result->data->parent)
+                    : null);
             }
 
             $request = <<<APICALL

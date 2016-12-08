@@ -17,6 +17,7 @@ class Modules_SpamexpertsExtension_Plesk_Dns
      * @return array
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function getDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, $forceRaw = false)
     {
@@ -55,7 +56,7 @@ APICALL;
                 if ('ok' == $rec->status && 'MX' == $rec->data->type) {
                     $mxHostname = (string) rtrim($rec->data->value, '.');
 
-                    if (!$forceRaw && $useIpAddresses) {
+                    if (! $forceRaw && $useIpAddresses) {
                         pm_Log::debug("Obtaining IP address for '$mxHostname' ... ");
 
                         $mxIpaddress = gethostbyname($mxHostname);
@@ -99,7 +100,7 @@ APICALL;
 
         $filter = $this->buildFilter($domain->getType(), $domainId);
 
-        $addRecordRequestTemplate = <<<APICALL
+        $addRecordRequestTpl = <<<APICALL
 <add_rec>
     $filter
     <type>MX</type>
@@ -113,7 +114,7 @@ APICALL;
         foreach ($records as $rec) {
             $existingRecordIndex = array_search($rec, $obsoleteMXRecords);
             if (false === $existingRecordIndex) {
-                $bulkRecordsRequest .= sprintf($addRecordRequestTemplate, $rec, $priority);
+                $bulkRecordsRequest .= sprintf($addRecordRequestTpl, $rec, $priority);
                 $priority += 10;
             } else {
                 unset($obsoleteMXRecords[$existingRecordIndex]);
@@ -134,7 +135,7 @@ APICALL;
         }
 
         if (!empty($obsoleteMXRecords)) {
-            $deleteRecordRequestTemplate = <<<APICALL
+            $deleteRecRequestTpl = <<<APICALL
 <dns>
  <del_rec>
   <filter>
@@ -143,8 +144,8 @@ APICALL;
  </del_rec>
 </dns>
 APICALL;
-            foreach ($obsoleteMXRecords as $oldRecordId => $oldRecordValue) {
-                $response = $this->xmlapi(sprintf($deleteRecordRequestTemplate, $oldRecordId));
+            foreach (array_keys($obsoleteMXRecords) as $oldRecordId) {
+                $response = $this->xmlapi(sprintf($deleteRecRequestTpl, $oldRecordId));
                 /** @noinspection PhpUndefinedFieldInspection */
                 if ('ok' != $response->dns->del_rec->result->status) {
                     /** @noinspection PhpUndefinedFieldInspection */

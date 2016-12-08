@@ -15,6 +15,18 @@ if (false !== ($upgrade = array_search('upgrade', $argv))) {
     exit(0);
 }
 
+$task = new pm_Scheduler_Task();
+$task->setSchedule(pm_Scheduler::$EVERY_5_MIN);
+$task->setCmd('bulk_actions.php');
+pm_Scheduler::getInstance()->putTask($task);
+
+$tasks = pm_Scheduler::getInstance()->listTasks();
+foreach ($tasks as $task) {
+    if ($task->getModuleId() == "spamexperts-extension") {
+        pm_Settings::set('task-id', $task->getId());
+    }
+}
+
 pm_Settings::set('history', 'install');
 echo "Installation finished.\n";
 exit(0);

@@ -268,6 +268,34 @@ class IndexController extends pm_Controller_Action
                     "subtype" => "delete",
                 ],
             ];
+
+            $listTools[] = [
+                'title' => 'Schedule Protect',
+                'description' => 'Create a list of domains to be added to the SpamFilter and to enable email filtering.',
+                'class' => 'sb-schedule-protect-selected',
+                'execGroupOperation' => [
+                    "url" => $this->_helper->url('scheduleprotect', 'domain'),
+                    "skipConfirmation" => false,
+                    "locale" => [
+                        "confirmOnGroupOperation" => "You are about to save a list with domains to be protected. Continue?",
+                    ],
+                    "subtype" => "confirm",
+                ],
+            ];
+
+            $listTools[] = [
+                'title' => 'Schedule Unprotect',
+                'description' => 'Create a list of domains to be removed from the SpamFilter and to disable email filtering.',
+                'class' => 'sb-schedule-unprotect-selected',
+                'execGroupOperation' => [
+                    "url" => $this->_helper->url('scheduleunprotect', 'domain'),
+                    "skipConfirmation" => false,
+                    "locale" => [
+                        "confirmOnGroupOperation" => "You are about to save a list with domains to be unprotected. Continue?",
+                    ],
+                    "subtype" => "delete",
+                ],
+            ];
         }
         $list->setTools($listTools);
 

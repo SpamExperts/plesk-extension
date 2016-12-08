@@ -266,4 +266,73 @@ class DomainController extends pm_Controller_Action
         return $result;
     }
 
+    public function scheduleprotectAction()
+    {
+        $domains    = [];
+        $messages   = [];
+
+        if ($this->_request->isPost()) {
+            $domains = (array)$this->_getParam('ids');
+        }
+
+        $task = pm_Scheduler::getInstance()->getTaskById(pm_Settings::get('task-id'));
+
+        if (!empty($task)) {
+            $args = $task->getArguments();
+            $args["protect"] = array_merge($args["protect"], $domains);
+            $task->setArguments($args);
+
+            $messages[] = [
+                'status' => 'success',
+                'content' => 'Domains were added to the list for the next scheduled protect operation',
+            ];
+
+            $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
+
+            return;
+        }
+
+        $messages[] = [
+            'status' => 'error',
+            'content' => 'List was not set because a task was not set for this extension',
+        ];
+
+        $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
+
+        return;
+    }
+
+    public function scheduleunprotectAction()
+    {
+        $domains = [];
+
+        if ($this->_request->isPost()) {
+            $domains = (array)$this->_getParam('ids');
+        }
+
+        $task = pm_Scheduler::getInstance()->getTaskById(pm_Settings::get('task-id'));
+
+        if (!empty($task)) {
+            $args = $task->getArguments();
+            $args["unprotect"] = array_merge($args["unprotect"], $domains);
+            $task->setArguments($args);
+
+            $messages[] = [
+                'status' => 'success',
+                'content' => 'Domains were added to the list for the next scheduled unprotect operation',
+            ];
+
+            $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
+
+            return;
+        }
+
+        $messages[] = [
+            'status' => 'error',
+            'content' => 'List was not set because a task was not set for this extension',
+        ];
+
+        $this->_helper->json(['status' => 'success', 'statusMessages' => $messages]);
+    }
+
 }

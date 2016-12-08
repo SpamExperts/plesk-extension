@@ -131,7 +131,7 @@ class IndexController extends pm_Controller_Action
         $this->checkExtensionConfiguration();
 
         // List object for pm_View_Helper_RenderList
-        $this->view->list = $this->_getDomainsList();
+        $this->view->list = $this->getDomainsList();
     }
 
     public function domainAction()
@@ -141,12 +141,12 @@ class IndexController extends pm_Controller_Action
         $contextDomainId = pm_Session::getCurrentDomain()->getId();
 
         // List object for pm_View_Helper_RenderList
-        $this->view->list = $this->_getDomainsList(
+        $this->view->list = $this->getDomainsList(
             !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
         );
     }
 
-    private function _getDomainsList(array $ids = [])
+    private function getDomainsList(array $ids = [])
     {
         $data = [];
         $dataUrl = 'list-data';
@@ -279,7 +279,7 @@ class IndexController extends pm_Controller_Action
 
     public function listDataAction()
     {
-        $list = $this->_getDomainsList();
+        $list = $this->getDomainsList();
 
         // Json data from pm_View_List_Simple
         $this->_helper->json($list->fetchData());
@@ -290,7 +290,7 @@ class IndexController extends pm_Controller_Action
         $contextDomainId = pm_Session::getCurrentDomain()->getId();
 
         // List object for pm_View_Helper_RenderList
-        $list = $this->_getDomainsList(
+        $list = $this->getDomainsList(
             !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
         );
 

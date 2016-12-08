@@ -176,11 +176,7 @@ class DomainController extends pm_Controller_Action
      */
     public function loginAction()
     {
-        $pageURL = 'http';
-        if ('on' == $_SERVER["HTTPS"]) {
-            $pageURL .= 's';
-        }
-        $pageURL .= '://' . $this->getRequest()->getHttpHost() . $_SERVER["REQUEST_URI"];
+        $pageURL = 'https://' . $this->getRequest()->getHttpHost() . $this->getRequest()->getRequestUri();
 
         $domain = $this->_getParam('domain');
         if (!empty($domain)) {

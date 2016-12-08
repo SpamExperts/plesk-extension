@@ -326,11 +326,13 @@ class IndexController extends pm_Controller_Action
                     'Extension is not configured yet. Please set up configuration options.'
                 );
                 $this->_redirect('/index/settings', [ 'exit' => true ]);
-            } else {
-                throw new pm_Exception(
-                    'Extension is not configured yet. Please ask your system administrator to fix that.'
-                );
+
+                return;
             }
+
+            throw new pm_Exception(
+                'Extension is not configured yet. Please ask your system administrator to fix that.'
+            );
         }
     }
 

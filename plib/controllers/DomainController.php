@@ -30,19 +30,17 @@ class DomainController extends pm_Controller_Action
                     $pleskDomain->getId()
                 );
 
-                if ($checker->execute()) {
-                    $messages[] = [
+                $messages[] = $checker->execute()
+                    ? [
                         'status' => 'info',
                         'content' => sprintf("Domain '%s' is protected",
                             htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
-                    ];
-                } else {
-                    $messages[] = [
+                    ]
+                    : [
                         'status' => 'error',
                         'content' => sprintf("Domain '%s' is NOT protected",
                             htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
                     ];
-                }
             } catch (Exception $e) {
                 $messages[] = [
                     'status' => 'error',
@@ -170,77 +168,77 @@ class DomainController extends pm_Controller_Action
         $pageURL = 'https://' . $this->getRequest()->getHttpHost() . $this->getRequest()->getRequestUri();
 
         $domain = $this->_getParam('domain');
-        if (!empty($domain)) {
+        if (! empty($domain)) {
             $pleskDomain = new Modules_SpamexpertsExtension_Plesk_Domain($domain);
 
-            if (!$this->hasAccessToDomain($pleskDomain)) {
+            if (! $this->hasAccessToDomain($pleskDomain)) {
                 $this->_status->addMessage('error', 'Access denied.');
                 $this->_forward('index', 'index');
 
                 return;
-            } else {
-                $seDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
-                if (! $seDomain->status()) {
-                    if (! pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN)) {
-                        $protectorClass =
-                            Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                                ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
-                                : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
+            }
 
-                        /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
-                        $protector = new $protectorClass(
-                            $pleskDomain->getDomain(),
-                            $pleskDomain->getType(),
-                            $pleskDomain->getId()
-                        );
+            $seDomain = new Modules_SpamexpertsExtension_SpamFilter_Domain($pleskDomain);
+            if (! $seDomain->status()) {
+                if (! pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN)) {
+                    $protectorClass =
+                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
+                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
+                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
 
-                        try {
-                            $protector->execute();
-                        } catch (Exception $e) {
-                            $this->_status->addMessage('error', $e->getMessage());
-                            $this->_forward('index', 'index');
+                    /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
+                    $protector = new $protectorClass(
+                        $pleskDomain->getDomain(),
+                        $pleskDomain->getType(),
+                        $pleskDomain->getId()
+                    );
 
-                            return;
-                        }
-                    } else {
-                        $this->_status->addMessage(
-                            'error',
-                            sprintf(
-                                "Domain '%s' is not protected",
-                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
-                            )
-                        );
+                    try {
+                        $protector->execute();
+                    } catch (Exception $e) {
+                        $this->_status->addMessage('error', $e->getMessage());
                         $this->_forward('index', 'index');
 
                         return;
                     }
-                }
-
-                $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
-                if (!$api->checkDomainUser($domain)) {
-                    $api->addDomainUser($domain);
-                }
-
-                $authToken = $api->getAuthTicket(
-                    $domain,
-                    0 < pm_Settings::get(
-                        Modules_SpamexpertsExtension_Form_Settings::OPTION_LOGOUT_REDIRECT
-                    ) ? preg_replace('~/index.php.*$~', '/index.php', $pageURL) : null
-                );
-
-                if (!empty($authToken)) {
-                    $url = rtrim(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL), '/')
-                        . "/?authticket=$authToken";
-
-                    header("Location: $url");
-
-                    exit(0);
                 } else {
-                    $this->_status->addMessage('error', 'Unable to obtain authentication token.');
+                    $this->_status->addMessage(
+                        'error',
+                        sprintf(
+                            "Domain '%s' is not protected",
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                        )
+                    );
                     $this->_forward('index', 'index');
 
                     return;
                 }
+            }
+
+            $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
+            if (!$api->checkDomainUser($domain)) {
+                $api->addDomainUser($domain);
+            }
+
+            $authToken = $api->getAuthTicket(
+                $domain,
+                0 < pm_Settings::get(
+                    Modules_SpamexpertsExtension_Form_Settings::OPTION_LOGOUT_REDIRECT
+                ) ? preg_replace('~/index.php.*$~', '/index.php', $pageURL) : null
+            );
+
+            if (!empty($authToken)) {
+                $url = rtrim(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL), '/')
+                    . "/?authticket=$authToken";
+
+                header("Location: $url");
+
+                exit(0);
+            } else {
+                $this->_status->addMessage('error', 'Unable to obtain authentication token.');
+                $this->_forward('index', 'index');
+
+                return;
             }
         }
     }

@@ -21,10 +21,7 @@ class DomainController extends pm_Controller_Action
                     return;
                 }
 
-                $checkerClass =
-                    Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                        ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary::class
-                        : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary::class;
+                $checkerClass = $pleskDomain->getCheckerClassname();
 
                 /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $checker */
                 $checker = new $checkerClass(
@@ -77,10 +74,7 @@ class DomainController extends pm_Controller_Action
                         return;
                     }
 
-                    $protectorClass =
-                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
-                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
+                    $protectorClass = $pleskDomain->getProtectorClassname();
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $protector */
                     $protector = new $protectorClass(
@@ -134,10 +128,7 @@ class DomainController extends pm_Controller_Action
                         return;
                     }
 
-                    $unprotectorClass =
-                        Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $pleskDomain->getType()
-                            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary::class
-                            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary::class;
+                    $unprotectorClass = $pleskDomain->getUnprotectorClassname();
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
                     $unprotector = new $unprotectorClass(

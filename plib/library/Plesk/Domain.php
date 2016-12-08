@@ -97,6 +97,13 @@ class Modules_SpamexpertsExtension_Plesk_Domain
      */
     public function getType()
     {
+        if (null === $this->id) {
+
+            // If the id field is empty then the type is also empty
+            // Execute the id getter to init the domain type
+            $this->getId();
+        }
+
         return $this->type;
     }
 
@@ -327,6 +334,42 @@ APICALL;
         $parentDomain = new pm_Domain($this->parentId);
 
         return new self($parentDomain->getName(), null, $this->parentId);
+    }
+
+    /**
+     * Return the name of the class to execute a domain status check
+     *
+     * @return string
+     */
+    public function getCheckerClassname()
+    {
+        return Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $this->getType()
+            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Secondary::class
+            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Status_Primary::class;
+    }
+
+    /**
+     * Return the name of the class to execute a domain protection
+     *
+     * @return string
+     */
+    public function getProtectorClassname()
+    {
+        return Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $this->getType()
+            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Secondary::class
+            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Protection_Primary::class;
+    }
+
+    /**
+     * Return the name of the class to execute a domain unprotection
+     *
+     * @return string
+     */
+    public function getUnprotectorClassname()
+    {
+        return Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS == $this->getType()
+            ? Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Secondary::class
+            : Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary::class;
     }
 
 }

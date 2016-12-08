@@ -162,6 +162,8 @@ class DomainController extends pm_Controller_Action
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loginAction()
     {

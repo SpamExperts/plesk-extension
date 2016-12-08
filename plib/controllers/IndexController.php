@@ -146,6 +146,13 @@ class IndexController extends pm_Controller_Action
         );
     }
 
+    /**
+     * @param array $ids
+     * @return pm_View_List_Simple
+     *
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     private function getDomainsList(array $ids = [])
     {
         $data = [];

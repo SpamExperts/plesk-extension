@@ -18,6 +18,7 @@ class Modules_SpamexpertsExtension_Plesk_Dns
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDomainsMxRecords(Modules_SpamexpertsExtension_Plesk_Domain $domain, $forceRaw = false)
     {
@@ -116,9 +117,11 @@ APICALL;
             if (false === $existingRecordIndex) {
                 $bulkRecordsRequest .= sprintf($addRecordRequestTpl, $rec, $priority);
                 $priority += 10;
-            } else {
-                unset($obsoleteMXRecords[$existingRecordIndex]);
+
+                continue;
             }
+
+            unset($obsoleteMXRecords[$existingRecordIndex]);
         }
 
         if (!empty($bulkRecordsRequest)) {

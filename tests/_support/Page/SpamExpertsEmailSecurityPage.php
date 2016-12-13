@@ -1,20 +1,24 @@
 <?php
 namespace Page;
 
-class ProfessionalSpamFilterPage
+class SpamExpertsEmailSecurityPage
 {
 	const TITLE = "Professional SpamFilter";
 
-    const DOMAINS_TAB = "//*[contains(span,'Domains') and @href='/modules/spamexperts-extension/index.php/index/domains']";
-    const SETTINGS_TAB = "//*[contains(span,'Settings')";
-    const BRANDING_TAB = "//*[contains(span,'Branding')";
-    const BRANDING_TAB = "//*[contains(span,'Support')";
+    const DOMAINS_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/domains')]";
+    const SETTINGS_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/settings')]";
+    const BRANDING_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/branding')]";
+    const SUPPORT_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/support')]";
 
-    /*AntiSpam API URL input field*/
-    const ANTISPAM_API_URL_XPATH = "//input[@id='spampanel_url']";
-    const ANTISPAM_API_URL_CSS = "#spampanel_url";
+    /*Error alert*/
+    const ERROR_ALERT_XPATH = "//div[@class='msg-box msg-error']";
+    const ERROR_ALERT_CSS = ".msg-box.msg-error";
 
-    /*SpamFilter API hostname input field*/
-    const ANTISPAM_API_URL_XPATH = "//input[@id='spampanel_url']";
-    const ANTISPAM_API_URL_CSS = "#spampanel_url";
+    /*Success alert*/
+    const SUCCESS_ALERT_XPATH = "//div[@class='msg-box msg-success']";
+    const SUCCESS_ALERT_CSS = ".msg-box.msg-error";
+
+    /*Notice alert*/
+    const NOTICE_ALERT_XPATH = "//div[@class='msg-box msg-notice']";
+    const NOTICE_ALERT_CSS = ".msg-box.msg-error";
 }

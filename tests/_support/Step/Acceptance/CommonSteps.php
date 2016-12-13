@@ -3,6 +3,7 @@ namespace Step\Acceptance;
 
 use Page\PleskLoginPage;
 use Page\PleskHomePage;
+use Page\SpamExpertsEmailSecurityPage;
 use Codeception\Util\Locator;
 
 class CommonSteps extends \AcceptanceTester
@@ -22,7 +23,7 @@ class CommonSteps extends \AcceptanceTester
     /**
      * Function used to login as root
      */
-    public function loginAsRoot()
+    public function loginAsAdminstrator()
     {
         // Get root credentials from environment variables
         $user = getenv($this->getEnvParameter('username'));
@@ -88,21 +89,33 @@ class CommonSteps extends \AcceptanceTester
         $this->click(PleskHomePage::LOGOUT_BTN);
     }
 
-     /**
+    /**
+     * Function used to access the email
+     * security plesk extension
+     */
+    public function openEmailSecurityExtension()
+    {
+        $this->amGoingTo(
+            "\n\n --- Open SpamExperts Email Security extension --- \n");
+
+        $this->click("Extensions", PleskHomePage::LEFT_SIDE_MENU);
+        $this->waitForText("Extensions Management");
+        $this->click("SpamExperts Email Security",
+            PleskHomePage::PAGE_CONTENT);
+        $this->waitForText(SpamExpertsEmailSecurityPage::TITLE);
+    }
+
+    /**
      * Function used to go to certain plugin page
      * @param $page - page name
      * @param $title - page title
      */
-    public function goToPage($tab, $title)
+    public function goToPage($tab)
     {
-        $this->amGoingTo("\n\n --- Go to {$title} page --- \n");
+        $this->amGoingTo("\n\n --- Go to {$tab} page --- \n");
 
-        $this->click("Extensions", PleskLoginPage::LEFT_SIDE_MENU);
-        $this->waitForText("Extensions Management");
-        $this->click("Professional SpamFilter");
-        $this->waitForElement();
         $this->click($tab);
-        $this->waitForText($title);
+        // $this->waitForText($title);
     }
 
     /**

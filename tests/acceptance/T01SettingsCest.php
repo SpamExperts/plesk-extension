@@ -1,34 +1,31 @@
 <?php
 
-use Page\DomainListPage;
-use Page\ConfigurationPage;
-use Page\TerminateAccountsPage;
-use Page\ProfessionalSpamFilterPage;
-use Step\Acceptance\ConfigurationSteps;
+use Page\SpamExpertsEmailSecurityPage;
+use Step\Acceptance\SettingsSteps;
 use Codeception\Util\Locator;
 
-class C01ConfigurationCest
+class T01_SettingsCest
 {
-    public function _before(ConfigurationSteps $I)
+    public function _before(SettingsSteps $I)
     {
-        // Login as root
-        $I->loginAsRoot();
+        $I->loginAsAdminstrator();
+        $I->openEmailSecurityExtension();
 
         // Create a default package if no one exists
         // $I->createDefaultPackage();
 
         // Go to plugin configuration page
-        $I->goToPage(ProfessionalSpamFilterPage::CONFIGURATION_BTN, ProfessionalSpamFilterPage::TITLE);
+        $I->goToPage(SpamExpertsEmailSecurityPage::SETTINGS_TAB);
     }
 
 
-    public function _after(ConfigurationSteps $I)
+    public function _after(SettingsSteps $I)
     {
         // Remove all created accounts
         // $I->removeCreatedAccounts();
     }
 
-    public function _failed(ConfigurationSteps $I)
+    public function _failed(SettingsSteps $I)
     {
         $this->_after($I);
     }
@@ -36,22 +33,28 @@ class C01ConfigurationCest
     /**
      * Verify the 'Configuration page' layout and functionality
      */
-    public function checkConfigurationPage(ConfigurationSteps $I)
+    public function checkSettingsPage(SettingsSteps $I)
     {
         // Verify configuration page layout
         $I->verifyPageLayout();
 
         // Fill configuration fields
-        $I->setFieldApiUrl(PsfConfig::getApiUrl());
-        $I->setFieldApiHostname(PsfConfig::getApiHostname());
-        $I->setFieldApiUsernameIfEmpty(PsfConfig::getApiUsername());
-        $I->setFieldApiPassword(PsfConfig::getApiPassword());
-        $I->setFieldPrimaryMX(PsfConfig::getPrimaryMX());
+        // $I->setFieldApiUrl(PsfConfig::getApiUrl());
+        // $I->setFieldApiHostname(PsfConfig::getApiHostname());
+        // $I->setFieldApiUsernameIfEmpty(PsfConfig::getApiUsername());
+        // $I->setFieldApiPassword(PsfConfig::getApiPassword());
+        // $I->setFieldPrimaryMX(PsfConfig::getPrimaryMX());
 
-        // Submit settings
-        $I->submitSettingForm();
+        // // Submit settings
+        // $I->submitSettingForm();
 
-        // Check if configuration was saved
-        $I->seeSubmissionIsSuccessful();
+        // // Check if configuration was saved
+        // $I->seeSubmissionIsSuccessful();
+
     }
 }
+
+
+
+
+

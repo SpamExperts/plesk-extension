@@ -11,17 +11,13 @@ class T01_SettingsCest
         $I->loginAsAdminstrator();
         $I->openEmailSecurityExtension();
 
-        // Create a default package if no one exists
+        /*Create a default package if no one exists*/
         // $I->createDefaultPackage();
-
-        // Go to plugin configuration page
-        $I->goToPage(SpamExpertsEmailSecurityPage::SETTINGS_TAB);
     }
-
 
     public function _after(SettingsSteps $I)
     {
-        // Remove all created accounts
+        /*Remove all created accounts*/
         // $I->removeCreatedAccounts();
     }
 
@@ -31,26 +27,27 @@ class T01_SettingsCest
     }
 
     /**
-     * Verify the 'Configuration page' layout and functionality
+     * Verify the 'Settings page' layout and functionality
      */
     public function checkSettingsPage(SettingsSteps $I)
     {
-        // Verify configuration page layout
+        /*Verify configuration page layout*/
+        $I->goToPage(SpamExpertsEmailSecurityPage::SETTINGS_TAB);
+        $I->seeErrorMessage('Error: Extension is not configured yet. Please set up configuration options.');
         $I->verifyPageLayout();
 
-        // Fill configuration fields
-        // $I->setFieldApiUrl(PsfConfig::getApiUrl());
-        // $I->setFieldApiHostname(PsfConfig::getApiHostname());
-        // $I->setFieldApiUsernameIfEmpty(PsfConfig::getApiUsername());
-        // $I->setFieldApiPassword(PsfConfig::getApiPassword());
-        // $I->setFieldPrimaryMX(PsfConfig::getPrimaryMX());
+        /*Fill configuration fields*/
+        $I->setFieldApiUrl(ExtensionConfig::getApiUrl());
+        $I->setFieldApiHostname(ExtensionConfig::getApiHostname());
+        $I->setFieldApiUsernameIfEmpty(ExtensionConfig::getApiUsername());
+        $I->setFieldApiPassword(ExtensionConfig::getApiPassword());
+        $I->setFieldPrimaryMX(ExtensionConfig::getPrimaryMX());
 
-        // // Submit settings
-        // $I->submitSettingForm();
+        /*Submit settings*/
+        $I->submitSettingForm();
 
-        // // Check if configuration was saved
-        // $I->seeSubmissionIsSuccessful();
-
+        /*Check if configuration was saved*/
+        $I->seeSuccessMessage('The settings have been saved.');
     }
 }
 

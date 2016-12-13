@@ -162,20 +162,32 @@ class SettingsSteps extends CommonSteps
      */
     public function submitSettingForm()
     {
-        // Click the save settings button
+        /*Click the save settings button*/
         $this->click(Locator::combine(SettingsPage::SAVE_BUTTON_XPATH,
             SettingsPage::SAVE_BUTTON_CSS));
     }
 
     /**
-     * Function used to check if the submission was successful
+     * Function used to check the success messages
      */
-    public function seeSubmissionIsSuccessful()
+    public function seeSuccessMessage($message)
     {
-        // Wait for success alert to pop up
+        /*Wait for success alert to pop up*/
         $this->waitForElement(Locator::combine(SpamExpertsEmailSecurityPage::SUCCESS_ALERT_XPATH, SpamExpertsEmailSecurityPage::SUCCESS_ALERT_CSS));
 
-        // Check the success message
-        $this->see('The settings have been saved.');
+        /*Check the success message*/
+        $this->see($message, Locator::combine(SpamExpertsEmailSecurityPage::SUCCESS_ALERT_XPATH, SpamExpertsEmailSecurityPage::SUCCESS_ALERT_CSS));
+    }
+
+    /**
+     * Function used to check the error messages
+     */
+    public function seeErrorMessage($message)
+    {
+        /*Wait for success alert to pop up*/
+        $this->waitForElement(Locator::combine(SpamExpertsEmailSecurityPage::ERROR_ALERT_XPATH, SpamExpertsEmailSecurityPage::ERROR_ALERT_CSS));
+
+        /*Check the success message*/
+        $this->see($message, Locator::combine(SpamExpertsEmailSecurityPage::ERROR_ALERT_XPATH, SpamExpertsEmailSecurityPage::ERROR_ALERT_CSS));
     }
 }

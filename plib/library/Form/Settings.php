@@ -71,8 +71,12 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         ];
 
         $apiUserWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_USER));
-        $apiuserOptions['disabled'] = $apiUserWasSetUp;
-        $apiuserOptions['required'] = ! $apiUserWasSetUp;
+        if ($apiUserWasSetUp) {
+            $apiuserOptions['disabled'] = true;
+        }
+        if (! $apiUserWasSetUp) {
+            $apiuserOptions['required'] = true;
+        }
         $this->addElement('text', self::OPTION_SPAMPANEL_API_USER, $apiuserOptions);
 
         $apipassOptions = [
@@ -84,8 +88,12 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         ];
 
         $apiPassWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_PASS));
-        $apipassOptions['disabled'] = $apiPassWasSetUp;
-        $apipassOptions['required'] = ! $apiPassWasSetUp;
+        if ($apiPassWasSetUp) {
+            $apipassOptions['disabled'] = true;
+        }
+        if (! $apiPassWasSetUp) {
+            $apipassOptions['required'] = true;
+        }
         $this->addElement('password', self::OPTION_SPAMPANEL_API_PASS, $apipassOptions);
 
 

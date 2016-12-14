@@ -176,6 +176,7 @@ APICALL;
         switch ($type) {
             case Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SITE:
             case Modules_SpamexpertsExtension_Plesk_Domain::TYPE_WEBSPACE:
+            case Modules_SpamexpertsExtension_Plesk_Domain::TYPE_SUBDOMAIN:
                 return "<site-id>$domainId</site-id>";
 
             case Modules_SpamexpertsExtension_Plesk_Domain::TYPE_ALIAS:

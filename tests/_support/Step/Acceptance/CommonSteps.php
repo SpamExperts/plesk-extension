@@ -45,7 +45,7 @@ class CommonSteps extends \AcceptanceTester
     {
         // If no credentials provided, login as root
         if (!$username && !$password) {
-            $this->loginAsRoot();
+            $this->loginAsAdminstrator();
             return;
         }
 

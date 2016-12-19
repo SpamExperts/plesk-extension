@@ -15,6 +15,16 @@ class SettingsSteps extends CommonSteps
     {
         $this->amGoingTo("\n\n --- Check settings page layout --- \n");
 
+        // Grab the attribute from field
+        $value = $this->grabAttributeFrom(Locator::combine(
+            SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
+            SettingsPage::SPAMFILTER_API_PASSWORD_CSS), "disabled");
+
+        if ($value == false) {
+            $this->seeErrorMessage(
+                'Error: Extension is not configured yet. Please set up configuration options.');
+        }
+
         $this->seeElement(SettingsPage::SAVE_BUTTON_XPATH);
         $this->seeElement(SettingsPage::ANTISPAM_API_URL_XPATH);
         $this->seeElement(SettingsPage::SPAMFILTER_API_HOSTNAME_XPATH);
@@ -45,13 +55,60 @@ class SettingsSteps extends CommonSteps
     }
 
     /**
+     * Function used to verify the mandatory fields
+     * @param string $string - value
+     */
+    public function verifyMandatoryFields()
+    {
+        $this->amGoingTo("\n\n --- Check mandatory fieds are required --- \n");
+
+        $this->setFieldApiUrl(" ");
+        $this->setFieldApiHostname(" ");
+        $this->setFieldApiUsernameIfEmpty(" ");
+        $this->setFieldApiPassword(" ");
+        $this->setFieldPrimaryMX(" ");
+        $this->setFieldSecondaryMX(" ");
+
+        $this->submitSettingForm();
+        $this->waitForText("This required field is empty.");
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::ANTISPAM_API_URL_ROW);
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::SPAMFILTER_API_HOSTNAME_ROW);
+
+        $value = $this->grabAttributeFrom(Locator::combine(
+            SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
+            SettingsPage::SPAMFILTER_API_PASSWORD_CSS), "disabled");
+
+        if ($value == false) {
+            $this->see(
+                "This required field is empty. You need to specify a value.",
+                SettingsPage::SPAMFILTER_API_USERNAME_ROW);
+            $this->see(
+                "This required field is empty. You need to specify a value.",
+                SettingsPage::SPAMFILTER_API_PASSWORD_ROW);
+        }
+
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::SPAMFILTER_API_USERNAME_ROW);
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::SPAMFILTER_API_PASSWORD_ROW);
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::PRIMARY_MX_ROW);
+        $this->see("This required field is empty. You need to specify a value.",
+            SettingsPage::SECONDARY_MX_ROW);
+
+    }
+
+    /**
      * Function used to fill the AntiSpam API URL field
      * @param string $string - value
      */
     public function setFieldApiUrl($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::ANTISPAM_API_URL_XPATH,
+            $this->fillField(Locator::combine(
+                SettingsPage::ANTISPAM_API_URL_XPATH,
                 SettingsPage::ANTISPAM_API_URL_CSS), $string);
     }
 
@@ -62,8 +119,9 @@ class SettingsSteps extends CommonSteps
     public function setFieldApiHostname($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::ANTISPAM_API_URL_XPATH,
-                SettingsPage::ANTISPAM_API_URL_CSS), $string);
+            $this->fillField(Locator::combine(
+                SettingsPage::SPAMFILTER_API_HOSTNAME_XPATH,
+                SettingsPage::SPAMFILTER_API_HOSTNAME_CSS), $string);
     }
 
     /**
@@ -73,13 +131,15 @@ class SettingsSteps extends CommonSteps
     public function setFieldApiUsernameIfEmpty($string)
     {
         // Grab the value from field
-        $value = $this->grabValueFrom(Locator::combine(SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
+        $value = $this->grabValueFrom(Locator::combine(
+            SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
             SettingsPage::SPAMFILTER_API_USERNAME_CSS));
 
         // If field is empty set the new value
         if (!$value)
             if ($string)
-                $this->fillField(Locator::combine(SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
+                $this->fillField(Locator::combine(
+                    SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
                     SettingsPage::SPAMFILTER_API_USERNAME_CSS), $string);
     }
 
@@ -89,9 +149,17 @@ class SettingsSteps extends CommonSteps
      */
     public function setFieldApiPassword($string)
     {
-        if ($string)
-            $this->fillField(Locator::combine(SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
-                SettingsPage::SPAMFILTER_API_PASSWORD_CSS), $string);
+        // Grab the attribute from field
+        $value = $this->grabAttributeFrom(Locator::combine(
+            SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
+            SettingsPage::SPAMFILTER_API_PASSWORD_CSS), "disabled");
+
+        // If password field is not disabled set the new value
+        if ($value == false)
+            if ($string)
+                $this->fillField(Locator::combine(
+                    SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
+                    SettingsPage::SPAMFILTER_API_PASSWORD_CSS), $string);
     }
 
     /**
@@ -101,7 +169,8 @@ class SettingsSteps extends CommonSteps
     public function setFieldPrimaryMX($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::PRIMARY_MX_XPATH,
+            $this->fillField(Locator::combine(
+                SettingsPage::PRIMARY_MX_XPATH,
                 SettingsPage::PRIMARY_MX_CSS), $string);
     }
 
@@ -112,7 +181,8 @@ class SettingsSteps extends CommonSteps
     public function setFieldSecondaryMX($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::SECONDARY_MX_XPATH,
+            $this->fillField(Locator::combine(
+                SettingsPage::SECONDARY_MX_XPATH,
                 SettingsPage::SECONDARY_MX_CSS), $string);
     }
 
@@ -123,7 +193,8 @@ class SettingsSteps extends CommonSteps
     public function setFieldTertiaryMX($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::TERTIARY_MX_XPATH,
+            $this->fillField(Locator::combine(
+                SettingsPage::TERTIARY_MX_XPATH,
                 SettingsPage::TERTIARY_MX_CSS), $string);
     }
 
@@ -134,7 +205,8 @@ class SettingsSteps extends CommonSteps
     public function setFieldQuaternaryMX($string)
     {
         if ($string)
-            $this->fillField(Locator::combine(SettingsPage::QUATERNARY_MX_XPATH,
+            $this->fillField(Locator::combine(
+                SettingsPage::QUATERNARY_MX_XPATH,
                 SettingsPage::QUATERNARY_MX_CSS), $string);
     }
 
@@ -145,49 +217,30 @@ class SettingsSteps extends CommonSteps
     public function getMxFields()
     {
         $mxRecords = [];
-        $mxRecords[] = $this->grabValueFrom(Locator::combine(SettingsPage::PRIMARY_MX_XPATH,
+        $mxRecords[] = $this->grabValueFrom(Locator::combine(
+            SettingsPage::PRIMARY_MX_XPATH,
             SettingsPage::PRIMARY_MX_CSS));
-        $mxRecords[] = $this->grabValueFrom(Locator::combine(SettingsPage::SECONDARY_MX_XPATH,
+        $mxRecords[] = $this->grabValueFrom(Locator::combine(
+            SettingsPage::SECONDARY_MX_XPATH,
             SettingsPage::SECONDARY_MX_CSS));
-        $mxRecords[] = $this->grabValueFrom(Locator::combine(SettingsPage::TERTIARY_MX_XPATH,
+        $mxRecords[] = $this->grabValueFrom(Locator::combine(
+            SettingsPage::TERTIARY_MX_XPATH,
             SettingsPage::TERTIARY_MX_CSS));
-        $mxRecords[] = $this->grabValueFrom(Locator::combine(SettingsPage::QUATERNARY_MX_XPATH,
+        $mxRecords[] = $this->grabValueFrom(Locator::combine(
+            SettingsPage::QUATERNARY_MX_XPATH,
             SettingsPage::QUATERNARY_MX_CSS));
 
         return array_filter($mxRecords);
     }
 
-    /**
+        /**
      * Function used to submit configuration form
      */
     public function submitSettingForm()
     {
         /*Click the save settings button*/
-        $this->click(Locator::combine(SettingsPage::SAVE_BUTTON_XPATH,
+        $this->click(Locator::combine(
+            SettingsPage::SAVE_BUTTON_XPATH,
             SettingsPage::SAVE_BUTTON_CSS));
-    }
-
-    /**
-     * Function used to check the success messages
-     */
-    public function seeSuccessMessage($message)
-    {
-        /*Wait for success alert to pop up*/
-        $this->waitForElement(Locator::combine(SpamExpertsEmailSecurityPage::SUCCESS_ALERT_XPATH, SpamExpertsEmailSecurityPage::SUCCESS_ALERT_CSS));
-
-        /*Check the success message*/
-        $this->see($message, Locator::combine(SpamExpertsEmailSecurityPage::SUCCESS_ALERT_XPATH, SpamExpertsEmailSecurityPage::SUCCESS_ALERT_CSS));
-    }
-
-    /**
-     * Function used to check the error messages
-     */
-    public function seeErrorMessage($message)
-    {
-        /*Wait for success alert to pop up*/
-        $this->waitForElement(Locator::combine(SpamExpertsEmailSecurityPage::ERROR_ALERT_XPATH, SpamExpertsEmailSecurityPage::ERROR_ALERT_CSS));
-
-        /*Check the success message*/
-        $this->see($message, Locator::combine(SpamExpertsEmailSecurityPage::ERROR_ALERT_XPATH, SpamExpertsEmailSecurityPage::ERROR_ALERT_CSS));
     }
 }

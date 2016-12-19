@@ -1,6 +1,7 @@
 <?php
 
 use Page\SpamExpertsEmailSecurityPage;
+use Page\SettingsPage;
 use Step\Acceptance\SettingsSteps;
 use Codeception\Util\Locator;
 
@@ -10,9 +11,6 @@ class T01_SettingsCest
     {
         $I->loginAsAdminstrator();
         $I->openEmailSecurityExtension();
-
-        /*Create a default package if no one exists*/
-        // $I->createDefaultPackage();
     }
 
     public function _after(SettingsSteps $I)
@@ -33,25 +31,23 @@ class T01_SettingsCest
     {
         /*Verify configuration page layout*/
         $I->goToPage(SpamExpertsEmailSecurityPage::SETTINGS_TAB);
-        $I->seeErrorMessage('Error: Extension is not configured yet. Please set up configuration options.');
         $I->verifyPageLayout();
 
-        /*Fill configuration fields*/
+        /*Verify mandatory fields are required*/
+        $I->verifyMandatoryFields();
+
+        /*Fill configuration fields with valid cases*/
         $I->setFieldApiUrl(ExtensionConfig::getApiUrl());
         $I->setFieldApiHostname(ExtensionConfig::getApiHostname());
         $I->setFieldApiUsernameIfEmpty(ExtensionConfig::getApiUsername());
         $I->setFieldApiPassword(ExtensionConfig::getApiPassword());
         $I->setFieldPrimaryMX(ExtensionConfig::getPrimaryMX());
-
+        $I->setFieldSecondaryMX(ExtensionConfig::getSecondaryMX());
         /*Submit settings*/
         $I->submitSettingForm();
 
         /*Check if configuration was saved*/
-        $I->seeSuccessMessage('The settings have been saved.');
+        $I->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
     }
 }
-
-
-
-
-

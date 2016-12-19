@@ -75,4 +75,12 @@ class SettingsPage
     /*Use as destination routes for clean mail when protecting domains */
     const USE_DETINATION_ROUTES_FOR_HOSTNAMES = "//input[@id='use_ip_address_as_destination_routes-0']";
     const USE_DETINATION_ROUTES_FOR_IPADDRESSES = "//input[@id='use_ip_address_as_destination_routes-1']";
+
+    /*Rows where mandatory fields are located*/
+    const ANTISPAM_API_URL_ROW = "//div[@id='spampanel_url-form-row']";
+    const SPAMFILTER_API_HOSTNAME_ROW = "//div[@id='apihost-form-row']";
+    const SPAMFILTER_API_USERNAME_ROW = "//div[@id='apiuser-form-row']";
+    const SPAMFILTER_API_PASSWORD_ROW = "//div[@id='apipass-form-row']";
+    const PRIMARY_MX_ROW = "//div[@id='mx1-form-row']";
+    const SECONDARY_MX_ROW = "//div[@id='mx2-form-row']";
 }

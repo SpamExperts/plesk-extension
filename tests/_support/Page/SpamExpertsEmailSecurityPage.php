@@ -15,8 +15,8 @@ class SpamExpertsEmailSecurityPage
     const ERROR_ALERT_CSS = ".msg-box.msg-error";
 
     /*Success alert*/
-    const SUCCESS_ALERT_XPATH = "//div[@class='msg-box msg-success']";
-    const SUCCESS_ALERT_CSS = ".msg-box.msg-error";
+    const SUCCESS_ALERT_XPATH = "//div[@class='msg-box msg-info']";
+    const SUCCESS_ALERT_CSS = ".msg-box.msg-info";
 
     /*Notice alert*/
     const NOTICE_ALERT_XPATH = "//div[@class='msg-box msg-notice']";

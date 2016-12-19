@@ -68,6 +68,15 @@ class ExtensionConfig
     {
         return getenv(self::$parameters['env']['primary_mx']);
     }
+
+    /**
+     * Get the Secondary MX value
+     * @return string secondary_mx environment variable value
+     */
+    public static function getSecondaryMX()
+    {
+        return getenv(self::$parameters['env']['secondary_mx']);
+    }
 }
 
 

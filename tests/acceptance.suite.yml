@@ -25,6 +25,7 @@ env:
     api_username: 'API_USERNAME'
     api_password: 'API_PASSWORD'
     primary_mx: 'PRIMARY_MX'
+    secondary_mx: 'SECONDARY_MX'
 
     # Environment variables used for cpanel
     username: 'EXTENSION_USERNAME'

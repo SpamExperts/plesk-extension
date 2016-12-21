@@ -41,18 +41,27 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         $this->logDebug(__METHOD__ . ": " . "Domain addition request");
 
         try {
-            $response = $this->call(
-                "/api/domain/add/domain/$domain/" .
+            $domainAddResponseRaw = $this->call(
+                "/api/domain/add/domain/$domain/format/json/" .
                 (!empty($destinations) ? "destinations/" . json_encode($destinations) . '/' : "") .
                 (!empty($aliases) ? "aliases/" . json_encode($aliases) . '/' : "")
             );
-            $result = stripos($response, 'added') !== false || stripos($response, 'already') !== false;
+            $domainAddResponseData = json_decode($domainAddResponseRaw, true);
+            $result = !empty($domainAddResponseData['messages']['success'])
+                && in_array(
+                    sprintf(
+                        "Domain '%s' added",
+                        function_exists('idn_to_utf8') ? idn_to_utf8($domain) : $domain
+                    ),
+                    $domainAddResponseData['messages']['success']
+                );
         } catch (Exception $e) {
-            $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
+            $domainAddResponseRaw = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
             $result = false;
         }
 
-        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true) . " Response: " . var_export($response, true));
+        $this->logDebug(__METHOD__ . ": Result: " . var_export($result, true)
+            . " Response: " . var_export($domainAddResponseRaw, true));
 
         return $result;
     }

@@ -83,4 +83,10 @@ class SettingsPage
     const SPAMFILTER_API_PASSWORD_ROW = "//div[@id='apipass-form-row']";
     const PRIMARY_MX_ROW = "//div[@id='mx1-form-row']";
     const SECONDARY_MX_ROW = "//div[@id='mx2-form-row']";
+
+    /*Locators for all options on the settings page*/
+    const AUTOMATIC_ADD_DOMAIN = "//div[@id='auto_add_domain-form-row']//label[contains(text(),'%s')]";
+    const AUTOMATIC_DELETE_DOMAIN = "//div[@id='auto_del_domain-form-row']//label[contains(text(),'%s')]";
+    const ACTIONS_ON_MXRECORDS = "//div[@id='provision_dns-form-row']//label[contains(text(),'%s')]";
+    const ACTIONS_ON_CONTACT_EMAIL = "//div[@id='set_contact-form-row']//label[contains(text(),'%s')]";
 }

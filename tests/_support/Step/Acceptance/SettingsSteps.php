@@ -28,6 +28,7 @@ class SettingsSteps extends CommonSteps
         $this->seeElement(SettingsPage::SAVE_BUTTON_XPATH);
         $this->seeElement(SettingsPage::ANTISPAM_API_URL_XPATH);
         $this->seeElement(SettingsPage::SPAMFILTER_API_HOSTNAME_XPATH);
+        $this->seeElement(SettingsPage::SPAMFILTER_API_USERNAME_XPATH);
         $this->seeElement(SettingsPage::SPAMFILTER_API_PASSWORD_XPATH);
         $this->seeElement(SettingsPage::PRIMARY_MX_XPATH);
         $this->seeElement(SettingsPage::SECONDARY_MX_XPATH);
@@ -77,22 +78,25 @@ class SettingsSteps extends CommonSteps
             SettingsPage::SPAMFILTER_API_HOSTNAME_ROW);
 
         $value = $this->grabAttributeFrom(Locator::combine(
+            SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
+            SettingsPage::SPAMFILTER_API_USERNAME_CSS), "disabled");
+
+        if ($value == false) {
+            $this->see(
+                "This required field is empty. You need to specify a value.",
+                SettingsPage::SPAMFILTER_API_USERNAME_ROW);
+        }
+
+        $value = $this->grabAttributeFrom(Locator::combine(
             SettingsPage::SPAMFILTER_API_PASSWORD_XPATH,
             SettingsPage::SPAMFILTER_API_PASSWORD_CSS), "disabled");
 
         if ($value == false) {
             $this->see(
                 "This required field is empty. You need to specify a value.",
-                SettingsPage::SPAMFILTER_API_USERNAME_ROW);
-            $this->see(
-                "This required field is empty. You need to specify a value.",
                 SettingsPage::SPAMFILTER_API_PASSWORD_ROW);
         }
 
-        $this->see("This required field is empty. You need to specify a value.",
-            SettingsPage::SPAMFILTER_API_USERNAME_ROW);
-        $this->see("This required field is empty. You need to specify a value.",
-            SettingsPage::SPAMFILTER_API_PASSWORD_ROW);
         $this->see("This required field is empty. You need to specify a value.",
             SettingsPage::PRIMARY_MX_ROW);
         $this->see("This required field is empty. You need to specify a value.",
@@ -131,9 +135,9 @@ class SettingsSteps extends CommonSteps
     public function setFieldApiUsernameIfEmpty($string)
     {
         // Grab the value from field
-        $value = $this->grabValueFrom(Locator::combine(
+        $value = $this->grabAttributeFrom(Locator::combine(
             SettingsPage::SPAMFILTER_API_USERNAME_XPATH,
-            SettingsPage::SPAMFILTER_API_USERNAME_CSS));
+            SettingsPage::SPAMFILTER_API_USERNAME_CSS), "disabled");
 
         // If field is empty set the new value
         if (!$value)
@@ -233,7 +237,7 @@ class SettingsSteps extends CommonSteps
         return array_filter($mxRecords);
     }
 
-        /**
+    /**
      * Function used to submit configuration form
      */
     public function submitSettingForm()
@@ -242,5 +246,65 @@ class SettingsSteps extends CommonSteps
         $this->click(Locator::combine(
             SettingsPage::SAVE_BUTTON_XPATH,
             SettingsPage::SAVE_BUTTON_CSS));
+    }
+
+    /**
+     * Function used to select option for action on new domains
+     *
+     * @param string $action
+     */
+    public function selectActionForNewDomains($action)
+    {
+        /*Select on of the two actions*/
+        $this->checkOption(sprintf(SettingsPage::AUTOMATIC_ADD_DOMAIN,
+            $action));
+        $this->submitSettingForm();
+        $this->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
+    }
+
+    /**
+     * Function used to select option for action on deleted domains
+     *
+     * @param string $action
+     */
+    public function selectActionForDeletedDomains($action)
+    {
+        /*Select on of the two actions*/
+        $this->checkOption(sprintf(SettingsPage::AUTOMATIC_DELETE_DOMAIN,
+            $action));
+        $this->submitSettingForm();
+        $this->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
+    }
+
+    /**
+     * Function used to select option for action on MX records
+     *
+     * @param string $action
+     */
+    public function selectActionForMXRecords($action)
+    {
+        /*Select on of the two actions*/
+        $this->checkOption(sprintf(SettingsPage::ACTIONS_ON_MXRECORDS,
+            $action));
+        $this->submitSettingForm();
+        $this->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
+    }
+
+    /**
+     * Function used to select option for action on primary email contact
+     *
+     * @param string $action
+     */
+    public function selectActionForPrimaryContactEmail($action)
+    {
+        /*Select on of the two actions*/
+        $this->checkOption(sprintf(SettingsPage::ACTIONS_ON_CONTACT_EMAIL,
+            $action));
+        $this->submitSettingForm();
+        $this->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
     }
 }

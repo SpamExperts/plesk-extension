@@ -1,5 +1,6 @@
 <?php
 
+use Codeception\Scenario;
 
 /**
  * Inherited Methods
@@ -20,7 +21,28 @@ class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
 
-   /**
-    * Define custom actions here
-    */
+    /**
+     * Define custom actions here
+     */
+   	private $parameters = [];
+
+    public function __construct(Scenario $scenario)
+    {
+        parent::__construct($scenario);
+        $this->parseYaml();
+    }
+
+    public function getEnvParameter($name, $default = null)
+    {
+        if (isset($this->parameters['env'][$name]))
+            return $this->parameters['env'][$name];
+
+        return $default;
+    }
+
+    private function parseYaml()
+    {
+        $file = __DIR__.'/../acceptance.suite.yml';
+        $this->parameters = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($file));
+    }
 }

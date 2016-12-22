@@ -1,0 +1,16 @@
+# Travis CI configuration file.
+
+language: php
+
+php:
+    - 5.6
+    - 7.0
+
+before_script:
+    # Install Composer dependencies
+    - composer install -d plib/library
+    # Download Codeception package
+    - wget http://codeception.com/codecept.phar
+
+script:
+    - php codecept.phar run unit

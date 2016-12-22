@@ -8,7 +8,7 @@ class IndexController extends pm_Controller_Action
 
         // Init title for all actions
         $this->view->pageTitle = htmlentities(
-            pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "Professional SpamFilter",
+            $this->getSetting(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "Professional SpamFilter",
             ENT_QUOTES,
             'UTF-8'
         );
@@ -73,7 +73,7 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN,
                 $form::OPTION_USE_IP_DESTINATION_ROUTES,
             ] as $optionName) {
-                pm_Settings::set($optionName, $form->getValue($optionName));
+                $this->setSetting($optionName, $form->getValue($optionName));
             }
 
             // API access details need special processing to avoid changing
@@ -82,8 +82,8 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_SPAMPANEL_API_USER,
                 $form::OPTION_SPAMPANEL_API_PASS,
             ] as $protectedOptionName) {
-                if (empty(pm_Settings::get($protectedOptionName))) {
-                    pm_Settings::set($protectedOptionName, $form->getValue($protectedOptionName));
+                if (empty($this->getSetting($protectedOptionName))) {
+                    $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
                 }
             }
 
@@ -152,7 +152,7 @@ class IndexController extends pm_Controller_Action
             ] as $optionName) {
                 $value = $form->getValue($optionName);
                 if (null !== $value) {
-                    pm_Settings::set($optionName, $value);
+                    $this->setSetting($optionName, $value);
                 }
             }
 
@@ -168,7 +168,7 @@ class IndexController extends pm_Controller_Action
         $this->checkExtensionConfiguration();
 
         // List object for pm_View_Helper_RenderList
-        $this->view->list = $this->_getDomainsList();
+        $this->view->list = $this->getDomainsList();
     }
 
     public function domainAction()
@@ -178,12 +178,19 @@ class IndexController extends pm_Controller_Action
         $contextDomainId = pm_Session::getCurrentDomain()->getId();
 
         // List object for pm_View_Helper_RenderList
-        $this->view->list = $this->_getDomainsList(
+        $this->view->list = $this->getDomainsList(
             !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
         );
     }
 
-    private function _getDomainsList(array $ids = [])
+    /**
+     * @param array $ids
+     * @return pm_View_List_Simple
+     *
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function getDomainsList(array $ids = [])
     {
         $data = [];
         $dataUrl = 'list-data';
@@ -196,7 +203,7 @@ class IndexController extends pm_Controller_Action
                 $domainsManager->getSites()
             );
             if (Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_SKIP !=
-                pm_Settings::get(
+                $this->getSetting(
                     Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
                 )
             ) {
@@ -222,13 +229,13 @@ class IndexController extends pm_Controller_Action
             $dataUrl = 'list-context-data';
         }
 
-        $secondaryDomainsStrategy = pm_Settings::get(
+        $secDomainsStrategy = $this->getSetting(
             Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
         );
 
         foreach ($allDomains as $info) {
             $displayLoginLink
-                = ($secondaryDomainsStrategy
+                = ($secDomainsStrategy
                 ==
                 Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract::SECONDARY_DOMAIN_ACTION_PROTECT_AS_DOMAIN)
                 || 'Alias' != $info['type'];
@@ -316,7 +323,7 @@ class IndexController extends pm_Controller_Action
 
     public function listDataAction()
     {
-        $list = $this->_getDomainsList();
+        $list = $this->getDomainsList();
 
         // Json data from pm_View_List_Simple
         $this->_helper->json($list->fetchData());
@@ -327,7 +334,7 @@ class IndexController extends pm_Controller_Action
         $contextDomainId = pm_Session::getCurrentDomain()->getId();
 
         // List object for pm_View_Helper_RenderList
-        $list = $this->_getDomainsList(
+        $list = $this->getDomainsList(
             !empty($contextDomainId) && is_numeric($contextDomainId) ? [$contextDomainId] : null
         );
 
@@ -349,6 +356,11 @@ class IndexController extends pm_Controller_Action
         throw new pm_Exception('Access denied');
     }
 
+    /**
+     * @throws pm_Exception
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function checkExtensionConfiguration()
     {
         if (Modules_SpamexpertsExtension_Form_Settings::areEmpty()) {
@@ -358,12 +370,45 @@ class IndexController extends pm_Controller_Action
                     'Extension is not configured yet. Please set up configuration options.'
                 );
                 $this->_redirect('/index/settings', [ 'exit' => true ]);
-            } else {
-                throw new pm_Exception(
-                    'Extension is not configured yet. Please ask your system administrator to fix that.'
-                );
+
+                return;
             }
+
+            throw new pm_Exception(
+                'Extension is not configured yet. Please ask your system administrator to fix that.'
+            );
         }
+    }
+
+    /**
+     * Extracts values from Plesk key-value storage
+     *
+     * @param string $id
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
+    protected function getSetting($id)
+    {
+        return pm_Settings::get($id);
+    }
+
+    /**
+     * Pushes values to Plesk key-value storage
+     *
+     * @param string $id
+     * @param string $value
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
+    protected function setSetting($id, $value)
+    {
+        pm_Settings::set($id, $value);
     }
 
 }

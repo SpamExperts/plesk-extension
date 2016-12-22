@@ -14,7 +14,9 @@ zip -r spamexperts-extension.zip \
     --exclude=composer.phar \
     --exclude=codecept.phar \
     --exclude=codeception.yml \
+    --exclude=phpmd.phar \
     --exclude=*tests* \
+    --exclude=docs/* \
     --exclude=library/composer.json \
     --exclude=library/composer.lock \
     --exclude=spamexperts-extension.zip \

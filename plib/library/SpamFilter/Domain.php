@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_SpamFilter_Domain
 {
     /**
@@ -83,6 +86,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * @return void
      *
      * @throws RuntimeException
+     *
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function protect($updateDns = true, array $aliases = [], $contactEmail = null)
     {
@@ -115,6 +120,15 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
             $aliases
         );
 
+        if (! $domainAddOk) {
+            throw new \RuntimeException(
+                sprintf(
+                    "Failed to add the domain '%s' into the spamfilter",
+                    htmlentities($this->pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
         if ($domainAddOk && !empty($spamfilterMx)) {
             $this->dns->replaceDomainsMxRecords($this->pleskDomain, $spamfilterMx);
         }
@@ -132,6 +146,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * @return void
      *
      * @throws RuntimeException
+     *
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function protectAlias($updateDns = true)
     {
@@ -160,6 +176,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * @return void
      *
      * @throws RuntimeException
+     *
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function unprotect($updateDns = true)
     {
@@ -189,6 +207,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * @return void
      *
      * @throws RuntimeException
+     *
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function unprotectAlias($updateDns = true)
     {
@@ -218,6 +238,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      * set up in tyhe extension configuration
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function getSpamfilterMxs()
     {

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 trait Modules_SpamexpertsExtension_Plesk_ApiClientTrait
 {
     /**
@@ -8,6 +11,8 @@ trait Modules_SpamexpertsExtension_Plesk_ApiClientTrait
      * @param string $request
      *
      * @return SimpleXMLElement
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function xmlapi($request)
     {

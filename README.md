@@ -1,5 +1,8 @@
+[![Code Climate](https://codeclimate.com/github/SpamExperts/plesk-extension/badges/gpa.svg)](https://codeclimate.com/github/SpamExperts/plesk-extension) [![Issue Count](https://codeclimate.com/github/SpamExperts/plesk-extension/badges/issue_count.svg)](https://codeclimate.com/github/SpamExperts/plesk-extension) [![Build Status](https://travis-ci.org/SpamExperts/plesk-extension.svg?branch=master)](https://travis-ci.org/SpamExperts/plesk-extension)
+
 # plesk-extension
-Plesk Extension for SpamExperts' services integration
+
+Plesk Extension for SpamExperts services integration.
 
 ### System requirements
 
@@ -7,6 +10,8 @@ Plesk Extension for SpamExperts' services integration
 - PHP v5.6+
 
 ### Build (OSX/Linux)
+
+*Please note that generally it's not required to build the package as in order to install the extension the one from [Plesk extensions catalog](https://ext.plesk.com/) should be used. Our application can be found there using the "spamexperts" keyword. These instructions can be used only in case you're contributing to the project and build your own packages for development purposes.*
 
 After cloning the repo into a local copy, run the following commands:
 
@@ -24,6 +29,7 @@ chmod +x build.sh
  * Click Add Extension and upload your package
 
 ### Troubleshooting
+
 The extension logs can bee seen at `/var/log/plesk/panel.log`. 
 
 If your extension uses the Plesk GUI and it exits with an error or an exception, you should see the PHP stack trace. If you do not see it, and, say, see only a blank screen, try to improve the verbosity level of the debug output by adding a few lines to panel.ini. The file path is:

@@ -246,10 +246,11 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      */
     final static public function areEmpty()
     {
-        return empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
+        return (empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
             || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_HOST))
             || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_USER))
-            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_PASS));
+            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_PASS)))
+            && ! self::useSettingsFromLicense();
     }
 
     /**
@@ -292,5 +293,16 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
     final static function useSettingsFromLicense()
     {
         return 1 == pm_Settings::get(self::OPTION_USE_CONFIG_FROM_LICENSE);
+    }
+
+    final static function getRuntimeConfigOption($key)
+    {
+        if (self::useSettingsFromLicense()) {
+            $licenseConfig = self::retrieveFromPleskLicense();
+
+            return isset($licenseConfig[$key]) ? $licenseConfig[$key] : null;
+        }
+
+        return \pm_Settings::get($key);
     }
 }

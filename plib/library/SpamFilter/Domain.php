@@ -246,7 +246,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
         $mxs = [];
 
         for ($mx = 1; $mx <= 4; $mx++) {
-            $record = pm_Settings::get(
+            $record = \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
                 constant("Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMFILTER_MX{$mx}")
             );
             if (!empty($record)) {

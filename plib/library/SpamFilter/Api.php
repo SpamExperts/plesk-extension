@@ -21,7 +21,9 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         /** @noinspection PhpUndefinedClassInspection */
         parent::__construct(
             [
-                'base_uri' => "https://" . pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_HOST),
+                'base_uri' => "https://" . \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
+                    \Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_HOST
+                ),
                 'timeout' => 30,
                 'allow_redirects' => false,
                 'verify' => false,
@@ -29,8 +31,12 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
                     'User-Agent' => "Professional SpamFilter Plesk/1.0",
                 ],
                 'auth' => [
-                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_USER),
-                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_PASS),
+                    \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
+                        \Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_USER
+                    ),
+                    \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
+                        \Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_API_PASS
+                    ),
                 ],
             ]
         );

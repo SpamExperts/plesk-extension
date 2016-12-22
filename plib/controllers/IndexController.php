@@ -315,15 +315,14 @@ class IndexController extends pm_Controller_Action
         if (!empty($supportEmail)) {
             $supportForm = new Modules_SpamexpertsExtension_Form_SupportRequest([]);
 
-            if ($this->getRequest()->isPost()
-                && $supportForm->isValid($this->getRequest()->getPost())
-            ) {
-                $pleskVersion = pm_ProductInfo::getVersion() . " (" . pm_ProductInfo::getPlatform() . ")";
-                $phpVersion = PHP_VERSION;
-                /** @var stdClass $ext */
-                $ext = pm_Context::getModuleInfo();
-                $extensionVersion = "v{$ext->version}-{$ext->release}";
-                $message = <<< MESSAGE
+            if ($this->getRequest()->isPost()) {
+                if ($supportForm->isValid($this->getRequest()->getPost())) {
+                    $pleskVersion = pm_ProductInfo::getVersion() . " (" . pm_ProductInfo::getPlatform() . ")";
+                    $phpVersion = PHP_VERSION;
+                    /** @var stdClass $ext */
+                    $ext = pm_Context::getModuleInfo();
+                    $extensionVersion = "v{$ext->version}-{$ext->release}";
+                    $message = <<< MESSAGE
 Hello there!
 
 A new support request from Plesk Extension was submitted. The details are:
@@ -339,11 +338,15 @@ Message:
 {$supportForm->getValue($supportForm::OPTION_MESSAGE)}
 MESSAGE;
 
-                $isSent = mail($supportEmail, 'Plesk Extension: New support request', $message,
-                    "From: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n" .
-                    "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n");
-                if ($isSent) {
-                    $this->_status->addMessage('info', 'Your message has been sent.');
+                    $isSent = mail($supportEmail, 'Plesk Extension: New support request', $message,
+                        "From: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n" .
+                        "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n");
+                    if ($isSent) {
+                        $this->_status->addMessage('info', 'Your message has been sent.');
+                        $this->_helper->json(['redirect' => $this->_helper->url('support')]);
+                    }
+                } else {
+                    $this->_status->addMessage('error', 'Please enter correct values into the form.');
                     $this->_helper->json(['redirect' => $this->_helper->url('support')]);
                 }
             }

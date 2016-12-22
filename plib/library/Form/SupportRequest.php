@@ -33,6 +33,7 @@ class Modules_SpamexpertsExtension_Form_SupportRequest extends pm_Form_Simple
             'label' => 'Reply-To',
             'description' => "An email address where a reply should be sent",
             'required' => true,
+            'value' => pm_Session::getClient()->getProperty('email'),
             'validators' => [
                 ['EmailAddress', true],
             ],

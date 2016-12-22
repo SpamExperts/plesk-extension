@@ -56,13 +56,34 @@ class IndexController extends pm_Controller_Action
         if ($this->getRequest()->isPost()
             && $form->isValid($this->getRequest()->getPost())) {
 
+            if (! Modules_SpamexpertsExtension_Form_Settings::useSettingsFromLicense()) {
+                foreach ([
+                    $form::OPTION_SPAMPANEL_URL,
+                    $form::OPTION_SPAMPANEL_API_HOST,
+                    $form::OPTION_SPAMFILTER_MX1,
+                    $form::OPTION_SPAMFILTER_MX2,
+                    $form::OPTION_SPAMFILTER_MX3,
+                    $form::OPTION_SPAMFILTER_MX4,
+                         ] as $optionName) {
+                    $this->setSetting($optionName, $form->getValue($optionName));
+                }
+
+                // API access details need special processing to avoid changing
+                // without running the migration procedure
+                foreach ([
+                             $form::OPTION_SPAMPANEL_API_USER,
+                             $form::OPTION_SPAMPANEL_API_PASS,
+                         ] as $protectedOptionName) {
+                    if (empty($this->getSetting($protectedOptionName))) {
+                        $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
+                    }
+                }
+            }
+
+            $this->setSetting($form::OPTION_USE_CONFIG_FROM_LICENSE,
+                !empty($form->getValue($form::OPTION_USE_CONFIG_FROM_LICENSE)) ? 1 : 0);
+
             foreach ([
-                $form::OPTION_SPAMPANEL_URL,
-                $form::OPTION_SPAMPANEL_API_HOST,
-                $form::OPTION_SPAMFILTER_MX1,
-                $form::OPTION_SPAMFILTER_MX2,
-                $form::OPTION_SPAMFILTER_MX3,
-                $form::OPTION_SPAMFILTER_MX4,
                 $form::OPTION_AUTO_ADD_DOMAINS,
                 $form::OPTION_AUTO_DEL_DOMAINS,
                 $form::OPTION_AUTO_PROVISION_DNS,
@@ -76,40 +97,8 @@ class IndexController extends pm_Controller_Action
                 $this->setSetting($optionName, $form->getValue($optionName));
             }
 
-            // API access details need special processing to avoid changing
-            // without running the migration procedure
-            foreach ([
-                $form::OPTION_SPAMPANEL_API_USER,
-                $form::OPTION_SPAMPANEL_API_PASS,
-            ] as $protectedOptionName) {
-                if (empty($this->getSetting($protectedOptionName))) {
-                    $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
-                }
-            }
-
             $this->_status->addMessage('info', 'Configuration options were successfully saved.');
             $this->_helper->json(['redirect' => $this->_helper->url('settings')]);
-        }
-
-        /**
-         * Check Plesk license for a container with bundled configuration
-         *
-         * @see https://trac.spamexperts.com/ticket/29702
-         */
-        $licenseSettings = \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense();
-        if (!empty($licenseSettings)) {
-            foreach (array_keys($licenseSettings) as $optKey) {
-                if (isset($licenseSettings[$optKey]) && $licenseSettings[$optKey] != pm_Settings::get($optKey)) {
-                    $this->_status->addMessage(
-                        'info',
-                        'Configuration options are found in Plesk license. <a href="'
-                            . $this->_helper->url('applyconfig') . '" onclick="return confirm(\'Existing configuration data will be erased. Are you sure to continue?\');">Apply</a>',
-                        true
-                    );
-
-                    break;
-                }
-            }
         }
 
         $this->view->form = $form;

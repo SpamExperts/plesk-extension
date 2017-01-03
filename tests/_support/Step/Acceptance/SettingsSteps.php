@@ -34,6 +34,7 @@ class SettingsSteps extends CommonSteps
         $this->seeElement(SettingsPage::SECONDARY_MX_XPATH);
         $this->seeElement(SettingsPage::TERTIARY_MX_XPATH);
         $this->seeElement(SettingsPage::QUATERNARY_MX_XPATH);
+        $this->seeElement(SettingsPage::SUPPORT_EMAIL_XPATH);
         $this->seeElement(SettingsPage::PROTECT_AUTO_ACTION_FOR_NEW_DOMAIN);
         $this->seeElement(SettingsPage::SKIP_AUTO_ACTION_FOR_NEW_DOMAIN);
         $this->seeElement(SettingsPage::UNPROTECT_AUTO_ACTION_FOR_DELETED_DOMAINS);
@@ -212,6 +213,18 @@ class SettingsSteps extends CommonSteps
             $this->fillField(Locator::combine(
                 SettingsPage::QUATERNARY_MX_XPATH,
                 SettingsPage::QUATERNARY_MX_CSS), $string);
+    }
+
+    /**
+     * Function used to fill the support email field
+     * @param string $string - value
+     */
+    public function setFieldSupportEmail($string)
+    {
+        if ($string)
+            $this->fillField(Locator::combine(
+                SettingsPage::SUPPORT_EMAIL_XPATH,
+                SettingsPage::SUPPORT_EMAIL_CSS), $string);
     }
 
     /**

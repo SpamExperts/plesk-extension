@@ -47,6 +47,7 @@ class T01_SettingsCest
         $I->setFieldApiPassword(ExtensionConfig::getApiPassword());
         $I->setFieldPrimaryMX(ExtensionConfig::getPrimaryMX());
         $I->setFieldSecondaryMX(ExtensionConfig::getSecondaryMX());
+        $I->setFieldSupportEmail("test@plesk.extension.example.com");
         /*Submit settings*/
         $I->submitSettingForm();
 

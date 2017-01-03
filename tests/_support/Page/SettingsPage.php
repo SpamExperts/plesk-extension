@@ -39,6 +39,10 @@ class SettingsPage
     const QUATERNARY_MX_XPATH = "//input[@id='mx3']";
     const QUATERNARY_MX_CSS = "#mx3";
 
+    /*Support email*/
+    const SUPPORT_EMAIL_XPATH = "//input[@id='support_email']";
+    const SUPPORT_EMAIL_CSS = "#support_email";
+
     /*Automatic action for a new domain when it is added to this server*/
     const PROTECT_AUTO_ACTION_FOR_NEW_DOMAIN = "//input[@id='auto_add_domain-1']";
     const SKIP_AUTO_ACTION_FOR_NEW_DOMAIN = "//input[@id='auto_add_domain-0']";

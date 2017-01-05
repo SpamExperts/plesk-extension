@@ -23,6 +23,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
     const OPTION_LOGOUT_REDIRECT = 'redirectback';
     const OPTION_AUTO_ADD_DOMAIN_ON_LOGIN = 'add_domain_loginfail';
     const OPTION_USE_IP_DESTINATION_ROUTES = 'use_ip_address_as_destination_routes';
+    const OPTION_SUPPORT_EMAIL = 'support_email';
 
     /**
      * Class constructor.
@@ -160,6 +161,15 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             $mx4FieldOptions['disabled'] = true;
         }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
+
+        $this->addElement('text', self::OPTION_SUPPORT_EMAIL, [
+            'label' => 'Support email',
+            'value' => $this->getSetting(self::OPTION_SUPPORT_EMAIL),
+            'description' => "If you want to provide support to your customers please enter an email address here to use as a destination for all support requests.",
+            'validators' => [
+                ['EmailAddress', true],
+            ],
+        ]);
 
         $autoAddDomains = $this->getSetting(self::OPTION_AUTO_ADD_DOMAINS);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAINS, [

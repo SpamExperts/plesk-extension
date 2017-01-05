@@ -30,11 +30,12 @@ class IndexController extends pm_Controller_Action
                 'title' => "Branding",
                 'action' => 'branding',
             ];
-            $tabs[] = [
-                'title' => "Support",
-                'action' => 'support',
-            ];
         }
+
+        $tabs[] = [
+            'title' => "Support",
+            'action' => 'support',
+        ];
         
         // Init tabs for all actions
         $this->view->tabs = $tabs;
@@ -93,6 +94,7 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_LOGOUT_REDIRECT,
                 $form::OPTION_AUTO_ADD_DOMAIN_ON_LOGIN,
                 $form::OPTION_USE_IP_DESTINATION_ROUTES,
+                $form::OPTION_SUPPORT_EMAIL,
             ] as $optionName) {
                 $this->setSetting($optionName, $form->getValue($optionName));
             }
@@ -333,11 +335,50 @@ class IndexController extends pm_Controller_Action
 
     public function supportAction()
     {
-        if (!pm_Session::getClient()->isAdmin()) {
-            $this->accessDenied();
-        }
-
         $this->checkExtensionConfiguration();
+
+        $supportEmail = $this->getSetting(\Modules_SpamexpertsExtension_Form_Settings::OPTION_SUPPORT_EMAIL);
+        if (!empty($supportEmail)) {
+            $supportForm = new Modules_SpamexpertsExtension_Form_SupportRequest([]);
+
+            if ($this->getRequest()->isPost()) {
+                if ($supportForm->isValid($this->getRequest()->getPost())) {
+                    $pleskVersion = pm_ProductInfo::getVersion() . " (" . pm_ProductInfo::getPlatform() . ")";
+                    $phpVersion = PHP_VERSION;
+                    /** @var stdClass $ext */
+                    $ext = pm_Context::getModuleInfo();
+                    $extensionVersion = "v{$ext->version}-{$ext->release}";
+                    $message = <<< MESSAGE
+Hello there!
+
+A new support request from Plesk Extension was submitted. The details are:
+
+Plesk: {$pleskVersion}
+PHP version: {$phpVersion}
+Extension version: {$extensionVersion}
+
+Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}
+Subject: {$supportForm->getValue($supportForm::OPTION_TITLE)}
+Message:
+
+{$supportForm->getValue($supportForm::OPTION_MESSAGE)}
+MESSAGE;
+
+                    $isSent = mail($supportEmail, 'Plesk Extension: New support request', $message,
+                        "From: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n" .
+                        "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n");
+                    if ($isSent) {
+                        $this->_status->addMessage('info', 'Your message has been sent.');
+                        $this->_helper->json(['redirect' => $this->_helper->url('support')]);
+                    }
+                } else {
+                    $this->_status->addMessage('error', 'Please enter correct values into the form.');
+                    $this->_helper->json(['redirect' => $this->_helper->url('support')]);
+                }
+            }
+
+            $this->view->supportForm = $supportForm;
+        }
     }
 
     protected function accessDenied()

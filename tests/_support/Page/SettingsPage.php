@@ -39,6 +39,10 @@ class SettingsPage
     const QUATERNARY_MX_XPATH = "//input[@id='mx3']";
     const QUATERNARY_MX_CSS = "#mx3";
 
+    /*Support email*/
+    const SUPPORT_EMAIL_XPATH = "//input[@id='support_email']";
+    const SUPPORT_EMAIL_CSS = "#support_email";
+
     /*Automatic action for a new domain when it is added to this server*/
     const PROTECT_AUTO_ACTION_FOR_NEW_DOMAIN = "//input[@id='auto_add_domain-1']";
     const SKIP_AUTO_ACTION_FOR_NEW_DOMAIN = "//input[@id='auto_add_domain-0']";
@@ -83,4 +87,10 @@ class SettingsPage
     const SPAMFILTER_API_PASSWORD_ROW = "//div[@id='apipass-form-row']";
     const PRIMARY_MX_ROW = "//div[@id='mx1-form-row']";
     const SECONDARY_MX_ROW = "//div[@id='mx2-form-row']";
+
+    /*Locators for all options on the settings page*/
+    const AUTOMATIC_ADD_DOMAIN = "//div[@id='auto_add_domain-form-row']//label[contains(text(),'%s')]";
+    const AUTOMATIC_DELETE_DOMAIN = "//div[@id='auto_del_domain-form-row']//label[contains(text(),'%s')]";
+    const ACTIONS_ON_MXRECORDS = "//div[@id='provision_dns-form-row']//label[contains(text(),'%s')]";
+    const ACTIONS_ON_CONTACT_EMAIL = "//div[@id='set_contact-form-row']//label[contains(text(),'%s')]";
 }

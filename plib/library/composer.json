@@ -14,5 +14,8 @@
   ],
   "require": {
     "guzzlehttp/guzzle": "6.*"
+  },
+  "require-dev": {
+    "codeception/codeception": "2.*"
   }
 }

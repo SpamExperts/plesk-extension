@@ -194,6 +194,14 @@ class IndexController extends pm_Controller_Action
             $dataUrl = 'list-context-data';
         }
 
+        // Add reseller customer domains
+        $client = pm_Session::getClient();
+
+        if ($client->isReseller()) {
+            $apiClient = new Modules_SpamexpertsExtension_Plesk_ApiClient();
+            $allDomains = array_merge($allDomains, $apiClient->getCustomerDomains($client->getId()));
+        }
+
         $secDomainsStrategy = $this->getSetting(
             Modules_SpamexpertsExtension_Form_Settings::OPTION_EXTRA_DOMAINS_HANDLING
         );

@@ -9,8 +9,6 @@ php:
 before_script:
     # Install Composer dependencies
     - composer install -d plib/library
-    # Download Codeception package
-    - wget http://codeception.com/codecept.phar
 
 script:
-    - php codecept.phar run unit
+    - php plib/library/vendor/bin/codecept run unit

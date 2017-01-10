@@ -11,6 +11,8 @@ Plesk Extension for SpamExperts services integration.
 
 ### Build (OSX/Linux)
 
+*Please note that generally it's not required to build the package as in order to install the extension the one from [Plesk extensions catalog](https://ext.plesk.com/) should be used. Our application can be found there using the "spamexperts" keyword. These instructions can be used only in case you're contributing to the project and build your own packages for development purposes.*
+
 After cloning the repo into a local copy, run the following commands:
 
 ```

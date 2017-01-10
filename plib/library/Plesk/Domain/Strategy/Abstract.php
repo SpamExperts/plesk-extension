@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
 {
     const SECONDARY_DOMAIN_ACTION_SKIP              = 0;
@@ -37,6 +40,8 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
      * @param int    $domainId
      *
      * @return Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function __construct($domainName, $domainType = null, $domainId = null)
     {
@@ -72,6 +77,13 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         return new Modules_SpamexpertsExtension_SpamFilter_Domain($panelDomain);
     }
 
+    /**
+     * @param Modules_SpamexpertsExtension_Plesk_Domain $pleskDomain
+     *
+     * @return null|string
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function getContactEmail(Modules_SpamexpertsExtension_Plesk_Domain $pleskDomain)
     {
         $email = null;
@@ -95,6 +107,11 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         );
     }
 
+    /**
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function isRemoteDomainsProtectionEnabled()
     {
         return ('0' == pm_Settings::get(
@@ -216,6 +233,11 @@ abstract class Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract
         return $this->initSeDomainInstance($this->initPanelDomainInstance())->statusAlias();
     }
 
+    /**
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function getSecondaryDomainsAction()
     {
         return pm_Settings::get(

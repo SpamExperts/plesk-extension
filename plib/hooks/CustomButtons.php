@@ -1,11 +1,17 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ */
 class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
 {
     /**
      * Custom Buttons generator
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getButtons()
     {

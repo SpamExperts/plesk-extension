@@ -116,7 +116,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"));
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $sut->addDomain($domain);
@@ -133,7 +133,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/destinations/" . json_encode($destinations) . "/"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/destinations/" . json_encode($destinations) . "/"));
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $sut->addDomain($domain, $destinations);
@@ -150,7 +150,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/aliases/" . json_encode($aliases) . "/"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/aliases/" . json_encode($aliases) . "/"));
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $sut->addDomain($domain, [], $aliases);
@@ -166,8 +166,8 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/"))
-            ->will($this->returnValue("SUCCESS: Domain '$domain' added"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
+            ->will($this->returnValue(json_encode(['messages' => ['success' => ["Domain '$domain' added"]]])));
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->addDomain($domain));
@@ -183,11 +183,17 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/"))
-            ->will($this->returnValue("ERROR: Domain already exists.\nERROR: Failed to add domain '$domain'"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
+            ->will(
+                $this->returnValue(
+                    json_encode(
+                        ['messages' => ['error' => ["Domain already exists.", "Failed to add domain '$domain'"]]]
+                    )
+                )
+            );
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
-        $this->assertTrue($sut->addDomain($domain));
+        $this->assertFalse($sut->addDomain($domain));
     }
 
     public function testAddDomainFailed()
@@ -200,8 +206,14 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->with($this->equalTo("/api/domain/add/domain/$domain/"))
-            ->will($this->returnValue("ERROR: Database connection error.\nERROR: Failed to add domain '$domain'"));
+            ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
+            ->will(
+                $this->returnValue(
+                    json_encode(
+                        ['messages' => ['error' => ["Database connection error.", "Failed to add domain '$domain'"]]]
+                    )
+                )
+            );
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->addDomain($domain));

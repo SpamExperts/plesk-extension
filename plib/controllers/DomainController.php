@@ -227,8 +227,13 @@ class DomainController extends pm_Controller_Action
             );
 
             if (!empty($authToken)) {
-                $url = rtrim(pm_Settings::get(Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL), '/')
-                    . "/?authticket=$authToken";
+                $url = rtrim(
+                    \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
+                        \Modules_SpamexpertsExtension_Form_Settings::OPTION_SPAMPANEL_URL
+                    ),
+                    '/'
+                )
+                . "/?authticket=$authToken";
 
                 header("Location: $url");
 

@@ -45,7 +45,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
          *
          * @see https://trac.spamexperts.com/ticket/29702
          */
-        $licenseSettings = \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense();
+        $licenseSettings = self::retrieveFromPleskLicense();
         if (!empty($licenseSettings)) {
             $this->addElement('checkbox', self::OPTION_USE_CONFIG_FROM_LICENSE, [
                 'label' => 'Use license parameters',

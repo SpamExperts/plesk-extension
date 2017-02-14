@@ -1,2 +1,8 @@
 <?php echo $this->renderTabs($this->tabs); ?>
+
+<?php if (! \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense()) : ?>
+<h4>You can buy antispam services and obtain valid configuration directives in our
+    <a href="https://go.plesk.com/buy-plesk-ext/spamexperts-extension" target="_blank">online store</a></h4>
+<?php endif; ?>
+
 <?php echo $this->form; ?>

@@ -7,5 +7,6 @@
     <release>2</release>
     <vendor>SpamExperts B.V.</vendor>
     <url>http://www.spamexperts.com/</url>
+    <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
     <plesk_min_version>12.5.0</plesk_min_version>
 </module>

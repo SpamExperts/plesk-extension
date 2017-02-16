@@ -4,7 +4,6 @@ plib/library/vendor/
 # Binary gettext files
 *.mo
 
-.gitignore
 .idea/
 /spamexperts-extension.zip
 /composer.phar

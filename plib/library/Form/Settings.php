@@ -2,6 +2,9 @@
 
 /**
  * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ *
+ * @method getValue($name)
+ * @method isValid($data)
  */
 class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 {

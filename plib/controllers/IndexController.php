@@ -57,7 +57,7 @@ class IndexController extends pm_Controller_Action
         if ($this->getRequest()->isPost()
             && $form->isValid($this->getRequest()->getPost())) {
 
-            if (! Modules_SpamexpertsExtension_Form_Settings::useSettingsFromLicense()) {
+            if (1 != $form->getValue(Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_CONFIG_FROM_LICENSE)) {
                 foreach ([
                     $form::OPTION_SPAMPANEL_URL,
                     $form::OPTION_SPAMPANEL_API_HOST,

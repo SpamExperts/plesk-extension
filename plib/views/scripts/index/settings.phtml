@@ -2,7 +2,32 @@
 
 <?php if (! \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense()) : ?>
 <h4>You can buy antispam services and obtain valid configuration directives in our
-    <a href="https://go.plesk.com/buy-plesk-ext/spamexperts-extension" target="_blank">online store</a></h4>
+    <a href="<?php
+
+    echo method_exists('pm_Context', 'getBuyUrl')
+        ? \pm_Context::getBuyUrl()
+        : 'https://go.plesk.com/buy-plesk-ext/spamexperts-extension';
+
+    ?>" target="_blank">online store</a></h4>
 <?php endif; ?>
 
 <?php echo $this->form; ?>
+
+<script>
+    document.observe('dom:loaded', function () {
+        var affectedFields = ['#spampanel_url', '#apihost', '#mx1', '#mx2', '#mx3', '#mx4', '#support_email'];
+
+        if (! $('apiuser').disabled) {
+            affectedFields.push('#apiuser');
+            affectedFields.push('#apipass');
+        }
+
+        $$('#use_config_from_license').each(function (checkbox) {
+            Event.on(checkbox, 'click', function () {
+                $$(affectedFields.join(',')).each(function (input) {
+                    input.disabled = checkbox.checked;
+                });
+            });
+        });
+    });
+</script>

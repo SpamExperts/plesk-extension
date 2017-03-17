@@ -286,7 +286,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         $keys = pm_License::getAdditionalKeysList('ext-spamexperts-extension');
 
         if (is_array($keys) && $licenseMeta = reset($keys)) {
-            if (date('Ymd') < $licenseMeta['lim_date']) {
+            if (date('Ymd') > $licenseMeta['lim_date']) {
                 pm_Log::debug("Do not use Plesk license data is the license seems to be expired");
             }
 

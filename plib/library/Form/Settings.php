@@ -28,6 +28,8 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
     const OPTION_USE_IP_DESTINATION_ROUTES = 'use_ip_address_as_destination_routes';
     const OPTION_SUPPORT_EMAIL = 'support_email';
 
+    const LICENSE_CONFIGURATION_ID = 'ext-spamexperts-extension';
+
     /**
      * Class constructor.
      *
@@ -165,14 +167,18 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
 
-        $this->addElement('text', self::OPTION_SUPPORT_EMAIL, [
+        $supportEmailFieldOptions = [
             'label' => 'Support email',
             'value' => $this->getSetting(self::OPTION_SUPPORT_EMAIL),
             'description' => "If you want to provide support to your customers please enter an email address here to use as a destination for all support requests.",
             'validators' => [
                 ['EmailAddress', true],
             ],
-        ]);
+        ];
+        if ($useSettingsFromLicenseMode) {
+            $supportEmailFieldOptions['disabled'] = true;
+        }
+        $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
 
         $autoAddDomains = $this->getSetting(self::OPTION_AUTO_ADD_DOMAINS);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAINS, [
@@ -259,11 +265,14 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      */
     final static public function areEmpty()
     {
-        return (empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
+        $manualConfigurationEmpty = (empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
             || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_HOST))
             || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_USER))
-            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_PASS)))
-            && ! self::useSettingsFromLicense();
+            || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_PASS)));
+
+        $licenseConfigurationValid = self::useSettingsFromLicense();
+
+        return $manualConfigurationEmpty && ! $licenseConfigurationValid;
     }
 
     /**
@@ -283,7 +292,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 
     final static public function retrieveFromPleskLicense()
     {
-        $keys = pm_License::getAdditionalKeysList('ext-spamexperts-extension');
+        $keys = pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID);
 
         if (is_array($keys) && $licenseMeta = reset($keys)) {
             if (date('Ymd') > $licenseMeta['lim_date']) {
@@ -305,7 +314,8 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      */
     final static function useSettingsFromLicense()
     {
-        return 1 == pm_Settings::get(self::OPTION_USE_CONFIG_FROM_LICENSE);
+        return ! empty(pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID))
+            && 1 == pm_Settings::get(self::OPTION_USE_CONFIG_FROM_LICENSE);
     }
 
     final static function getRuntimeConfigOption($key)

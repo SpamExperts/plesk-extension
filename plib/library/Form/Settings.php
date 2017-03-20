@@ -43,52 +43,32 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
     {
         parent::__construct($options);
 
-        $useSettingsFromLicenseMode = self::useSettingsFromLicense();
-
-        /**
-         * Check Plesk license for a container with bundled configuration
-         *
-         * @see https://trac.spamexperts.com/ticket/29702
-         */
-        $licenseSettings = self::retrieveFromPleskLicense();
-        if (!empty($licenseSettings)) {
-            $this->addElement('checkbox', self::OPTION_USE_CONFIG_FROM_LICENSE, [
-                'label' => 'Use license parameters',
-                'value' => '1',
-                'checked' => $useSettingsFromLicenseMode,
-                'description' => "Configuration options are found in Plesk license. Please tick this box to use them.",
-            ]);
-        }
-
         $apiUrlFieldOptions = [
             'label' => 'AntiSpam API URL',
             'value' => $this->getSetting(self::OPTION_SPAMPANEL_URL),
+            'required' => true,
             'description' => "This is the URL you use to login to your AntiSpam Web Interface. Please prepend the URL with http:// or https://",
             'validators' => [
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $apiUrlFieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMPANEL_URL, $apiUrlFieldOptions);
 
         $apiHostFieldOptions = [
             'label' => 'SpamFilter API hostname',
             'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_HOST),
+            'required' => true,
             'description' => "This is the hostname of the first antispam server, usually the same as the AntiSpam Web Interface URL unless you're using a CNAME for that.",
             'validators' => [
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $apiHostFieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMPANEL_API_HOST, $apiHostFieldOptions);
 
         $apiuserOptions = [
             'label' => 'SpamFilter API username',
             'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_USER),
+            'required' => true,
             'description' => "This is the name of the user that is being used to communicate with the SpamFilter API. You can only change this at the migration page.",
             'validators' => [
                 ['NotEmpty', true],
@@ -96,13 +76,15 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         ];
 
         $apiUserWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_USER));
-        if ($apiUserWasSetUp || $useSettingsFromLicenseMode) {
+        if ($apiUserWasSetUp) {
             $apiuserOptions['disabled'] = true;
+            unset($apiuserOptions['required']);
         }
         $this->addElement('text', self::OPTION_SPAMPANEL_API_USER, $apiuserOptions);
 
         $apipassOptions = [
             'label' => 'SpamFilter API password',
+            'required' => true,
             'description' => "This is the password from the user that is being used to communicate with the SpamFilter API. Can be left empty once it has been validated.",
             'validators' => [
                 ['NotEmpty', true],
@@ -110,35 +92,32 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         ];
 
         $apiPassWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_PASS));
-        if ($apiPassWasSetUp || $useSettingsFromLicenseMode) {
+        if ($apiPassWasSetUp) {
             $apipassOptions['disabled'] = true;
+            unset($apipassOptions['required']);
         }
         $this->addElement('password', self::OPTION_SPAMPANEL_API_PASS, $apipassOptions);
 
         $mx1FieldOptions = [
             'label' => 'Primary MX',
             'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX1),
+            'required' => true,
             'description' => "This is for the first MX record. It can be either your cluster's first server or an other DNS name if you're using Round Robin DNS.",
             'validators' => [
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $mx1FieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX1, $mx1FieldOptions);
 
         $mx2FieldOptions = [
             'label' => 'Secondary MX',
             'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX2),
+            'required' => true,
             'description' => "This is for the second MX record. It can be either your cluster's second server or an other DNS name if you're using Round Robin DNS.",
             'validators' => [
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $mx2FieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX2, $mx2FieldOptions);
 
         $mx3FieldOptions = [
@@ -149,9 +128,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $mx3FieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX3, $mx3FieldOptions);
 
         $mx4FieldOptions = [
@@ -162,9 +138,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 ['NotEmpty', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $mx4FieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
 
         $supportEmailFieldOptions = [
@@ -175,9 +148,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 ['EmailAddress', true],
             ],
         ];
-        if ($useSettingsFromLicenseMode) {
-            $supportEmailFieldOptions['disabled'] = true;
-        }
         $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
 
         $autoAddDomains = $this->getSetting(self::OPTION_AUTO_ADD_DOMAINS);
@@ -314,8 +284,18 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      */
     final static function useSettingsFromLicense()
     {
-        return ! empty(pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID))
+        return self::settingsFromLicenseAvailable()
             && 1 == pm_Settings::get(self::OPTION_USE_CONFIG_FROM_LICENSE);
+    }
+
+    /**
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    final static function settingsFromLicenseAvailable()
+    {
+        return ! empty(pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID));
     }
 
     final static function getRuntimeConfigOption($key)

@@ -1,6 +1,6 @@
 <?php echo $this->renderTabs($this->tabs); ?>
 
-<?php if (! \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense()) : ?>
+<?php if (! \Modules_SpamexpertsExtension_Form_Settings::retrieveFromPleskLicense()) { ?>
 <h4>You can buy antispam services and obtain valid configuration directives in our
     <a href="<?php
 
@@ -9,25 +9,24 @@
         : 'https://go.plesk.com/buy-plesk-ext/spamexperts-extension';
 
     ?>" target="_blank">online store</a></h4>
-<?php endif; ?>
 
-<?php echo $this->form; ?>
+    <?php echo $this->form; ?>
+<?php } elseif ($this->configFromLicenseAvailable) { ?>
+    <?php if ($this->configFromLicenseUsed) { ?>
+        <h4>Configuration options from an Additional Plesk license are in use. Please click
+            <a href="<?php
 
-<script>
-    document.observe('dom:loaded', function () {
-        var affectedFields = ['#spampanel_url', '#apihost', '#mx1', '#mx2', '#mx3', '#mx4', '#support_email'];
+            echo $this->url(['controller' => 'index', 'action' => 'disablelicenseconfiguration']);
 
-        if (! $('apiuser').disabled) {
-            affectedFields.push('#apiuser');
-            affectedFields.push('#apipass');
-        }
+            ?>">here</a> to change to manual configuration.</h4>
+    <?php } else { ?>
+        <h4>Configuration options from an Additional Plesk license are available but not in use. Please click
+            <a href="<?php
 
-        $$('#use_config_from_license').each(function (checkbox) {
-            Event.on(checkbox, 'click', function () {
-                $$(affectedFields.join(',')).each(function (input) {
-                    input.disabled = checkbox.checked;
-                });
-            });
-        });
-    });
-</script>
+            echo $this->url(['controller' => 'index', 'action' => 'enablelicenseconfiguration']);
+
+            ?>">here</a> to update configuration to the options from the license.</h4>
+
+        <?php echo $this->form; ?>
+    <?php } ?>
+<?php } ?>

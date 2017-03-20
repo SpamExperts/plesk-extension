@@ -52,6 +52,13 @@ class IndexController extends pm_Controller_Action
             $this->accessDenied();
         }
 
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->view->configFromLicenseAvailable
+            = Modules_SpamexpertsExtension_Form_Settings::settingsFromLicenseAvailable();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->view->configFromLicenseUsed
+            = Modules_SpamexpertsExtension_Form_Settings::useSettingsFromLicense();
+
         // Init form here
         $form = new Modules_SpamexpertsExtension_Form_Settings([]);
         if ($this->getRequest()->isPost()
@@ -104,6 +111,35 @@ class IndexController extends pm_Controller_Action
         }
 
         $this->view->form = $form;
+    }
+
+    public function enablelicenseconfigurationAction()
+    {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
+
+        $this->setSetting(
+            Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_CONFIG_FROM_LICENSE,
+            1
+        );
+
+        $this->_redirect('/index/settings', [ 'exit' => true ]);
+    }
+
+
+    public function disablelicenseconfigurationAction()
+    {
+        if (!pm_Session::getClient()->isAdmin()) {
+            $this->accessDenied();
+        }
+
+        $this->setSetting(
+            Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_CONFIG_FROM_LICENSE,
+            0
+        );
+
+        $this->_redirect('/index/settings', [ 'exit' => true ]);
     }
 
     public function applyconfigAction()

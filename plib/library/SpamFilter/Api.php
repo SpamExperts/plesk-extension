@@ -310,7 +310,12 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
     {
         pm_Log::info("Making SpamFilter API request: $url");
 
-        $response = (string) $this->get($url)->getBody();
+        try {
+            $response = (string) $this->get($url)->getBody();
+        } catch (\Exception $e) {
+            pm_Log::err("SpamFilter API request error: " . $e->getMessage());
+            $response = "";
+        }
 
         pm_Log::info("SpamFilter API response: $response");
 

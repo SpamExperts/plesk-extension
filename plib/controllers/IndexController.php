@@ -119,6 +119,11 @@ class IndexController extends pm_Controller_Action
             1
         );
 
+        $this->_status->addMessage(
+            'info',
+            'Configuration options from an Additional Plesk license were successfully saved.'
+        );
+
         $this->_redirect('/index/settings', [ 'exit' => true ]);
     }
 
@@ -132,6 +137,11 @@ class IndexController extends pm_Controller_Action
         $this->setSetting(
             Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_CONFIG_FROM_LICENSE,
             0
+        );
+
+        $this->_status->addMessage(
+            'warning',
+            'Configuration options from an Additional Plesk license were reverted.'
         );
 
         $this->_redirect('/index/settings', [ 'exit' => true ]);

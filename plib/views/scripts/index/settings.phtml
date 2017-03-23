@@ -9,8 +9,6 @@
         : 'https://go.plesk.com/buy-plesk-ext/spamexperts-extension';
 
     ?>" target="_blank">online store</a></h4>
-
-    <?php echo $this->form; ?>
 <?php } elseif ($this->configFromLicenseAvailable) { ?>
     <?php if ($this->configFromLicenseUsed) { ?>
         <h4>Configuration options from an Additional Plesk license are in use. Please click
@@ -26,7 +24,7 @@
             echo $this->url(['controller' => 'index', 'action' => 'enablelicenseconfiguration']);
 
             ?>">here</a> to update configuration to the options from the license.</h4>
-
-        <?php echo $this->form; ?>
     <?php } ?>
 <?php } ?>
+
+<?php echo $this->form; ?>

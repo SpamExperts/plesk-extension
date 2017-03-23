@@ -43,112 +43,117 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
     {
         parent::__construct($options);
 
-        $apiUrlFieldOptions = [
-            'label' => 'AntiSpam API URL',
-            'value' => $this->getSetting(self::OPTION_SPAMPANEL_URL),
-            'required' => true,
-            'description' => "This is the URL you use to login to your AntiSpam Web Interface. Please prepend the URL with http:// or https://",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMPANEL_URL, $apiUrlFieldOptions);
+        $configFromLicenseUsed = self::useSettingsFromLicense();
 
-        $apiHostFieldOptions = [
-            'label' => 'SpamFilter API hostname',
-            'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_HOST),
-            'required' => true,
-            'description' => "This is the hostname of the first antispam server, usually the same as the AntiSpam Web Interface URL unless you're using a CNAME for that.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMPANEL_API_HOST, $apiHostFieldOptions);
+        if (! $configFromLicenseUsed) {
+            $apiUrlFieldOptions = [
+                'label' => 'AntiSpam API URL',
+                'value' => $this->getSetting(self::OPTION_SPAMPANEL_URL),
+                'required' => true,
+                'description' => "This is the URL you use to login to your AntiSpam Web Interface. Please prepend the URL with http:// or https://",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMPANEL_URL, $apiUrlFieldOptions);
 
-        $apiuserOptions = [
-            'label' => 'SpamFilter API username',
-            'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_USER),
-            'required' => true,
-            'description' => "This is the name of the user that is being used to communicate with the SpamFilter API. You can only change this at the migration page.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
+            $apiHostFieldOptions = [
+                'label' => 'SpamFilter API hostname',
+                'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_HOST),
+                'required' => true,
+                'description' => "This is the hostname of the first antispam server, usually the same as the AntiSpam Web Interface URL unless you're using a CNAME for that.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMPANEL_API_HOST, $apiHostFieldOptions);
 
-        $apiUserWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_USER));
-        if ($apiUserWasSetUp) {
-            $apiuserOptions['disabled'] = true;
-            unset($apiuserOptions['required']);
+            $apiuserOptions = [
+                'label' => 'SpamFilter API username',
+                'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_USER),
+                'required' => true,
+                'description' => "This is the name of the user that is being used to communicate with the SpamFilter API. You can only change this at the migration page.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+
+            $apiUserWasSetUp = !empty($this->getSetting(self::OPTION_SPAMPANEL_API_USER));
+            if ($apiUserWasSetUp) {
+                $apiuserOptions['disabled'] = true;
+                unset($apiuserOptions['required']);
+            }
+            $this->addElement('text', self::OPTION_SPAMPANEL_API_USER, $apiuserOptions);
+
+            $apipassOptions = [
+                'label' => 'SpamFilter API password',
+                'required' => true,
+                'description' => "This is the password from the user that is being used to communicate with the SpamFilter API. Can be left empty once it has been validated.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+
+            $apiPassWasSetUp = !empty($this->getSetting(self::OPTION_SPAMPANEL_API_PASS));
+            if ($apiPassWasSetUp) {
+                $apipassOptions['disabled'] = true;
+                unset($apipassOptions['required']);
+            }
+            $this->addElement('password', self::OPTION_SPAMPANEL_API_PASS, $apipassOptions);
+
+            $mx1FieldOptions = [
+                'label' => 'Primary MX',
+                'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX1),
+                'required' => true,
+                'description' => "This is for the first MX record. It can be either your cluster's first server or an other DNS name if you're using Round Robin DNS.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMFILTER_MX1, $mx1FieldOptions);
+
+            $mx2FieldOptions = [
+                'label' => 'Secondary MX',
+                'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX2),
+                'required' => true,
+                'description' => "This is for the second MX record. It can be either your cluster's second server or an other DNS name if you're using Round Robin DNS.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMFILTER_MX2, $mx2FieldOptions);
+
+            $mx3FieldOptions = [
+                'label' => 'Tertiary MX',
+                'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX3),
+                'description' => "This is for the third MX record. It can be either your cluster's third server or an other DNS name if you're using Round Robin DNS.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMFILTER_MX3, $mx3FieldOptions);
+
+            $mx4FieldOptions = [
+                'label' => 'Quaternary MX',
+                'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX4),
+                'description' => "This is for the fourth MX record. It can be either your cluster's fourth server or another DNS name if you're using Round Robin DNS.",
+                'validators' => [
+                    ['NotEmpty', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
+
+            $supportEmailFieldOptions = [
+                'label' => 'Support email',
+                'value' => $this->getSetting(self::OPTION_SUPPORT_EMAIL),
+                'required' => true,
+                'description' => "If you want to provide support to your customers please enter an email address here to use as a destination for all support requests.",
+                'validators' => [
+                    ['EmailAddress', true],
+                ],
+            ];
+            $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
         }
-        $this->addElement('text', self::OPTION_SPAMPANEL_API_USER, $apiuserOptions);
-
-        $apipassOptions = [
-            'label' => 'SpamFilter API password',
-            'required' => true,
-            'description' => "This is the password from the user that is being used to communicate with the SpamFilter API. Can be left empty once it has been validated.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-
-        $apiPassWasSetUp = ! empty($this->getSetting(self::OPTION_SPAMPANEL_API_PASS));
-        if ($apiPassWasSetUp) {
-            $apipassOptions['disabled'] = true;
-            unset($apipassOptions['required']);
-        }
-        $this->addElement('password', self::OPTION_SPAMPANEL_API_PASS, $apipassOptions);
-
-        $mx1FieldOptions = [
-            'label' => 'Primary MX',
-            'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX1),
-            'required' => true,
-            'description' => "This is for the first MX record. It can be either your cluster's first server or an other DNS name if you're using Round Robin DNS.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMFILTER_MX1, $mx1FieldOptions);
-
-        $mx2FieldOptions = [
-            'label' => 'Secondary MX',
-            'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX2),
-            'required' => true,
-            'description' => "This is for the second MX record. It can be either your cluster's second server or an other DNS name if you're using Round Robin DNS.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMFILTER_MX2, $mx2FieldOptions);
-
-        $mx3FieldOptions = [
-            'label' => 'Tertiary MX',
-            'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX3),
-            'description' => "This is for the third MX record. It can be either your cluster's third server or an other DNS name if you're using Round Robin DNS.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMFILTER_MX3, $mx3FieldOptions);
-
-        $mx4FieldOptions = [
-            'label' => 'Quaternary MX',
-            'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX4),
-            'description' => "This is for the fourth MX record. It can be either your cluster's fourth server or another DNS name if you're using Round Robin DNS.",
-            'validators' => [
-                ['NotEmpty', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
-
-        $supportEmailFieldOptions = [
-            'label' => 'Support email',
-            'value' => $this->getSetting(self::OPTION_SUPPORT_EMAIL),
-            'description' => "If you want to provide support to your customers please enter an email address here to use as a destination for all support requests.",
-            'validators' => [
-                ['EmailAddress', true],
-            ],
-        ];
-        $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
 
         $autoAddDomains = $this->getSetting(self::OPTION_AUTO_ADD_DOMAINS);
         $this->addElement('radio', self::OPTION_AUTO_ADD_DOMAINS, [

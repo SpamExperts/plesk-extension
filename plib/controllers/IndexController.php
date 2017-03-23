@@ -64,32 +64,27 @@ class IndexController extends pm_Controller_Action
         if ($this->getRequest()->isPost()
             && $form->isValid($this->getRequest()->getPost())) {
 
-            if (1 != $form->getValue(Modules_SpamexpertsExtension_Form_Settings::OPTION_USE_CONFIG_FROM_LICENSE)) {
-                foreach ([
-                    $form::OPTION_SPAMPANEL_URL,
-                    $form::OPTION_SPAMPANEL_API_HOST,
-                    $form::OPTION_SPAMFILTER_MX1,
-                    $form::OPTION_SPAMFILTER_MX2,
-                    $form::OPTION_SPAMFILTER_MX3,
-                    $form::OPTION_SPAMFILTER_MX4,
-                         ] as $optionName) {
-                    $this->setSetting($optionName, $form->getValue($optionName));
-                }
-
-                // API access details need special processing to avoid changing
-                // without running the migration procedure
-                foreach ([
-                             $form::OPTION_SPAMPANEL_API_USER,
-                             $form::OPTION_SPAMPANEL_API_PASS,
-                         ] as $protectedOptionName) {
-                    if (empty($this->getSetting($protectedOptionName))) {
-                        $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
-                    }
-                }
+            foreach ([
+                $form::OPTION_SPAMPANEL_URL,
+                $form::OPTION_SPAMPANEL_API_HOST,
+                $form::OPTION_SPAMFILTER_MX1,
+                $form::OPTION_SPAMFILTER_MX2,
+                $form::OPTION_SPAMFILTER_MX3,
+                $form::OPTION_SPAMFILTER_MX4,
+                     ] as $optionName) {
+                $this->setSetting($optionName, $form->getValue($optionName));
             }
 
-            $this->setSetting($form::OPTION_USE_CONFIG_FROM_LICENSE,
-                !empty($form->getValue($form::OPTION_USE_CONFIG_FROM_LICENSE)) ? 1 : 0);
+            // API access details need special processing to avoid changing
+            // without running the migration procedure
+            foreach ([
+                         $form::OPTION_SPAMPANEL_API_USER,
+                         $form::OPTION_SPAMPANEL_API_PASS,
+                     ] as $protectedOptionName) {
+                if (empty($this->getSetting($protectedOptionName))) {
+                    $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
+                }
+            }
 
             foreach ([
                 $form::OPTION_AUTO_ADD_DOMAINS,

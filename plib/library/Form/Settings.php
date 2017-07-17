@@ -50,7 +50,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'AntiSpam API URL',
                 'value' => $this->getSetting(self::OPTION_SPAMPANEL_URL),
                 'required' => true,
-                'description' => "This is the URL you use to login to your AntiSpam Web Interface. Please prepend the URL with http:// or https://",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -61,7 +60,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'SpamFilter API hostname',
                 'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_HOST),
                 'required' => true,
-                'description' => "This is the hostname of the first antispam server, usually the same as the AntiSpam Web Interface URL unless you're using a CNAME for that.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -72,7 +70,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'SpamFilter API username',
                 'value' => $this->getSetting(self::OPTION_SPAMPANEL_API_USER),
                 'required' => true,
-                'description' => "This is the name of the user that is being used to communicate with the SpamFilter API. You can only change this at the migration page.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -88,7 +85,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             $apipassOptions = [
                 'label' => 'SpamFilter API password',
                 'required' => true,
-                'description' => "This is the password from the user that is being used to communicate with the SpamFilter API. Can be left empty once it has been validated.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -105,7 +101,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'Primary MX',
                 'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX1),
                 'required' => true,
-                'description' => "This is for the first MX record. It can be either your cluster's first server or an other DNS name if you're using Round Robin DNS.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -116,7 +111,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'Secondary MX',
                 'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX2),
                 'required' => true,
-                'description' => "This is for the second MX record. It can be either your cluster's second server or an other DNS name if you're using Round Robin DNS.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -126,7 +120,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             $mx3FieldOptions = [
                 'label' => 'Tertiary MX',
                 'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX3),
-                'description' => "This is for the third MX record. It can be either your cluster's third server or an other DNS name if you're using Round Robin DNS.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -136,7 +129,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             $mx4FieldOptions = [
                 'label' => 'Quaternary MX',
                 'value' => $this->getSetting(self::OPTION_SPAMFILTER_MX4),
-                'description' => "This is for the fourth MX record. It can be either your cluster's fourth server or another DNS name if you're using Round Robin DNS.",
                 'validators' => [
                     ['NotEmpty', true],
                 ],
@@ -147,7 +139,6 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'label' => 'Support email',
                 'value' => $this->getSetting(self::OPTION_SUPPORT_EMAIL),
                 'required' => true,
-                'description' => "If you want to provide support to your customers please enter an email address here to use as a destination for all support requests.",
                 'validators' => [
                     ['EmailAddress', true],
                 ],

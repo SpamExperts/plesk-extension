@@ -445,8 +445,8 @@ MESSAGE;
         if (Modules_SpamexpertsExtension_Form_Settings::areEmpty()) {
             if (pm_Session::getClient()->isAdmin()) {
                 $this->_status->addMessage(
-                    'error',
-                    'Extension is not configured yet. Please set up configuration options.'
+                    'warning',
+                    'The extension you are about to use is not configured yet. Please set up the configuration below.'
                 );
                 $this->_redirect('/index/settings', [ 'exit' => true ]);
 

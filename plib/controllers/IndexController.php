@@ -201,6 +201,8 @@ class IndexController extends pm_Controller_Action
 
         // List object for pm_View_Helper_RenderList
         $this->view->list = $this->getDomainsList();
+
+        $this->view->checkStatusAction = $this->_helper->url('status', 'domain');
     }
 
     public function domainAction()
@@ -282,6 +284,8 @@ class IndexController extends pm_Controller_Action
 
             $data[$info['name']] = [
                 'domain'     => idn_to_utf8($info['name']),
+                'status'     => '<a href="#" class="ext-se-check-domain-link" onclick="ext_se_checkDomainsProtectionStatus(event);" data-domain="'
+                    . htmlentities($info['name']) . '">Check status</a>',
                 'type'       => $info['type'],
                 'login-link' => ($displayLoginLink
                     ? '<a target="_blank" href="' . $this->_helper->url('login', 'domain', null, ['domain' => $info['name']])
@@ -303,6 +307,11 @@ class IndexController extends pm_Controller_Action
                 'noEscape' => true,
                 'searchable' => true,
             ],
+            'status' => [
+                'title' => 'Status',
+                'noEscape' => true,
+                'searchable' => false,
+            ],
             'type' => [
                 'title' => 'Type',
                 'searchable' => false,
@@ -320,7 +329,14 @@ class IndexController extends pm_Controller_Action
                 'description' => 'Check protection status of selected domains.',
                 'class' => 'sb-status-selected',
                 'execGroupOperation' => [
-                    "url" => $this->_helper->url('status', 'domain'),
+                    'submitHandler' => 'function (url, ids) {
+                        $A(ids).each(function (id) {
+                            var link = $$("a.ext-se-check-domain-link[data-domain=\'" + id.value + "\']").first();
+                            if (link) {
+                                link.click();
+                            }
+                        });                       
+                    }'
                 ],
             ],
         ];

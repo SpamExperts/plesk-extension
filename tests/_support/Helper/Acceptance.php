@@ -42,4 +42,20 @@ class Acceptance extends BaseHelper
             SpamExpertsEmailSecurityPage::ERROR_ALERT_XPATH,
             SpamExpertsEmailSecurityPage::ERROR_ALERT_CSS));
     }
+
+    /**
+     * Function used to check the warning messages
+     */
+    public function seeWarningMessage($message)
+    {
+        /*Wait for success alert to pop up*/
+        $this->getWebDriver()->waitForElement(Locator::combine(
+            SpamExpertsEmailSecurityPage::WARNING_ALERT_XPATH,
+            SpamExpertsEmailSecurityPage::WARNING_ALERT_CSS));
+
+        /*Check the success message*/
+        $this->getWebDriver()->see($message, Locator::combine(
+            SpamExpertsEmailSecurityPage::WARNING_ALERT_XPATH,
+            SpamExpertsEmailSecurityPage::WARNING_ALERT_CSS));
+    }
 }

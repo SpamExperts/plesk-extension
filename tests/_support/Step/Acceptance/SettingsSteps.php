@@ -21,8 +21,8 @@ class SettingsSteps extends CommonSteps
             SettingsPage::SPAMFILTER_API_PASSWORD_CSS), "disabled");
 
         if ($value == false) {
-            $this->seeErrorMessage(
-                'Error: Extension is not configured yet. Please set up configuration options.');
+            $this->seeWarningMessage(
+                'Warning: The extension you are about to use is not configured yet. Please set up the configuration below.');
         }
 
         $this->seeElement(SettingsPage::SAVE_BUTTON_XPATH);

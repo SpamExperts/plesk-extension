@@ -1,3 +1,8 @@
+# 1.2-0 (26 July 2017)
+
+* Status column added to the domains list ([#37](https://github.com/SpamExperts/plesk-extension/issues/37))
+* UI improvements to the extension configuration page ([#36](https://github.com/SpamExperts/plesk-extension/issues/36))
+
 # 1.1-0 (21 March 2017)
 
 * User support form

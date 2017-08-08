@@ -72,7 +72,10 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_SPAMFILTER_MX3,
                 $form::OPTION_SPAMFILTER_MX4,
                      ] as $optionName) {
-                $this->setSetting($optionName, $form->getValue($optionName));
+                $currentValue = $form->getValue($optionName);
+                if (null !== $currentValue) {
+                    $this->setSetting($optionName, $currentValue);
+                }
             }
 
             // API access details need special processing to avoid changing
@@ -82,7 +85,10 @@ class IndexController extends pm_Controller_Action
                          $form::OPTION_SPAMPANEL_API_PASS,
                      ] as $protectedOptionName) {
                 if (empty($this->getSetting($protectedOptionName))) {
-                    $this->setSetting($protectedOptionName, $form->getValue($protectedOptionName));
+                    $currentValue = $form->getValue($protectedOptionName);
+                    if (null !== $currentValue) {
+                        $this->setSetting($protectedOptionName, $currentValue);
+                    }
                 }
             }
 
@@ -98,7 +104,10 @@ class IndexController extends pm_Controller_Action
                 $form::OPTION_USE_IP_DESTINATION_ROUTES,
                 $form::OPTION_SUPPORT_EMAIL,
             ] as $optionName) {
-                $this->setSetting($optionName, $form->getValue($optionName));
+                $currentValue = $form->getValue($optionName);
+                if (null !== $currentValue) {
+                    $this->setSetting($optionName, $currentValue);
+                }
             }
 
             $this->_status->addMessage('info', 'Configuration options were successfully saved.');

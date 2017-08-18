@@ -144,6 +144,19 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 ],
             ];
             $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
+        } else {
+
+            // Show current MX servers as users who use external DNS service and bought a license key and tried to
+            // setup DNS records cannot know what MX records should be set.
+            foreach (['1' => 'Primary MX', '2' => 'Secondary MX', '3' => 'Tertiary MX', '4' => 'Quaternary MX' ] as $idx => $label) {
+                $mxHostname = $this->getSetting(constant("self::OPTION_SPAMFILTER_MX{$idx}"));
+                if (!empty($mxHostname)) {
+                    $this->addElement('SimpleText', constant("self::OPTION_SPAMFILTER_MX{$idx}"), [
+                        'label' => $label,
+                        'value' => $mxHostname,
+                    ]);
+                }
+            }
         }
 
         $autoAddDomains = $this->getSetting(self::OPTION_AUTO_ADD_DOMAINS);

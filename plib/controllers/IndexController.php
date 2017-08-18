@@ -39,6 +39,7 @@ class IndexController extends pm_Controller_Action
         
         // Init tabs for all actions
         $this->view->tabs = $tabs;
+        $this->view->checkStatusAction = $this->_helper->url('status', 'domain');
     }
 
     public function indexAction()
@@ -210,8 +211,6 @@ class IndexController extends pm_Controller_Action
 
         // List object for pm_View_Helper_RenderList
         $this->view->list = $this->getDomainsList();
-
-        $this->view->checkStatusAction = $this->_helper->url('status', 'domain');
     }
 
     public function domainAction()

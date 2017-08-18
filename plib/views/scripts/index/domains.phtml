@@ -7,7 +7,12 @@
 
         var container = Event.element(event),
             cell = Event.element(event).up(),
-            domain = container.readAttribute("data-domain");
+            domain = container.readAttribute("data-domain"),
+            failedRequest = function (dom) {
+                cell.childElements().first().replace(
+                    '<a href="#" class="ext-se-check-domain-link" onclick="ext_se_checkDomainsProtectionStatus(event);" data-domain="' + dom + '">Check status</a>'
+                );
+            };
 
         container.replace('<span class="s-btn sb-ext-se-domain-status-loading"><span>Loading...</span></span>');
 
@@ -15,14 +20,24 @@
             method: 'get',
             parameters: { ids: domain },
             onSuccess: function (transport) {
-                var response = JSON.parse(transport.responseText),
-                    isProtected = response.statusMessages
+                try {
+                    var response = JSON.parse(transport.responseText);
+                } catch (e) {
+                    failedRequest(domain);
+
+                    return;
+                }
+
+                var isProtected = response.statusMessages
                         && response.statusMessages[0]
                         && "info" === response.statusMessages[0].status;
 
                 cell.childElements().first().replace(isProtected
                     ? '<span class="s-btn sb-ext-se-domain-protected"><span>Protected</span></span>'
                     : '<span class="s-btn sb-ext-se-domain-not-protected"><span>Not Protected</span></span>');
+            },
+            onFailure: function () {
+                failedRequest(domain);
             }
         });
     }

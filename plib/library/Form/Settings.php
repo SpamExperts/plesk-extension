@@ -149,9 +149,10 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
             // Show current MX servers as users who use external DNS service and bought a license key and tried to
             // setup DNS records cannot know what MX records should be set.
             foreach (['1' => 'Primary MX', '2' => 'Secondary MX', '3' => 'Tertiary MX', '4' => 'Quaternary MX' ] as $idx => $label) {
-                $mxHostname = $this->getSetting(constant("self::OPTION_SPAMFILTER_MX{$idx}"));
+                $fieldName = constant("self::OPTION_SPAMFILTER_MX{$idx}");
+                $mxHostname = self::getRuntimeConfigOption($fieldName);
                 if (!empty($mxHostname)) {
-                    $this->addElement('SimpleText', constant("self::OPTION_SPAMFILTER_MX{$idx}"), [
+                    $this->addElement('SimpleText', $fieldName, [
                         'label' => $label,
                         'value' => $mxHostname,
                     ]);

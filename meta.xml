@@ -1,16 +1,48 @@
 <?xml version="1.0"?>
 <module>
-    <id>spamexperts-extension</id>
-    <name>SpamExperts Email Security</name>
-    <description>The application integrates SpamExperts' advanced email security system with Plesk, offering automatic protection of domains and emails as well as a one-click login option to the dedicated SpamExperts control panel to manage specific settings and view detailed statistics.</description>
-    <version>1.2</version>
-    <release>0</release>
-    <vendor>SpamExperts B.V.</vendor>
-    <url>http://www.spamexperts.com/</url>
-    <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
-    <help_url>https://my.spamexperts.com/kb/769/Plesk-Extension-Linux-and-Windows.html</help_url>
-    <support_url>https://www.spamexperts.com/about/contact</support_url>
-    <plesk_min_version>12.5.0</plesk_min_version>
-    <category>mail</category>
-    <category>security</category>
+  <id>spamexperts-extension</id>
+  <name>SpamExperts Email Security</name>
+  <description>The application integrates SpamExperts' advanced email security system with Plesk, offering automatic protection of domains and emails as well as a one-click login option to the dedicated SpamExperts control panel to manage specific settings and view detailed statistics.</description>
+  <version>1.2</version>
+  <release>1</release>
+  <vendor>SpamExperts B.V.</vendor>
+  <url>http://www.spamexperts.com/</url>
+  <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
+  <help_url>https://my.spamexperts.com/kb/769/Plesk-Extension-Linux-and-Windows.html</help_url>
+  <support_url>https://www.spamexperts.com/about/contact</support_url>
+  <plesk_min_version>12.5.0</plesk_min_version>
+  <category>mail</category>
+  <category>security</category>
+  <!--Localized descriptions below-->
+  <description xml:lang="ar">يقوم التطبيق بدمج نظام أمان البريد الإلكتروني المتقدم من SpamExperts مع منصة Plesk، مما يوفر حماية تلقائية للنطاقات ورسائل البريد الإلكتروني بالإضافة إلى خيار تسجيل الدخول بنقرة واحدة إلى لوحة تحكم SpamExperts المخصصة لإدارة إعدادات محددة وعرض إحصائيات مفصلة.</description>
+  <description xml:lang="ca-ES">L'aplicació integra el sistema de seguretat de correu avançat de SpamExperts amb Plesk, oferint-li una protecció automàtica dels dominis i dels correus. Tanmateix, li permet accedir al panell de control dedicat de SpamExperts amb un sol clic per a gestionar la configuració i veure estadístiques detallades.</description>
+  <description xml:lang="cs-CZ">Aplikace integruje do prostředí Plesk rozšířený zabezpečovací systém, který nabízí nejen automatickou ochranu domén a pošty, ale i možnost přihlášení jediným kliknutím na vyhrazený ovládací panel SpamExperts, kde lze spravovat zvláštní nastavení a zobrazovat podrobné statistiky.</description>
+  <description xml:lang="da-DK">Applikationen integrerer SpamExperts' avancerede email sikkerhedssystem med Plesk, og tilbyder automatisk beskyttelse af domæner og emails samt etkliks-login mulighed til det dedikerede SpamExperts kontrolpanel til administration af specifikke indstillinger og visning af detaljeret statistik.</description>
+  <description xml:lang="de-DE">Über die Anwendung wird das erweiterte E-Mail-Sicherheitssystem von SpamExperts in Plesk integriert. Domains und E-Mails werden dabei automatisch geschützt und Benutzer können sich mit nur einem Klick in der SpamExperts-Systemsteuerung anmelden, um Einstellungen zu verwalten und detaillierte Statistiken aufzurufen.</description>
+  <description xml:lang="el-GR">Η εφαρμογή αυτή ενσωματώνει στο Plesk το προηγμένο σύστημα προστασίας ηλεκτρονικής αλληλογραφίας του SpamExperts, προσφέροντας αυτόματη προστασία τομέων και μηνυμάτων ηλεκτρονικού ταχυδρομείου, καθώς και την επιλογή σύνδεσης με ένα κλικ στον αποκλειστικό πίνακα ελέγχου του SpamExperts, για τη διαχείριση συγκεκριμένων ρυθμίσεων και την προβολή λεπτομερών στατιστικών στοιχείων.</description>
+  <description xml:lang="es-ES">La aplicación integra el sistema avanzado de seguridad de emails de SpamExperts con Plesk, ofreciendo así protección automática de dominios y correos electrónicos, así como la posibilidad de acceder al panel de control dedicado de SpamExperts con un solo clic para gestionar determinados parámetros de configuración y ver estadísticas detalladas.</description>
+  <description xml:lang="fi-FI">Sovellus integroi SpamExpertsin edistyneen sähköpostin suojausjärjestelmän Pleskiin tarjoamalla toimialueiden ja sähköpostien automaattisen suojauksen sekä mahdollisuuden kirjautua sisään yhdellä napsautuksella SpamExperts-ohjauspaneeliin erityisten asetusten hallitsemiseksi sekä yksityiskohtaisten tilastotietojen tarkastelemiseksi.</description>
+  <description xml:lang="fr-FR">L'application intègre à Plesk le système de protection avancé de la messagerie de SpamExperts, pour une protection automatique des domaines et des e-mails, ainsi qu'une option de connexion en un clic au panneau de contrôle dédié SpamExperts pour gérer les paramètres spécifiques et voir des statistiques détaillées.</description>
+  <description xml:lang="he-IL">היישום משלב את מערכת אבטחת הדואר האלקטרוני המתקדמת של SpamExperts עם Plesk, ומציע הגנה אוטומטית של דומיינים והודעות דואר אלקטרוני, כמו גם אפשרות כניסה בלחיצה אחת ללוח הבקרה של SpamExperts על מנת לנהל הגדרות ספציפיות ולהציג נתונים סטטיסטיים מפורטים.</description>
+  <description xml:lang="hu-HU">A Plesk kezelőpanelbe integrálja a SpamExperts speciális e-mail biztonsági rendszert az alkalmazás, automatikus domain és e-mail védelmez kínál, illetve egykattintásos bejelentkezési lehetőséget a dedikált SpamExperts kezelőpanelre megadott beállítások kezelésére és a részletes statisztikák megtekintésére.</description>
+  <description xml:lang="id-ID">Aplikasi mengintegrasikan sistem keamanan surel lanjutan SpamExperts dengan Plesk, memberikan perlindungan otomatis atas domain dan surel serta opsi masuk dengan satu klik ke panel kontrol SpamExperts khusus untuk mengatur pengaturan spesifik dan melihat statistik terperinci.</description>
+  <description xml:lang="it-IT">L’applicazione integra in Plesk il sistema avanzato di sicurezza e-mail di SpamExperts offrendo una protezione automatica dei domini e delle e-mail, oltre a un’opzione di accesso con un singolo clic per il pannello di controllo dedicato di SpamExperts, che consente di gestire impostazioni specifiche e visualizzare statistiche dettagliate.</description>
+  <description xml:lang="ja-JP">アプリケーションは SpamExperts の高度なメールセキュリティシステムを Plesk と統合し、ドメインとメールに自動保護を提供します。また、専用の SpamExperts コントロールパネルへのワンクリックログインオプションにより、特定の設定の管理や詳細な統計の確認ができます。</description>
+  <description xml:lang="ko-KR">이 애플리케이션은 SpamExperts의 최신 이메일 보안 시스템을 Plesk와 통합하여 도메인과 이메일을 자동으로 보호할 뿐만 아니라, 클릭 한 번으로 전용 SpamExperts 제어 패널로 로그인하여 특정 설정을 관리하고 세부 통계 정보를 볼 수 있도록 해줍니다.</description>
+  <description xml:lang="ms-MY">Aplikasi ini menyatukan sistem keselamatan e-mel lanjutan SpamExperts dengan Plesk, menawarkan perlindungan domain dan e-mel secara automatik serta pilihan log masuk satu klik ke panel kawalan SpamExperts khusus untuk mengurus tetapan khusus dan melihat statistik terperinci.</description>
+  <description xml:lang="nb-NO">Applikasjonen integrerer SpamExperts' avanserte sikkerhetssystem for e-post med Plesk, tilbyr automatisk beskyttelse av domener og e-post, samt pålogging med ett klikk til det dedikerte SpamExperts-kontrollpanelet for å administrere spesifikke innstillinger og vise detaljert statistikk.</description>
+  <description xml:lang="nl-NL">De applicatie integreert het geavanceerde e-mailbeveiligingssysteem van SpamExperts met Plesk, dat automatische bescherming van domeinen en e-mails aanbied. U kunt u met één klik aanmelden bij het speciale configuratiescherm van SpamExperts om specifieke instellingen te beheren en om gedetailleerde statistieken te bekijken.</description>
+  <description xml:lang="pl-PL">Aplikacja integruje zaawansowany system ochrony poczty e-mail SpamExperts z Plesk, oferując automatyczną ochronę domen i wiadomości e-mail, a także opcję logowania jednym kliknięciem do dedykowanego panelu sterowania SpamExperts w celu zarządzania określonymi ustawieniami i wyświetlania szczegółowych statystyk.</description>
+  <description xml:lang="pt-BR">A aplicação integra o avançado sistema de segurança de e-mail da SpamExperts ao Plesk, oferecendo proteção automática de domínios e e-mails, bem como uma opção de login com um clique no painel de controle dedicado da SpamExperts para gerenciar configurações específicas e visualizar estatísticas detalhadas.</description>
+  <description xml:lang="pt-PT">A aplicação integra o avançado sistema de segurança de e-mail da SpamExperts com o Plesk, oferecendo proteção automática de domínios e e-mails, bem como uma opção de início de sessão com um clique no painel de controlo dedicado do SpamExperts para gerir definições específicas e visualizar estatísticas detalhadas.</description>
+  <description xml:lang="ro-RO">Aplicația integrează cu Plesk sistemul de securitate e-mail complex de la SpamExperts și oferă automat protecție pentru domenii și e-mail, precum și o opțiune de conectare cu un singur clic la panoul de control dedicat SpamExperts, pentru a administra setările specifice și a vizualiza statistici detaliate.</description>
+  <description xml:lang="ru-RU">Расширение представляет собой интеграцию системы усовершенствованной защиты почты SpamExperts с Plesk, предлагая автоматическую защиту доменов и почтовых сообщений, а также возможность входа в выделенную панель управления SpamExperts в один клик для изменения настроек и просмотра подробной статистики.</description>
+  <description xml:lang="sv-SE">Programmet integrerar SpamExperts avancerade e-post säkerhetssystem med Plesk, som erbjuder automatiskt skydd av domäner och e-post samt ett inloggningsalternativ för ett klick till den dedikerade SpamExperts kontrollpanelen för att hantera specifika inställningar och visa detaljerad statistik.</description>
+  <description xml:lang="th-TH">แอปพลิเคชันนี้บูรณาการระบบรักษาความปลอดภัยอีเมลขั้นสูงของ SpamExperts เข้ากับ Plesk เพื่อให้การปกป้องแก่โดเมนและอีเมลในแบบอัตโนมัติ รวมทั้งมีตัวเลือกการเข้าสู่แผงควบคุมของ SpamExperts โดยอาศัยการคลิกเพียงครั้งเดียวก็สามารถจัดการตั้งค่าและดูรายละเอียดทางสถิติได้แล้ว</description>
+  <description xml:lang="tl-PH">Ini-integrate ng application ang advanced na system ng seguridad ng email ng SpamExperts sa Plesk, na naghahatid ng awtomatikong proteksyon ng mga domain at email gayundin ng isahang pag-click na opsyon sa pag-log in sa nakatalagang control panel ng SpamExperts para mapamahalaan ang mga partikular na setting at matingnan ang mga detalyadong istatistika.</description>
+  <description xml:lang="tr-TR">Uygulama, SpamExperts'in gelişmiş e-posta güvenlik sistemini Plesk'e entegre ederek, alan adları ve e-postalar için otomatik koruma ve özel ayarları yönetmek ve ayrıntılı istatistikleri görüntülemek için atanmış SpamExperts kontrol panelinde tek tıklamayla oturum açma seçeneği sunar.</description>
+  <description xml:lang="uk-UA">Це розширення додає до Plesk передову систему захисту електронної пошти від SpamExperts, забезпечує автоматичний захист доменів та електронних скриньок та передбачає можливість входити у один клік до панелі управління SpamExperts, де ви можете встановити особисті налаштування та ознайомитися з детальною статистикою.</description>
+  <description xml:lang="vi-VN">Ứng dụng này tích hợp hệ thống bảo mật email tiên tiến của SpamExperts với Plesk, cung cấp khả năng bảo vệ tự động cho tên miền và email cũng như tùy chọn đăng nhập một lần nhấp vào bảng điều khiển dành riêng của SpamExperts để quản lý cài đặt cụ thể và xem thống kê chi tiết.</description>
+  <description xml:lang="zh-CN">该应用程序整合了 SpamExperts 的高级电子邮件安全系统和 Plesk，可自动保护域名和邮件的安全，并提供用于管理特定设置和查看详细统计数据的 SpamExperts 专用控制面板的一键登录选项。</description>
+  <description xml:lang="zh-TW">该应用程序整合了 SpamExperts 的高级电子邮件安全系统和 Plesk，可自动保护域名和邮件的安全，并提供用于管理特定设置和查看详细统计数据的 SpamExperts 专用控制面板的一键登入选项。</description>
 </module>

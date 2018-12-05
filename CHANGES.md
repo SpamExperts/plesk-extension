@@ -1,3 +1,7 @@
+# 1.2-1 (04 December 2018)
+
+* Add translations for description and meta info
+
 # 1.2-0 (26 July 2017)
 
 * Status column added to the domains list ([#37](https://github.com/SpamExperts/plesk-extension/issues/37))

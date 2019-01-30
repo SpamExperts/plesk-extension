@@ -1,3 +1,7 @@
+# 1.2-2 (30 January 2019)
+
+* Use the support email from the license, when available
+
 # 1.2-1 (04 December 2018)
 
 * Add translations for description and meta info

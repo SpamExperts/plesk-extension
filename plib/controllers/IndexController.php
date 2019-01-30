@@ -410,7 +410,10 @@ class IndexController extends pm_Controller_Action
     {
         $this->checkExtensionConfiguration();
 
-        $supportEmail = $this->getSetting(\Modules_SpamexpertsExtension_Form_Settings::OPTION_SUPPORT_EMAIL);
+        $supportEmail = Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(
+            Modules_SpamexpertsExtension_Form_Settings::OPTION_SUPPORT_EMAIL
+        );
+
         if (!empty($supportEmail)) {
             $supportForm = new Modules_SpamexpertsExtension_Form_SupportRequest([]);
 

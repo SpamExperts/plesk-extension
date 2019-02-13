@@ -51,6 +51,6 @@ class T04_SupportCest
 
         /*Check if configuration was saved*/
         $I->seeSuccessMessage(
-            'Information: Your message has been sent.');
+            'Information: Your message has been queued for delivery.');
     }
 }

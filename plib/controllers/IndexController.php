@@ -444,7 +444,7 @@ MESSAGE;
                         "From: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n" .
                         "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n");
                     if ($isSent) {
-                        $this->_status->addMessage('info', 'Your message has been sent.');
+                        $this->_status->addMessage('info', 'Your message has been queued for delivery.');
                         $this->_helper->json(['redirect' => $this->_helper->url('support')]);
                     }
                 } else {

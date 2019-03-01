@@ -4,12 +4,12 @@
   <name>SpamExperts Email Security</name>
   <description>The application integrates SpamExperts' advanced email security system with Plesk, offering automatic protection of domains and emails as well as a one-click login option to the dedicated SpamExperts control panel to manage specific settings and view detailed statistics.</description>
   <version>1.2</version>
-  <release>2</release>
+  <release>3</release>
   <vendor>SpamExperts B.V.</vendor>
   <url>http://www.spamexperts.com/</url>
   <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
   <help_url>https://my.spamexperts.com/kb/769/Plesk-Extension-Linux-and-Windows.html</help_url>
-  <support_url>https://www.spamexperts.com/about/contact</support_url>
+  <support_url>https://kb.spamexperts.com/29941-integration/227821-plesk-extension</support_url>
   <plesk_min_version>12.5.0</plesk_min_version>
   <category>mail</category>
   <category>security</category>

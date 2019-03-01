@@ -1,3 +1,7 @@
+# 1.2-3 (1 March 2019)
+
+* Update support URL
+
 # 1.2-2 (30 January 2019)
 
 * Use the support email from the license, when available

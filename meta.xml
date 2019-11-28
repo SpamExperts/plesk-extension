@@ -9,7 +9,7 @@
   <url>http://www.spamexperts.com/</url>
   <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
   <help_url>https://documentation.solarwindsmsp.com/spamexperts/documentation/Content/Integration/plesk-extn.htm</help_url>
-  <support_url>https://www.spamexperts.com/resources/support-contracts</support_url>
+  <support_url>https://www.spamexperts.com/resources/support</support_url>
   <plesk_min_version>12.5.0</plesk_min_version>
   <category>mail</category>
   <category>security</category>

@@ -22,11 +22,11 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ],
                 'title' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME)
-                        ?: "Professional SpamFilter",
+                        ?: "SpamExperts Email Security",
                     ENT_QUOTES,
                     'UTF-8'
                 ),
-                'description' => 'Professional SpamFilter Management',
+                'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
                         pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
                         ENT_QUOTES,
@@ -40,11 +40,11 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ],
                 'title' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME)
-                        ?: "Professional SpamFilter",
+                        ?: "SpamExperts Email Security",
                     ENT_QUOTES,
                     'UTF-8'
                 ),
-                'description' => 'Professional SpamFilter Management',
+                'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
                     ENT_QUOTES,
@@ -61,11 +61,11 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ],
                 'title' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME)
-                        ?: "Professional SpamFilter",
+                        ?: "SpamExperts Email Security",
                     ENT_QUOTES,
                     'UTF-8'
                 ) . " (All domains)",
-                'description' => 'Professional SpamFilter Management',
+                'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
                     ENT_QUOTES,
@@ -82,11 +82,11 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ],
                 'title' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME)
-                        ?: "Professional SpamFilter",
+                        ?: "SpamExperts Email Security",
                     ENT_QUOTES,
                     'UTF-8'
                 ),
-                'description' => 'Professional SpamFilter Management',
+                'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
                     pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
                     ENT_QUOTES,

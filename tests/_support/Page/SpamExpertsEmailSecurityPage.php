@@ -3,7 +3,7 @@ namespace Page;
 
 class SpamExpertsEmailSecurityPage
 {
-	const TITLE = "Professional SpamFilter";
+	const TITLE = "SpamExperts Email Security";
 
     const DOMAINS_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/domains')]";
     const SETTINGS_TAB = "//*[contains(@href,'/modules/spamexperts-extension/index.php/index/settings')]";

@@ -17,7 +17,7 @@ The installation of the extension can be done from Plesk administrator interface
 
 ## Extension features for Plesk Administrators
 
-For Plesk Administrators the extension is accessible from Plesk Home screen, `Professional SpamFilter` button:
+For Plesk Administrators the extension is accessible from Plesk Home screen, `SpamExperts Email Security` button:
 
 ![Spamexperts Plesk Extension Admin Home custom button](https://github.com/SpamExperts/plesk-extension/blob/master/docs/images/admin-home-custom-button.png)
 
@@ -127,7 +127,7 @@ For more information please feel free to [contact support](mailto:support@spamex
 
 ## Extension features for Plesk Resellers
 
-For Plesk Resellers the extension is accessible from Plesk Home screen, `Professional SpamFilter` button:
+For Plesk Resellers the extension is accessible from Plesk Home screen, `SpamExperts Email Security` button:
 
 ![Spamexperts Plesk Extension Admin Home custom button](https://github.com/SpamExperts/plesk-extension/blob/master/docs/images/admin-home-custom-button.png)
 
@@ -141,9 +141,9 @@ Please note: The selection is not persistent and cancels when switching pages.
 
 ## Extension features for Plesk Customers
 
-For Plesk Customers the extension is accessible from Plesk `Websites & Domains` screen, `Professional SpamFilter` link:
+For Plesk Customers the extension is accessible from Plesk `Websites & Domains` screen, `SpamExperts Email Security` link:
 
-![Spamexperts Plesk Extension Websites &amp; Domains screen, Professional SpamFilter link](https://github.com/SpamExperts/plesk-extension/blob/master/docs/images/websites-and-domains-customer-link.png)
+![Spamexperts Plesk Extension Websites &amp; Domains screen, SpamExperts Email Security link](https://github.com/SpamExperts/plesk-extension/blob/master/docs/images/websites-and-domains-customer-link.png)
 
 ### Domains
 

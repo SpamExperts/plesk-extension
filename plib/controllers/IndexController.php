@@ -8,7 +8,7 @@ class IndexController extends pm_Controller_Action
 
         // Init title for all actions
         $this->view->pageTitle = htmlentities(
-            $this->getSetting(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "Professional SpamFilter",
+            $this->getSetting(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "SpamExperts Email Security",
             ENT_QUOTES,
             'UTF-8'
         );

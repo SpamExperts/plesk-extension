@@ -1,3 +1,10 @@
+# 1.2-4 (29 November 2019)
+
+* Update support URL
+* Update Help&Documentation URL
+* Update extension name
+* Update logo
+
 # 1.2-3 (1 March 2019)
 
 * Update support URL

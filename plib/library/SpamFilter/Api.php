@@ -239,8 +239,9 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
     static final public function getRevision()
     {
         $response = trim((new self)->call('/api/version/get'));
+        list($date, $time) = explode('.', $response, 2);
 
-        return is_numeric($response) ? $response : 'UNKNOWN';
+        return is_numeric($date) && is_numeric($time) ? $response : 'UNKNOWN';
     }
 
     # Domain aliases

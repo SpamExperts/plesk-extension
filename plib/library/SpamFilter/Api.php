@@ -79,6 +79,12 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         try {
             $response = $this->call("/api/domain/remove/domain/$domain/");
             $result = stripos($response, 'removed') !== false;
+            if (!$result) {
+                $error_message = empty($response) ? "Failed to unprotect domain '$domain'" : $response;
+                throw new RuntimeException($error_message);
+            }
+        } catch (RuntimeException $e) {
+            throw $e;
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
             $result = false;

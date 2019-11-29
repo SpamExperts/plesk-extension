@@ -47,7 +47,9 @@ APICALL;
             $filter = [];
 
             foreach ($response->customer->get->result as $customer) {
-                $filter[] = "<get-domain-list><filter><id>" . $customer->id->__toString() . "</id></filter></get-domain-list>";
+                if (isset($customer->id)) {
+                    $filter[] = "<get-domain-list><filter><id>" . $customer->id->__toString() . "</id></filter></get-domain-list>";
+                }
             }
 
             if (!empty($filter)) {

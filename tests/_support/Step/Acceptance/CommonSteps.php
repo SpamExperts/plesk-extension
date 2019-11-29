@@ -9,7 +9,7 @@ use Codeception\Util\Locator;
 class CommonSteps extends \AcceptanceTester
 {
 	// Current addon name
-    protected $currentBrandname = 'Professional Spam Filter';
+    protected $currentBrandname = 'SpamExperts Email Security';
 
     // Used for save created accounts and to cleanup them when finish the test
     private static $accounts = array();

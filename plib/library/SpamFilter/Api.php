@@ -28,7 +28,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
                 'allow_redirects' => false,
                 'verify' => false,
                 'headers' => [
-                    'User-Agent' => "SpamExperts Email Security Plesk/1.2",
+                    'User-Agent' => "Spam Experts Email Security Plesk/1.2",
                 ],
                 'auth' => [
                     \Modules_SpamexpertsExtension_Form_Settings::getRuntimeConfigOption(

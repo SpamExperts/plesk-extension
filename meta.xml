@@ -5,8 +5,8 @@
   <description>The application integrates SpamExperts' advanced email security system with Plesk, offering automatic protection of domains and emails as well as a one-click login option to the dedicated SpamExperts control panel to manage specific settings and view detailed statistics.</description>
   <version>1.2</version>
   <release>4</release>
-  <vendor>SolarWinds Spam Experts</vendor>
-  <url>http://www.spamexperts.com/</url>
+  <vendor>N-able SpamExperts</vendor>
+  <url>https://www.spamexperts.com/</url>
   <buy_url>https://go.plesk.com/buy-plesk-ext/spamexperts-extension</buy_url>
   <help_url>https://documentation.solarwindsmsp.com/spamexperts/documentation/Content/Integration/plesk-extn.htm</help_url>
   <support_url>https://www.spamexperts.com/resources/support</support_url>

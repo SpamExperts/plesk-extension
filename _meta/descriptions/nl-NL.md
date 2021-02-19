@@ -1,4 +1,4 @@
-Met deze uitbreiding beschikt u over alle professionele e-mailbeveiligingsproducten van Spam Experts: **Inkomend filter**, **Uitgaand filter** en **E-mailarchivering**, gehost in de cloud. Het is perfect voor webhosts die hun gehele webhostinginfrastructuur willen beschermen en voor resellers die SpamExperts willen aanbieden als aanvullende service.
+Met deze uitbreiding beschikt u over alle professionele e-mailbeveiligingsproducten van SpamExperts: **Inkomend filter**, **Uitgaand filter** en **E-mailarchivering**, gehost in de cloud. Het is perfect voor webhosts die hun gehele webhostinginfrastructuur willen beschermen en voor resellers die SpamExperts willen aanbieden als aanvullende service.
 
 Het **inkomende filter** scheidt normale e-mails van ongewenste en ongevraagde berichten. Het beschermt tegen allerlei bedreigingen, waaronder:
 

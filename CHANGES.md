@@ -1,3 +1,7 @@
+# 1.2-5 (19 March 2021)
+
+* Rebrand from SolarWinds to N-Able
+
 # 1.2-4 (29 November 2019)
 
 * Update support URL

@@ -1,0 +1,11 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/plib/library"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 99
+  versioning-strategy: lockfile-only
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect

@@ -223,6 +223,7 @@ class DomainController extends pm_Controller_Action
                 $domain,
                 0 < pm_Settings::get(
                     Modules_SpamexpertsExtension_Form_Settings::OPTION_LOGOUT_REDIRECT
+                // phpcs:ignore PHPCS_SecurityAudit.BadFunctions.PregReplace.PregReplaceWeird
                 ) ? preg_replace('~/index.php.*$~', '/index.php', $pageURL) : null
             );
 

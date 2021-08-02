@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignore PHPCS_SecurityAudit.BadFunctions.EasyRFI.WarnEasyRFI
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -157,6 +158,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
     {
         $this->logDebug(__METHOD__ . ": " . "Domain user addition request");
 
+        // phpcs:ignore PHPCS_SecurityAudit.BadFunctions.CryptoFunctions.WarnCryptoFunc
         $password = substr(str_shuffle(md5(microtime())), 0, 10);
 
         try {
@@ -226,6 +228,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
         try {
             $url = "/api/authticket/create/username/$username/format/json/";
             if (!empty($logoutUrl)) {
+                // phpcs:ignore PHPCS_SecurityAudit.BadFunctions.CryptoFunctions.WarnCryptoFunc
                 $url .= 'logouturl/' . base64_encode($logoutUrl) . '/';
             }
             $result = $response = $this->call($url);

@@ -5,6 +5,7 @@
 
 if (false !== ($upgrade = array_search('upgrade', $argv))) {
     $upgradeVersion = $argv[$upgrade + 1];
+    // phpcs:ignore PHPCS_SecurityAudit.BadFunctions.EasyXSS.EasyXSSwarn
     echo "upgrading from version $upgradeVersion\n";
 
     if (version_compare($upgradeVersion, '1.2') < 0) {

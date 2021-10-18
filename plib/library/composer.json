@@ -13,7 +13,10 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "6.*"
+    "guzzlehttp/guzzle": "6.4.1"
+  },
+  "conflict": {
+    "guzzlehttp/promises": "<1.4.1 || >1.4.1"
   },
   "require-dev": {
     "codeception/codeception": "2.*"

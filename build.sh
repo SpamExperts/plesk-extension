@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [ ! -f ./composer.phar ]; then
     wget getcomposer.org/composer.phar
 fi

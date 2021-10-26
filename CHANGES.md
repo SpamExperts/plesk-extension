@@ -1,3 +1,8 @@
+# 1.2-6 (26 October 2021)
+
+* Update metadata to N-able
+* Update min supported version
+
 # 1.2-5 (19 March 2021)
 
 * Rebrand from SolarWinds to N-Able

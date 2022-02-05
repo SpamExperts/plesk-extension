@@ -19,6 +19,6 @@
     "guzzlehttp/promises": "<1.4.1 || >1.4.1"
   },
   "require-dev": {
-    "codeception/codeception": "2.*"
+    "codeception/codeception": "3.*"
   }
 }

@@ -63,7 +63,7 @@ APICALL;
 
                 $response = $this->xmlapi($request);
 
-                if ("ok" == $response->customer->{"get-domain-list"}->{result}->{status}) {
+                if ("ok" == $response->customer->{"get-domain-list"}->result->status) {
                     foreach ($response->customer->children() as $customerDomains) {
                         foreach ($customerDomains->result->domains as $domain) {
                             foreach ($domain->children() as $item) {

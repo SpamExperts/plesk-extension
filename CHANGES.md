@@ -1,3 +1,9 @@
+# 1.2-7 (20 March 2023)
+
+* Fix get-domain-list status check
+* Update domain/exists response check to avoid warnings
+* Show an error when addAlias fails
+
 # 1.2-6 (26 October 2021)
 
 * Update metadata to N-able

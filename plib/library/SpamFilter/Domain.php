@@ -163,6 +163,15 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
             $this->pleskDomain->getDomain()
         );
 
+        if (!$domainAddOk) {
+            throw new \RuntimeException(
+                sprintf(
+                    "Failed to add the domain '%s' as an alias into the spamfilter",
+                    htmlentities($this->pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                )
+            );
+        }
+
         if ($domainAddOk && !empty($spamfilterMx)) {
             $this->dns->replaceDomainsMxRecords($this->pleskDomain, $spamfilterMx);
         }

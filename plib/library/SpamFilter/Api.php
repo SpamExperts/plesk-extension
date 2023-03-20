@@ -101,7 +101,8 @@ class Modules_SpamexpertsExtension_SpamFilter_Api extends GuzzleHttp\Client
 
         try {
             $response = $this->call("/api/domain/exists/domain/$domain");
-            $result = (1 == json_decode($response, true)['present']);
+            $decoded_response = json_decode($response, true);
+            $result = $decoded_response && 1 === $decoded_response['present'];
         } catch (Exception $e) {
             $response = "Error: " . $e->getMessage() . " | Code: " . $e->getCode();
             $result = false;

@@ -2,14 +2,13 @@
 
 ### System requirements
 
-- Odin Plesk Panel v12.5+
-- PHP v5.6+
+- Plesk Obsidian v18.0.+
 
 ### Setup instructions
 
 The installation of the extension can be done from Plesk administrator interface. In order to install the extension the following steps have to be preformed:
  
-- Download the installation package from the [Plesk extensions catalog](https://ext.plesk.com/packages/bbc5272e-7b88-4d5a-8a50-67431075fac4-spamexperts-extension)
+- Download the installation package from the [Plesk extensions catalog](https://ext.plesk.com/packages/b5b2592f-1e71-48fa-93ea-9814913b884d-spamexperts-extension)
 - Log in as an administrator in Plesk and go to `Server Management` -> `Extensions` page
 - Click `Add Extension` button
 - Upload the installation package

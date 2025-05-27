@@ -8,27 +8,27 @@
  */
 class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
 {
-    const OPTION_USE_CONFIG_FROM_LICENSE = 'use_config_from_license';
-    const OPTION_SPAMPANEL_URL = 'spampanel_url';
-    const OPTION_SPAMPANEL_API_HOST = 'apihost';
-    const OPTION_SPAMPANEL_API_USER = 'apiuser';
-    const OPTION_SPAMPANEL_API_PASS = 'apipass';
-    const OPTION_SPAMFILTER_MX1 = 'mx1';
-    const OPTION_SPAMFILTER_MX2 = 'mx2';
-    const OPTION_SPAMFILTER_MX3 = 'mx3';
-    const OPTION_SPAMFILTER_MX4 = 'mx4';
-    const OPTION_AUTO_ADD_DOMAINS = 'auto_add_domain';
-    const OPTION_AUTO_DEL_DOMAINS = 'auto_del_domain';
-    const OPTION_AUTO_PROVISION_DNS = 'provision_dns';
-    const OPTION_AUTO_SET_CONTACT = 'set_contact';
-    const OPTION_EXTRA_DOMAINS_HANDLING = 'handle_extra_domains';
-    const OPTION_SKIP_REMOTE_DOMAINS = 'handle_only_localdomains';
-    const OPTION_LOGOUT_REDIRECT = 'redirectback';
-    const OPTION_AUTO_ADD_DOMAIN_ON_LOGIN = 'add_domain_loginfail';
-    const OPTION_USE_IP_DESTINATION_ROUTES = 'use_ip_address_as_destination_routes';
-    const OPTION_SUPPORT_EMAIL = 'support_email';
+    public const OPTION_USE_CONFIG_FROM_LICENSE = 'use_config_from_license';
+    public const OPTION_SPAMPANEL_URL = 'spampanel_url';
+    public const OPTION_SPAMPANEL_API_HOST = 'apihost';
+    public const OPTION_SPAMPANEL_API_USER = 'apiuser';
+    public const OPTION_SPAMPANEL_API_PASS = 'apipass';
+    public const OPTION_SPAMFILTER_MX1 = 'mx1';
+    public const OPTION_SPAMFILTER_MX2 = 'mx2';
+    public const OPTION_SPAMFILTER_MX3 = 'mx3';
+    public const OPTION_SPAMFILTER_MX4 = 'mx4';
+    public const OPTION_AUTO_ADD_DOMAINS = 'auto_add_domain';
+    public const OPTION_AUTO_DEL_DOMAINS = 'auto_del_domain';
+    public const OPTION_AUTO_PROVISION_DNS = 'provision_dns';
+    public const OPTION_AUTO_SET_CONTACT = 'set_contact';
+    public const OPTION_EXTRA_DOMAINS_HANDLING = 'handle_extra_domains';
+    public const OPTION_SKIP_REMOTE_DOMAINS = 'handle_only_localdomains';
+    public const OPTION_LOGOUT_REDIRECT = 'redirectback';
+    public const OPTION_AUTO_ADD_DOMAIN_ON_LOGIN = 'add_domain_loginfail';
+    public const OPTION_USE_IP_DESTINATION_ROUTES = 'use_ip_address_as_destination_routes';
+    public const OPTION_SUPPORT_EMAIL = 'support_email';
 
-    const LICENSE_CONFIGURATION_ID = 'ext-spamexperts-extension';
+    public const LICENSE_CONFIGURATION_ID = 'ext-spamexperts-extension';
 
     /**
      * Class constructor.
@@ -53,6 +53,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMPANEL_URL, $apiUrlFieldOptions);
 
@@ -63,6 +64,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMPANEL_API_HOST, $apiHostFieldOptions);
 
@@ -73,6 +75,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
 
             $apiUserWasSetUp = !empty($this->getSetting(self::OPTION_SPAMPANEL_API_USER));
@@ -88,6 +91,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
 
             $apiPassWasSetUp = !empty($this->getSetting(self::OPTION_SPAMPANEL_API_PASS));
@@ -104,6 +108,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMFILTER_MX1, $mx1FieldOptions);
 
@@ -114,6 +119,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMFILTER_MX2, $mx2FieldOptions);
 
@@ -123,6 +129,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMFILTER_MX3, $mx3FieldOptions);
 
@@ -132,6 +139,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['NotEmpty', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SPAMFILTER_MX4, $mx4FieldOptions);
 
@@ -142,6 +150,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                 'validators' => [
                     ['EmailAddress', true],
                 ],
+                'style' => 'width: 100%; max-width: 450px;',
             ];
             $this->addElement('text', self::OPTION_SUPPORT_EMAIL, $supportEmailFieldOptions);
         } else {
@@ -155,6 +164,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
                     $this->addElement('SimpleText', $fieldName, [
                         'label' => $label,
                         'value' => $mxHostname,
+                        'style' => 'width: 100%; max-width: 450px;',
                     ]);
                 }
             }
@@ -243,7 +253,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    final static public function areEmpty()
+    final public static function areEmpty()
     {
         $manualConfigurationEmpty = (empty(pm_Settings::get(self::OPTION_SPAMPANEL_URL))
             || empty(pm_Settings::get(self::OPTION_SPAMPANEL_API_HOST))
@@ -270,7 +280,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
         return pm_Settings::get($id);
     }
 
-    final static public function retrieveFromPleskLicense()
+    final public static function retrieveFromPleskLicense()
     {
         $keys = pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID);
 
@@ -292,7 +302,7 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    final static function useSettingsFromLicense()
+    final public static function useSettingsFromLicense()
     {
         return self::settingsFromLicenseAvailable()
             && 1 == pm_Settings::get(self::OPTION_USE_CONFIG_FROM_LICENSE);
@@ -303,12 +313,12 @@ class Modules_SpamexpertsExtension_Form_Settings extends pm_Form_Simple
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    final static function settingsFromLicenseAvailable()
+    final public static function settingsFromLicenseAvailable()
     {
         return ! empty(pm_License::getAdditionalKeysList(self::LICENSE_CONFIGURATION_ID));
     }
 
-    final static function getRuntimeConfigOption($key)
+    final public static function getRuntimeConfigOption($key)
     {
         if (self::useSettingsFromLicense()) {
             $licenseConfig = self::retrieveFromPleskLicense();

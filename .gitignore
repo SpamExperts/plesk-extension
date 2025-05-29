@@ -5,6 +5,7 @@ plib/library/vendor/
 *.mo
 
 .idea/
+.nvim/
 /spamexperts-extension.zip
 /composer.phar
 /codecept.phar

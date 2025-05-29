@@ -5,8 +5,8 @@
  */
 class Modules_SpamexpertsExtension_Form_Brand extends pm_Form_Simple
 {
-    const OPTION_BRAND_NAME = 'brand_name';
-    const OPTION_LOGO_URL = 'brand_logo_url';
+    public const OPTION_BRAND_NAME = 'brand_name';
+    public const OPTION_LOGO_URL = 'brand_logo_url';
 
     /**
      * Modules_SpamexpertsExtension_Form_Brand constructor.
@@ -26,6 +26,7 @@ class Modules_SpamexpertsExtension_Form_Brand extends pm_Form_Simple
             'validators' => [
                 ['NotEmpty', true],
             ],
+            'style' => 'width: 100%; max-width: 450px;',
         ]);
 
         $this->addElement('text', self::OPTION_LOGO_URL, [
@@ -35,6 +36,7 @@ class Modules_SpamexpertsExtension_Form_Brand extends pm_Form_Simple
             'validators' => [
                 ['NotEmpty', true],
             ],
+            'style' => 'width: 100%; max-width: 450px;',
         ]);
 
         $this->addControlButtons([

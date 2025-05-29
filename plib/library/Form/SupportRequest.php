@@ -5,9 +5,9 @@
  */
 class Modules_SpamexpertsExtension_Form_SupportRequest extends pm_Form_Simple
 {
-    const OPTION_TITLE = 'title';
-    const OPTION_REPLY_TO = 'reply_to';
-    const OPTION_MESSAGE = 'message';
+    public const OPTION_TITLE = 'title';
+    public const OPTION_REPLY_TO = 'reply_to';
+    public const OPTION_MESSAGE = 'message';
 
     /**
      * Modules_SpamexpertsExtension_Form_Brand constructor.
@@ -27,6 +27,7 @@ class Modules_SpamexpertsExtension_Form_SupportRequest extends pm_Form_Simple
             'validators' => [
                 ['NotEmpty', true],
             ],
+            'style' => 'width: 100%; max-width: 450px;',
         ]);
 
         $this->addElement('text', self::OPTION_REPLY_TO, [
@@ -37,6 +38,7 @@ class Modules_SpamexpertsExtension_Form_SupportRequest extends pm_Form_Simple
             'validators' => [
                 ['EmailAddress', true],
             ],
+            'style' => 'width: 100%; max-width: 450px;',
         ]);
 
         $this->addElement('textarea', self::OPTION_MESSAGE, [

@@ -5,6 +5,24 @@
  */
 class Modules_SpamexpertsExtension_EventListener implements EventListener
 {
+    public function filterActions()
+    {
+        return [
+            'domain_create',
+            'domain_delete',
+            'site_create',
+            'site_delete',
+            'subdomain_create',
+            'site_subdomain_create',
+            'subdomain_delete',
+            'site_subdomain_delete',
+            'domain_alias_create',
+            'site_alias_create',
+            'domain_alias_delete',
+            'site_alias_delete',
+        ];
+    }
+
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.ElseExpression)
@@ -14,11 +32,6 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
     public function handleEvent($objectType, $objectId, $action, $oldValues, $newValues)
     {
         pm_Log::debug(__METHOD__ . ' call with the following arguments:');
-        pm_Log::vardump($objectType, '$objectType = ');
-        pm_Log::vardump($objectId, '$objectId = ');
-        pm_Log::vardump($action, '$action = ');
-        pm_Log::vardump($oldValues, '$oldValues = ');
-        pm_Log::vardump($newValues, '$newValues = ');
 
         switch ($objectType) {
             case 'domain':
@@ -40,7 +53,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
                         } else {
                             pm_Log::debug("Skipping '{$newValues['Domain Name']}' protection in the {$objectType}/{$action} hook");
                         }
-                        
+
                         break;
 
                     case 'domain_delete':
@@ -49,8 +62,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
 
                             try {
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
-                                        $oldValues['Domain Name']
-                                    );
+                                    $oldValues['Domain Name']
+                                );
                                 $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
@@ -62,7 +75,7 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
 
                         break;
                 }
-                
+
                 break;
 
             case 'site':
@@ -93,8 +106,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
 
                             try {
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
-                                        $oldValues['Domain Name']
-                                    );
+                                    $oldValues['Domain Name']
+                                );
                                 $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
@@ -140,8 +153,8 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
 
                             try {
                                 $unprotector = new Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Unprotection_Primary(
-                                        "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
-                                    );
+                                    "{$oldValues['Subdomain Name']}.{$oldValues['Domain Name']}"
+                                );
                                 $unprotector->setUpdateDnsMode(false); // It does not make sense to update DNS of removed entity
                                 $unprotector->execute();
                             } catch (Exception $e) {
@@ -224,4 +237,4 @@ class Modules_SpamexpertsExtension_EventListener implements EventListener
     }
 }
 
-return new Modules_SpamexpertsExtension_EventListener;
+return new Modules_SpamexpertsExtension_EventListener();

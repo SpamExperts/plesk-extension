@@ -1,3 +1,8 @@
+# 1.2-8 (03 June 2025)
+
+* Explicitly list the specific events that are to be handled
+* Adjust styling for text inputs
+
 # 1.2-7 (20 March 2023)
 
 * Fix get-domain-list status check

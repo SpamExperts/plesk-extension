@@ -14,7 +14,7 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
 
     /**
      * SpamFilter API client instance container
-     * 
+     *
      * @var Modules_SpamexpertsExtension_SpamFilter_Api
      */
     protected $api;
@@ -35,19 +35,20 @@ class Modules_SpamexpertsExtension_SpamFilter_Domain
      *
      * @return Modules_SpamexpertsExtension_SpamFilter_Domain
      */
-    public function __construct(Modules_SpamexpertsExtension_Plesk_Domain $domain,
-                                Modules_SpamexpertsExtension_SpamFilter_Api $api = null,
-                                Modules_SpamexpertsExtension_Plesk_Dns $dns = null)
-    {
+    public function __construct(
+        Modules_SpamexpertsExtension_Plesk_Domain $domain,
+        ?Modules_SpamexpertsExtension_SpamFilter_Api $api = null,
+        ?Modules_SpamexpertsExtension_Plesk_Dns $dns = null
+    ) {
         $this->pleskDomain = $domain;
 
         if (null === $api) {
-            $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
+            $api = new Modules_SpamexpertsExtension_SpamFilter_Api();
         }
         $this->api = $api;
 
         if (null === $dns) {
-            $dns = new Modules_SpamexpertsExtension_Plesk_Dns;
+            $dns = new Modules_SpamexpertsExtension_Plesk_Dns();
         }
         $this->dns = $dns;
     }

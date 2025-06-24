@@ -28,10 +28,10 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ),
                 'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
-                        pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
-                        ENT_QUOTES,
-                        'UTF-8'
-                    ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
+                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL) ?? '',
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
                 'link' => pm_Context::getActionUrl('index'),
             ],
             [
@@ -46,7 +46,7 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ),
                 'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
-                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
+                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL) ?? '',
                     ENT_QUOTES,
                     'UTF-8'
                 ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
@@ -67,7 +67,7 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ) . " (All domains)",
                 'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
-                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
+                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL) ?? '',
                     ENT_QUOTES,
                     'UTF-8'
                 ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',
@@ -88,7 +88,7 @@ class Modules_SpamexpertsExtension_CustomButtons extends pm_Hook_CustomButtons
                 ),
                 'description' => 'SpamExperts Email Security Management',
                 'icon' => htmlentities(
-                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL),
+                    pm_Settings::get(Modules_SpamexpertsExtension_Form_Brand::OPTION_LOGO_URL) ?? '',
                     ENT_QUOTES,
                     'UTF-8'
                 ) ?: pm_Context::getBaseUrl() . 'images/seicon-32x32.png',

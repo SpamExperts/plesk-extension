@@ -80,17 +80,18 @@ APICALL;
      * Aliases getter
      *
      * @param array $filter
-     * 
+     *
      * @return array
      */
-    public function getAliases(array $filter = null)
+    public function getAliases(?array $filter = null)
     {
         $list = [];
 
         $xmlFilter = '';
         if (null !== $filter) {
             foreach ($filter as $fName => $fValue) {
-                $xmlFilter .= "<$fName>$fValue</$fName>";;
+                $xmlFilter .= "<$fName>$fValue</$fName>";
+                ;
             }
         }
 

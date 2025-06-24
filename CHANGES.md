@@ -1,3 +1,8 @@
+# 1.2-9 (24 June 2025)
+
+* Update bundled guzzle version (7.9.3)
+* Fix deprecation warnings
+
 # 1.2-8 (03 June 2025)
 
 * Explicitly list the specific events that are to be handled

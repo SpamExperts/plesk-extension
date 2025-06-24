@@ -10,7 +10,6 @@ plib/library/vendor/
 /composer.phar
 /codecept.phar
 /phpmd.phar
-/plib/library/composer.lock
 
 tests/_output/*
 

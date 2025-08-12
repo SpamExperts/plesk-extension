@@ -1811,16 +1811,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "7.1.0",
+            "version": "7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "03d905327dccc0851c9a08d6a979dfc683826b6f"
+                "reference": "1a7c2bce03a13a457ed3c975dfd331b3b4b133aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/03d905327dccc0851c9a08d6a979dfc683826b6f",
-                "reference": "03d905327dccc0851c9a08d6a979dfc683826b6f",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1a7c2bce03a13a457ed3c975dfd331b3b4b133aa",
+                "reference": "1a7c2bce03a13a457ed3c975dfd331b3b4b133aa",
                 "shasum": ""
             },
             "require": {
@@ -1879,7 +1879,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.0"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.2"
             },
             "funding": [
                 {
@@ -1899,7 +1899,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-17T07:41:58+00:00"
+            "time": "2025-08-10T08:50:08+00:00"
         },
         {
             "name": "sebastian/complexity",

@@ -606,25 +606,25 @@
     "packages-dev": [
         {
             "name": "behat/gherkin",
-            "version": "v4.14.0",
+            "version": "v4.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Gherkin.git",
-                "reference": "34c9b59c59355a7b4c53b9f041c8dbd1c8acc3b4"
+                "reference": "e26037937dfd48528746764dd870bc5d0836665f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/34c9b59c59355a7b4c53b9f041c8dbd1c8acc3b4",
-                "reference": "34c9b59c59355a7b4c53b9f041c8dbd1c8acc3b4",
+                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/e26037937dfd48528746764dd870bc5d0836665f",
+                "reference": "e26037937dfd48528746764dd870bc5d0836665f",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.2",
-                "php": "8.1.* || 8.2.* || 8.3.* || 8.4.*"
+                "php": ">=8.1 <8.6"
             },
             "require-dev": {
-                "cucumber/gherkin-monorepo": "dev-gherkin-v32.1.1",
-                "friendsofphp/php-cs-fixer": "^3.65",
+                "cucumber/gherkin-monorepo": "dev-gherkin-v37.0.0",
+                "friendsofphp/php-cs-fixer": "^3.77",
                 "mikey179/vfsstream": "^1.6",
                 "phpstan/extension-installer": "^1",
                 "phpstan/phpstan": "^2",
@@ -669,9 +669,23 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Gherkin/issues",
-                "source": "https://github.com/Behat/Gherkin/tree/v4.14.0"
+                "source": "https://github.com/Behat/Gherkin/tree/v4.16.1"
             },
-            "time": "2025-05-23T15:06:40+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/acoulton",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/carlos-granados",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/stof",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-08T16:12:58+00:00"
         },
         {
             "name": "codeception/codeception",

@@ -13,8 +13,10 @@ class DomainController extends pm_Controller_Action
                 if (!$this->hasAccessToDomain($pleskDomain)) {
                     $this->_status->addMessage(
                         'error',
-                        sprintf('Access denied to the domain %s',
-                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
+                        sprintf(
+                            'Access denied to the domain %s',
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                        )
                     );
                     $this->_forward('index', 'index');
 
@@ -33,13 +35,17 @@ class DomainController extends pm_Controller_Action
                 $messages[] = $checker->execute()
                     ? [
                         'status' => 'info',
-                        'content' => sprintf("Domain '%s' is protected",
-                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
+                        'content' => sprintf(
+                            "Domain '%s' is protected",
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                        ),
                     ]
                     : [
                         'status' => 'error',
-                        'content' => sprintf("Domain '%s' is NOT protected",
-                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')),
+                        'content' => sprintf(
+                            "Domain '%s' is NOT protected",
+                            htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                        ),
                     ];
             } catch (Exception $e) {
                 $messages[] = [
@@ -64,8 +70,10 @@ class DomainController extends pm_Controller_Action
                     if (!$this->hasAccessToDomain($pleskDomain)) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s',
-                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
+                            sprintf(
+                                'Access denied to the domain %s',
+                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                            )
                         );
                         $this->_forward('index', 'index');
 
@@ -118,8 +126,10 @@ class DomainController extends pm_Controller_Action
                     if (!$this->hasAccessToDomain($pleskDomain)) {
                         $this->_status->addMessage(
                             'error',
-                            sprintf('Access denied to the domain %s',
-                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8'))
+                            sprintf(
+                                'Access denied to the domain %s',
+                                htmlentities($pleskDomain->getDomain(), ENT_QUOTES, 'UTF-8')
+                            )
                         );
                         $this->_forward('index', 'index');
 
@@ -130,10 +140,10 @@ class DomainController extends pm_Controller_Action
 
                     /** @var Modules_SpamexpertsExtension_Plesk_Domain_Strategy_Abstract $unprotector */
                     $unprotector = new $unprotectorClass(
-                            $pleskDomain->getDomain(),
-                            $pleskDomain->getType(),
-                            $pleskDomain->getId()
-                        );
+                        $pleskDomain->getDomain(),
+                        $pleskDomain->getType(),
+                        $pleskDomain->getId()
+                    );
                     $unprotector->execute();
 
                     $messages[] = [
@@ -148,7 +158,7 @@ class DomainController extends pm_Controller_Action
                         'status' => 'warning',
                         'content' => $e->getMessage(),
                     ];
-                }  catch (Exception $e) {
+                } catch (Exception $e) {
                     $messages[] = [
                         'status' => 'error',
                         'content' => $e->getMessage(),
@@ -214,7 +224,7 @@ class DomainController extends pm_Controller_Action
                 }
             }
 
-            $api = new Modules_SpamexpertsExtension_SpamFilter_Api;
+            $api = new Modules_SpamexpertsExtension_SpamFilter_Api();
             if (! $api->checkDomainUser($domain)) {
                 $api->addDomainUser($domain);
             }

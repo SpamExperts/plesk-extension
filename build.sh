@@ -3,7 +3,7 @@
 set -e
 
 if [ ! -f ./composer.phar ]; then
-  wget getcomposer.org/composer.phar
+  wget https://github.com/composer/composer/releases/latest/download/composer.phar
 fi
 
 php composer.phar install --no-dev -d plib/library

@@ -6,6 +6,14 @@ class IndexController extends pm_Controller_Action
     {
         parent::init();
 
+        if (
+            pm_Session::getClient()->isAdmin()
+            && !pm_Settings::get('eulaAccepted')
+        ) {
+            $this->_redirect('eula');
+            return;
+        }
+
         // Init title for all actions
         $this->view->pageTitle = htmlentities(
             $this->getSetting(Modules_SpamexpertsExtension_Form_Brand::OPTION_BRAND_NAME) ?: "SpamExperts Email Security",
@@ -36,7 +44,7 @@ class IndexController extends pm_Controller_Action
             'title' => "Support",
             'action' => 'support',
         ];
-        
+
         // Init tabs for all actions
         $this->view->tabs = $tabs;
         $this->view->checkStatusAction = $this->_helper->url('status', 'domain');
@@ -238,7 +246,7 @@ class IndexController extends pm_Controller_Action
         $dataUrl = 'list-data';
 
         if (empty($ids)) {
-            $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection;
+            $domainsManager = new Modules_SpamexpertsExtension_Plesk_Domain_Collection();
 
             $allDomains = array_merge(
                 $domainsManager->getWebspaces(),
@@ -440,9 +448,13 @@ Message:
 {$supportForm->getValue($supportForm::OPTION_MESSAGE)}
 MESSAGE;
 
-                    $isSent = mail($supportEmail, 'Plesk Extension: New support request', $message,
+                    $isSent = mail(
+                        $supportEmail,
+                        'Plesk Extension: New support request',
+                        $message,
                         "From: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n" .
-                        "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n");
+                        "Reply-To: {$supportForm->getValue($supportForm::OPTION_REPLY_TO)}\r\n"
+                    );
                     if ($isSent) {
                         $this->_status->addMessage('info', 'Your message has been queued for delivery.');
                         $this->_helper->json(['redirect' => $this->_helper->url('support')]);

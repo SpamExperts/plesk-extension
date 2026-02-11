@@ -1,3 +1,9 @@
+# 1.2-10 (10 February 2026)
+
+* Add EULA acceptance requirement
+* Add privacy policy url to extension metadata
+* Bump dependencies
+
 # 1.2-9 (24 June 2025)
 
 * Update bundled guzzle version (7.9.3)

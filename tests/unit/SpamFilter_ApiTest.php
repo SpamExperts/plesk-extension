@@ -2,18 +2,18 @@
 
 require_once LIB_ROOT . '/SpamFilter/Api.php';
 
-class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
+class SpamFilter_ApiTest extends \PHPUnit\Framework\TestCase
 {
     // tests
     public function testCheckDomainPresent()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->will($this->returnValue('{"present":1}'));
+            ->willReturn('{"present":1}');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->checkDomain('example.com'));
@@ -22,12 +22,12 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainMisses()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->will($this->returnValue('{"present":0}'));
+            ->willReturn('{"present":0}');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->checkDomain('example.com'));
@@ -36,12 +36,12 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainInvalidJson()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->will($this->returnValue('{"present"'));
+            ->willReturn('{"present"');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->checkDomain('example.com'));
@@ -50,12 +50,12 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainPlaintextError()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
-            ->will($this->returnValue("ERROR: The domain 'example.com' does not belong to the admin 'admin-username'"));
+            ->willReturn("ERROR: The domain 'example.com' does not belong to the admin 'admin-username'");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->checkDomain('example.com'));
@@ -64,13 +64,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainAliasPresent()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
-            ->will($this->returnValue('["alias.example.net","alias.example.com","alias.example.org"]'));
+            ->willReturn('["alias.example.net","alias.example.com","alias.example.org"]');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->aliasExists('example.com', 'alias.example.net'));
@@ -79,13 +79,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainAliasMissing()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
-            ->will($this->returnValue('["alias.example.com","alias.example.org"]'));
+            ->willReturn('["alias.example.com","alias.example.org"]');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->aliasExists('example.com', 'alias.example.net'));
@@ -94,13 +94,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
     public function testCheckDomainAliasInvalidJson()
     {
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/list/domain/example.com/"))
-            ->will($this->returnValue('alias.example.comalias.example.org'));
+            ->willReturn('alias.example.comalias.example.org');
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->aliasExists('example.com', 'alias.example.net'));
@@ -111,7 +111,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
@@ -128,7 +128,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $destinations = ['primmary.destination.host', 'secondary.destination.host'];
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
@@ -145,7 +145,7 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $aliases = ['alias.example.net', 'alias.example.org'];
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
@@ -161,13 +161,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
-            ->will($this->returnValue(json_encode(['messages' => ['success' => ["Domain '$domain' added"]]])));
+            ->willReturn(json_encode(['messages' => ['success' => ["Domain '$domain' added"]]]));
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->addDomain($domain));
@@ -178,17 +178,15 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
-            ->will(
-                $this->returnValue(
-                    json_encode(
-                        ['messages' => ['error' => ["Domain already exists.", "Failed to add domain '$domain'"]]]
-                    )
+            ->willReturn(
+                json_encode(
+                    ['messages' => ['error' => ["Domain already exists.", "Failed to add domain '$domain'"]]]
                 )
             );
 
@@ -201,17 +199,15 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domain/add/domain/$domain/format/json/"))
-            ->will(
-                $this->returnValue(
-                    json_encode(
-                        ['messages' => ['error' => ["Database connection error.", "Failed to add domain '$domain'"]]]
-                    )
+            ->willReturn(
+                json_encode(
+                    ['messages' => ['error' => ["Database connection error.", "Failed to add domain '$domain'"]]]
                 )
             );
 
@@ -225,13 +221,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $alias  = 'example.org';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
-            ->will($this->returnValue("SUCCESS: Alias '$alias' has been added"));
+            ->willReturn("SUCCESS: Alias '$alias' has been added");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->addAlias($domain, $alias));
@@ -243,13 +239,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $alias  = 'example.org';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
-            ->will($this->returnValue("ERROR: Alias already exists"));
+            ->willReturn("ERROR: Alias already exists");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->addAlias($domain, $alias));
@@ -261,13 +257,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $alias  = 'example.org';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domainalias/add/domain/$domain/alias/$alias/"))
-            ->will($this->returnValue("ERROR: Database connection error.\nERROR: Failed to add alias '$alias'"));
+            ->willReturn("ERROR: Database connection error.\nERROR: Failed to add alias '$alias'");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertFalse($sut->addAlias($domain, $alias));
@@ -278,13 +274,13 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domain/remove/domain/$domain/"))
-            ->will($this->returnValue("SUCCESS: Domain '$domain' removed"));
+            ->willReturn("SUCCESS: Domain '$domain' removed");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
         $this->assertTrue($sut->removeDomain($domain));
@@ -295,16 +291,19 @@ class SpamFilter_ApiTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'call', 'logDebug'])
+            ->onlyMethods(['call', 'logDebug'])
             ->disableOriginalConstructor()
             ->getMock();
         $sut->expects($this->once())
             ->method('call')
             ->with($this->equalTo("/api/domain/remove/domain/$domain/"))
-            ->will($this->returnValue("ERROR: You are not the owner of '$domain'.\nERROR: Failed to remove domain '$domain'"));
+            ->willReturn("ERROR: You are not the owner of '$domain'.\nERROR: Failed to remove domain '$domain'");
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("ERROR: You are not the owner of '$domain'.");
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Api $sut */
-        $this->assertFalse($sut->removeDomain($domain));
+        $sut->removeDomain($domain);
     }
 
 }

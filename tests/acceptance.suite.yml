@@ -4,7 +4,7 @@
 # Perform tests in browser using the WebDriver or PhpBrowser.
 # If you need both WebDriver and PHPBrowser tests - create a separate suite.
 
-class_name: AcceptanceTester
+actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver
@@ -27,6 +27,11 @@ env:
     primary_mx: 'PRIMARY_MX'
     secondary_mx: 'SECONDARY_MX'
 
+    # Environment variable names used for the Plesk domain the protection tests run on,
+    # and its hosting mail server (defaults to the Plesk host from the panel URL)
+    test_domain: 'TEST_DOMAIN'
+    hosting_mx: 'HOSTING_MX'
+
     # Environment variables used for cpanel
     username: 'EXTENSION_USERNAME'
     password: 'EXTENSION_PASSWORD'
@@ -37,4 +42,7 @@ env:
         config:
           WebDriver:
             browser: chrome
+            capabilities:
+              goog:chromeOptions:
+                args: ["--headless", "--no-sandbox", "--ignore-certificate-errors", "--window-size=1366,1000"]
     firefox:

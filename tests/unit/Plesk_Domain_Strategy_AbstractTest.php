@@ -2,7 +2,7 @@
 
 require_once LIB_ROOT . '/Plesk/Domain/Strategy/Abstract.php';
 
-class Plesk_Domain_Strategy_AbstractTest extends \PHPUnit_Framework_TestCase
+class Plesk_Domain_Strategy_AbstractTest extends \PHPUnit\Framework\TestCase
 {
     // tests
     public function testProtectAsDomainLocalDomainGetsProtectedInSkipRemoteDomainsMode()

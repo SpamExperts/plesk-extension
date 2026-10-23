@@ -16,6 +16,8 @@
     "guzzlehttp/guzzle": "^7.9"
   },
   "require-dev": {
-    "codeception/codeception": "^5.3"
+    "codeception/codeception": "^5.3",
+    "codeception/module-asserts": "^3.3",
+    "codeception/module-webdriver": "^4.0"
   }
 }

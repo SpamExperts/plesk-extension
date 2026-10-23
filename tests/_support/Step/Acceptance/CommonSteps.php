@@ -4,6 +4,7 @@ namespace Step\Acceptance;
 use Page\PleskLoginPage;
 use Page\PleskHomePage;
 use Page\SpamExpertsEmailSecurityPage;
+use Codeception\Step\Argument\PasswordArgument;
 use Codeception\Util\Locator;
 
 class CommonSteps extends \AcceptanceTester
@@ -52,6 +53,11 @@ class CommonSteps extends \AcceptanceTester
         // Go to login page
         $this->amOnUrl(getenv($this->getEnvParameter('url')));
 
+        // Dismiss the cookie consent banner, if shown
+        if ($this->grabMultiple(PleskLoginPage::ACCEPT_NECESSARY_COOKIES_BTN)) {
+            $this->click(PleskLoginPage::ACCEPT_NECESSARY_COOKIES_BTN);
+        }
+
         // Fill the username field
         $this->waitForElement(Locator::combine(
         	PleskLoginPage::USERNAME_FIELD_XPATH,
@@ -64,9 +70,10 @@ class CommonSteps extends \AcceptanceTester
         $this->waitForElement(Locator::combine(
         	PleskLoginPage::PASSWORD_FIELD_XPATH,
         	PleskLoginPage::PASSWORD_FIELD_CSS), 10);
+        // Mask the password in the test output
         $this->fillField(Locator::combine(
         	PleskLoginPage::PASSWORD_FIELD_XPATH,
-        	PleskLoginPage::PASSWORD_FIELD_CSS), $password);
+        	PleskLoginPage::PASSWORD_FIELD_CSS), new PasswordArgument($password));
 
         // Click the login button
         $this->click(PleskLoginPage::LOGIN_BTN_CSS);
@@ -75,6 +82,12 @@ class CommonSteps extends \AcceptanceTester
         $this->waitForElement(PleskHomePage::LEFT_SIDE_MENU, 10);
         $this->waitForElement(PleskHomePage::PAGE_HEADER, 10);
         $this->waitForElement(PleskHomePage::PAGE_CONTENT, 10);
+
+        // Cancel the "Welcome to Plesk!" survey, if shown (it opens shortly after the page loads)
+        $this->wait(3);
+        if ($this->grabMultiple(PleskHomePage::SURVEY_CANCEL_BTN)) {
+            $this->click(PleskHomePage::SURVEY_CANCEL_BTN);
+        }
     }
 
     /**
@@ -98,11 +111,10 @@ class CommonSteps extends \AcceptanceTester
         $this->amGoingTo(
             "\n\n --- Open SpamExperts Email Security extension --- \n");
 
-        $this->click("Extensions", PleskHomePage::LEFT_SIDE_MENU);
-        $this->waitForText("Extensions Management");
-        $this->click("SpamExperts Email Security",
-            PleskHomePage::PAGE_CONTENT);
-        $this->waitForText(SpamExpertsEmailSecurityPage::TITLE);
+        // Open the extension directly, independently of the Plesk extensions catalog page
+        $this->amOnUrl(rtrim(getenv($this->getEnvParameter('url')), '/')
+            . '/modules/spamexperts-extension/index.php');
+        $this->waitForText(SpamExpertsEmailSecurityPage::TITLE, 30);
     }
 
     /**
@@ -114,8 +126,16 @@ class CommonSteps extends \AcceptanceTester
     {
         $this->amGoingTo("\n\n --- Go to {$tab} page --- \n");
 
+        $selectedTab = $tab . "[@aria-selected='true']";
+
         $this->click($tab);
-        // $this->waitForText($title);
+        try {
+            $this->waitForElement($selectedTab, 10);
+        } catch (\Exception $e) {
+            /*The click can be lost while the page is still busy after a form save*/
+            $this->click($tab);
+            $this->waitForElement($selectedTab, 10);
+        }
     }
 
     /**

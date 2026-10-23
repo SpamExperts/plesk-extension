@@ -2,19 +2,19 @@
 
 require_once LIB_ROOT . '/SpamFilter/Domain.php';
 
-class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
+class SpamFilter_DomainTest extends \PHPUnit\Framework\TestCase
 {
     // tests
     public function testStatusPresent()
     {
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('example.com'));
+            ->willReturn('example.com');
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'checkDomain'])
+            ->onlyMethods(['checkDomain'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -22,7 +22,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('example.com')
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
@@ -37,13 +37,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
     public function testStatusMissing()
     {
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('example.com'));
+            ->willReturn('example.com');
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'checkDomain'])
+            ->onlyMethods(['checkDomain'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -51,7 +51,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('example.com')
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
@@ -66,22 +66,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
     public function testStatusAliasPresent()
     {
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('parent.example.com'));
+            ->willReturn('parent.example.com');
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('example.com'));
+            ->willReturn('example.com');
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'aliasExists'])
+            ->onlyMethods(['aliasExists'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -90,7 +90,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo('parent.example.com'),
                 $this->equalTo('example.com')
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
@@ -105,22 +105,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
     public function testStatusAliasMissing()
     {
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('parent.example.com'));
+            ->willReturn('parent.example.com');
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue('example.com'));
+            ->willReturn('example.com');
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'aliasExists'])
+            ->onlyMethods(['aliasExists'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -129,7 +129,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo('parent.example.com'),
                 $this->equalTo('example.com')
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
@@ -148,13 +148,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $aliases = [];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -164,22 +164,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->never())
@@ -197,13 +197,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $aliases = [];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -213,17 +213,17 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->once())
             ->method('replaceDomainsMxRecords')
             ->with(
@@ -232,12 +232,12 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protect(true);
@@ -251,13 +251,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $aliases = [];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any(2))
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -267,27 +267,27 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         try {
@@ -301,20 +301,20 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
 
         $mxrecords = [];
 
-        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')->getMock();
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')->disableOriginalConstructor()->getMock();
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct'])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protect(true);
@@ -329,13 +329,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $contact = 'info@simplyspamfree.com';
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -345,7 +345,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->once())
             ->method('setContact')
             ->with(
@@ -354,14 +354,14 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->once())
             ->method('replaceDomainsMxRecords')
             ->with(
@@ -370,12 +370,12 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protect(true, $aliases, $contact);
@@ -390,13 +390,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $contact = 'info@simplyspamfree.com';
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -406,29 +406,29 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $spamfilterApiMock->expects($this->never())
             ->method('setContact');
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         try {
@@ -445,13 +445,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $contact = '';
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addDomain', 'setContact'])
+            ->onlyMethods(['addDomain', 'setContact'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -461,19 +461,19 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($destinations),
                 $this->equalTo($aliases)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->never())
             ->method('setContact');
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('getDomainsMxRecords')
             ->with(
                 $this->equalTo($pleskDomainMock)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
         $pleskDnsMock->expects($this->once())
             ->method('replaceDomainsMxRecords')
             ->with(
@@ -482,12 +482,12 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protect(true, $aliases, $contact);
@@ -499,22 +499,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $parentDomain = 'parent.example.com';
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addAlias'])
+            ->onlyMethods(['addAlias'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -523,10 +523,10 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('getDomainsMxRecords');
@@ -534,7 +534,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->never())
@@ -551,22 +551,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $mxrecords = ['mx.spamfilter.test', 'fallbackmx.spamfilter.test'];
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addAlias'])
+            ->onlyMethods(['addAlias'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -575,10 +575,10 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('getDomainsMxRecords');
@@ -590,12 +590,12 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protectAlias(true);
@@ -603,27 +603,29 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
 
     public function testProtectAliasSkipsUpdatingDnsIfAddAliasFails()
     {
+        $this->expectException(RuntimeException::class);
+
         $domain = 'example.com';
         $parentDomain = 'parent.example.com';
         $mxrecords = ['mx.spamfilter.test', 'fallbackmx.spamfilter.test'];
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
-        $pleskDomainMock->expects($this->once())
+            ->willReturn($parentPleskDomainMock);
+        $pleskDomainMock->expects($this->exactly(2))
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'addAlias'])
+            ->onlyMethods(['addAlias'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -632,10 +634,10 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
+            ->onlyMethods(['getDomainsMxRecords', 'replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('getDomainsMxRecords');
@@ -643,12 +645,12 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protectAlias(true);
@@ -660,20 +662,20 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
 
         $mxrecords = [];
 
-        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')->getMock();
+        $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')->disableOriginalConstructor()->getMock();
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct'])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')->getMock();
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(['getSpamfilterMxs'])
+            ->onlyMethods(['getSpamfilterMxs'])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
         $sut->expects($this->once())
             ->method('getSpamfilterMxs')
-            ->will($this->returnValue($mxrecords));
+            ->willReturn($mxrecords);
 
         /** @var Modules_SpamexpertsExtension_SpamFilter_Domain $sut */
         $sut->protectAlias(true);
@@ -684,13 +686,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $domain = 'example.com';
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeDomain', 'getRoutes'])
+            ->onlyMethods(['removeDomain', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -698,18 +700,18 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->never())
             ->method('getRoutes');
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -723,13 +725,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = ['primmary.destination.host', 'secondary.destination.host'];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeDomain', 'getRoutes'])
+            ->onlyMethods(['removeDomain', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -737,16 +739,16 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('replaceDomainsMxRecords')
@@ -756,7 +758,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -770,13 +772,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = ['primmary.destination.host', 'secondary.destination.host'];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeDomain', 'getRoutes'])
+            ->onlyMethods(['removeDomain', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -784,22 +786,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -813,13 +815,13 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = [];
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeDomain', 'getRoutes'])
+            ->onlyMethods(['removeDomain', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -827,22 +829,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -856,22 +858,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $parentDomain = 'parent.example.com';
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->once())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->onlyMethods(['removeAlias', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -880,18 +882,18 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->never())
             ->method('getRoutes');
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -906,22 +908,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = ['primmary.destination.host', 'secondary.destination.host'];
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->onlyMethods(['removeAlias', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -930,16 +932,16 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($parentDomain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->once())
             ->method('replaceDomainsMxRecords')
@@ -949,7 +951,7 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
             );
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -964,22 +966,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = ['primmary.destination.host', 'secondary.destination.host'];
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->onlyMethods(['removeAlias', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -988,22 +990,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($parentDomain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 
@@ -1018,22 +1020,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
         $destinations = [];
 
         $parentPleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain'])->getMock();
+            ->onlyMethods(['getDomain'])->disableOriginalConstructor()->getMock();
         $parentPleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($parentDomain));
+            ->willReturn($parentDomain);
 
         $pleskDomainMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Domain')
-            ->setMethods(['getDomain', 'getParent'])->getMock();
+            ->onlyMethods(['getDomain', 'getParent'])->disableOriginalConstructor()->getMock();
         $pleskDomainMock->expects($this->once())
             ->method('getParent')
-            ->will($this->returnValue($parentPleskDomainMock));
+            ->willReturn($parentPleskDomainMock);
         $pleskDomainMock->expects($this->any())
             ->method('getDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
 
         $spamfilterApiMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Api')
-            ->setMethods(['__construct', 'removeAlias', 'getRoutes'])
+            ->onlyMethods(['removeAlias', 'getRoutes'])
             ->disableOriginalConstructor()
             ->getMock();
         $spamfilterApiMock->expects($this->once())
@@ -1042,22 +1044,22 @@ class SpamFilter_DomainTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($parentDomain),
                 $this->equalTo($domain)
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $spamfilterApiMock->expects($this->once())
             ->method('getRoutes')
             ->with(
                 $this->equalTo($parentDomain)
             )
-            ->will($this->returnValue($destinations));
+            ->willReturn($destinations);
 
         $pleskDnsMock = $this->getMockBuilder('\Modules_SpamexpertsExtension_Plesk_Dns')
-            ->setMethods(['replaceDomainsMxRecords'])
+            ->onlyMethods(['replaceDomainsMxRecords'])
             ->getMock();
         $pleskDnsMock->expects($this->never())
             ->method('replaceDomainsMxRecords');
 
         $sut = $this->getMockBuilder('\Modules_SpamexpertsExtension_SpamFilter_Domain')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([$pleskDomainMock, $spamfilterApiMock, $pleskDnsMock])
             ->getMock();
 

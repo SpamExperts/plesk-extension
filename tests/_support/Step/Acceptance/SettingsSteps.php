@@ -320,4 +320,20 @@ class SettingsSteps extends CommonSteps
         $this->seeSuccessMessage(
             'Information: Configuration options were successfully saved.');
     }
+
+    /**
+     * Function used to select what is used as destination routes
+     * when protecting domains ("Hostnames" or "IP addresses")
+     *
+     * @param string $type
+     */
+    public function selectDestinationRoutesType($type)
+    {
+        /*Select on of the two types*/
+        $this->checkOption(sprintf(SettingsPage::DESTINATION_ROUTES_TYPE,
+            $type));
+        $this->submitSettingForm();
+        $this->seeSuccessMessage(
+            'Information: Configuration options were successfully saved.');
+    }
 }

@@ -4,8 +4,8 @@ namespace Page;
 
 class SettingsPage
 {
-    const SAVE_BUTTON_XPATH = "//*[@type='button']";
-    const SAVE_BUTTON_CSS = "#btn-send>button";
+    const SAVE_BUTTON_XPATH = "//button[@id='btn-send']";
+    const SAVE_BUTTON_CSS = "button#btn-send";
 
     /*AntiSpam API URL input field*/
     const ANTISPAM_API_URL_XPATH = "//input[@id='spampanel_url']";
@@ -93,4 +93,5 @@ class SettingsPage
     const AUTOMATIC_DELETE_DOMAIN = "//div[@id='auto_del_domain-form-row']//label[contains(text(),'%s')]";
     const ACTIONS_ON_MXRECORDS = "//div[@id='provision_dns-form-row']//label[contains(text(),'%s')]";
     const ACTIONS_ON_CONTACT_EMAIL = "//div[@id='set_contact-form-row']//label[contains(text(),'%s')]";
+    const DESTINATION_ROUTES_TYPE = "//div[@id='use_ip_address_as_destination_routes-form-row']//label[contains(text(),'%s')]";
 }
